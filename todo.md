@@ -4,19 +4,20 @@
 * Gaussian Projection:
   * Access to size information, e.g. size(A)
   * Create matrix filled with random normal values of size m,n
-  * elementwise division
+  * Elementwise division
   * Matrix multiplication
 
 * Count Sketch:
   * Flip the signs of entire columns in the matrix
-  * Hashing function to discrete set (modulo is fine)
+  * Hashing function to discrete set (modulo is NOT fine)
   * Add columns in matrix
+  * 
 
 ##Regression
 * Approximate Matrix Solver, i.e. Ax = b
   * Concatenate matrix with vector
   * Call sketching algorithms
-  * built in solver for Ax = b, Lapack also has built in solver, most matrix libraries will have one.
+  * Built-in solver for Ax = b, Lapack also has built in solver, most matrix libraries will have one.
 
 ##K-SVD
 * Approximate K-SVD
@@ -32,6 +33,5 @@
  * *
  * =
  * Move
- * constructors
+ * Constructors
 
-  
