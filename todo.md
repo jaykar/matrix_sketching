@@ -24,5 +24,14 @@
   * Overwrite entire columns, e.g. A(:,5) = B
   * Overwrite columns in range, e.g. A(:, i-5 : i+5) = C
   * SVD
+ 
+##Miscellaneous
+ * +
+ * -
+ * /
+ * *
+ * =
+ * Move
+ * constructors
 
   
