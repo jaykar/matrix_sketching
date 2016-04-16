@@ -1,4 +1,5 @@
 #include <tuple>
+#include <vector>
 
 template <class T>
 class SKMatrix {
@@ -15,14 +16,14 @@ class SKMatrix {
         virtual SKMatrix operator+(const SKMatrix& lhs, const SKMatrix& rhs) const = 0;
         virtual SKMatrix operator-(const SKMatrix& lhs, const SKMatrix& rhs) const = 0;
 
-        virtual SKMatrix& operator+=(const SKMatrix& rhs)
-        virtual SKMatrix& operator-=(const SKMatrix& rhs)
+        virtual SKMatrix& operator+=(const SKMatrix& rhs) = 0; 
+        virtual SKMatrix& operator-=(const SKMatrix& rhs) = 0;
 
-        virtual SKMatrix& operator*(const SKMatrix& lhs, const SKMatrix& rhs)
-        virtual SKMatrix& operator*=(const SKMatrix& rhs)
+        virtual SKMatrix& operator*(const SKMatrix& lhs, const SKMatrix& rhs) = 0; 
+        virtual SKMatrix& operator*=(const SKMatrix& rhs) = 0; 
 
-        virtual SKMatrix& operator/(const SKMatrix& lhs, const SKMatrix& rhs)
-        virtual SKMatrix& operator/=(const SKMatrix& rhs)
+        virtual SKMatrix& operator/(const SKMatrix& lhs, const SKMatrix& rhs) = 0; 
+        virtual SKMatrix& operator/=(const SKMatrix& rhs) = 0; 
 
         int size() const = 0;
         vector<int>& dimensions() const = 0;
@@ -37,8 +38,8 @@ class SKMatrix {
         virtual SKMatrix<T>& elem_div(const T a) const = 0;
 
         /* Count Sketch */
-        virtual vector<int>& flip_signs(const int col...) const = 0;
-        virtual vector<int>& bucket(const int num_buckets) const = 0;
+        virtual std::vector<int>& flip_signs(const int col...) const = 0;
+        virtual std::vector<int>& bucket(const int num_buckets) const = 0;
 
         virtual SKMatrix<T>& count_sketch() const = 0;
 
