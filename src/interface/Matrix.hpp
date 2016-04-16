@@ -7,48 +7,46 @@ class SKMatrix {
         SKMatrix();
         SKMatrix(const int row, const int col);
         ~SKMatrix();
-        SKMatrix(const SKMatrix& sk);
+        SKMatrix(const T& sk);
+        T& operator=(const T& rhs); 
+        //T(SKMatrix&& other);
+        
+        //gpu parallaizable
+        virtual T operator+(const T& rhs) const = 0;
+        virtual T operator-(const T& rhs) const = 0;
 
-        SKMatrix& operator=(const SKMatrix& rhs);
-        SKMatrix(SKMatrix&& other);
+        virtual T& operator+=(const T& rhs) = 0; 
+        virtual T& operator-=(const T& rhs) = 0;
 
-        /* gpu parallaizable */
-        virtual SKMatrix operator+(const SKMatrix& lhs, const SKMatrix& rhs) const = 0;
-        virtual SKMatrix operator-(const SKMatrix& lhs, const SKMatrix& rhs) const = 0;
+        virtual T& operator*(const T& rhs) = 0; 
+        virtual T& operator*=(const T& rhs) = 0; 
 
-        virtual SKMatrix& operator+=(const SKMatrix& rhs) = 0; 
-        virtual SKMatrix& operator-=(const SKMatrix& rhs) = 0;
-
-        virtual SKMatrix& operator*(const SKMatrix& lhs, const SKMatrix& rhs) = 0; 
-        virtual SKMatrix& operator*=(const SKMatrix& rhs) = 0; 
-
-        virtual SKMatrix& operator/(const SKMatrix& lhs, const SKMatrix& rhs) = 0; 
-        virtual SKMatrix& operator/=(const SKMatrix& rhs) = 0; 
+        virtual T& operator/(const T& rhs) = 0; 
+        virtual T& operator/=(const T& rhs) = 0; 
 
         int size() const = 0;
-        vector<int>& dimensions() const = 0;
+        std::vector<int>& dimensions() const = 0;
 
-        virtual SKMatrix<T>& mult(SKMatrix<T>& m) const = 0;
+        virtual T& mult(T& m) const = 0;
 
-        template<typename F>
-        virtual SKMatrix<T>& col_op(const F& lambda, const int col) const = 0;
+        //template<typename F>
+        //virtual T& col_op(const F& lambda, const int col) const = 0;
 
-        /* Gaussian projection */
-        virtual SKMatrix<T>& rand_n(const Container& dimensions) const = 0;
-        virtual SKMatrix<T>& elem_div(const T a) const = 0;
+        // Gaussian projection 
+        virtual T& rand_n(const int row, const int col) const = 0;
+        virtual T& elem_div(const float a) const = 0;
 
-        /* Count Sketch */
+        // Count Sketch
         virtual std::vector<int>& flip_signs(const int col...) const = 0;
         virtual std::vector<int>& bucket(const int num_buckets) const = 0;
+        virtual T& count_sketch() const = 0;
 
-        virtual SKMatrix<T>& count_sketch() const = 0;
+        // Regression 
+        virtual T& concat(const T& col) const  = 0;
+        virtual T& solve_x(const T& A, const T& B) const = 0;
 
-        /* Regression */
-        virtual SKMatrix<T>& concat(const SKMatrix<T>& col) const  = 0;
-        virtual SKMatrix<T>& solve_x(const SKMatrix<T>& A, const SKMatrix& B) const = 0;
-
-        /* TODO: K-SVD */
-        virtual SKMatrix<T>& overridce_col(const int col, const SKMatrix& B) const = 0;
-        virtual vector<SKMatrix<T> > qr_decompose() const = 0;
-        virtual SKMatrix<T>& svd() const = 0;
+        // TODO: K-SVD 
+        virtual T& override_col(const int col, const T& B) const = 0;
+        virtual std::vector<T> qr_decompose() const = 0;
+        virtual T& svd() const = 0;
 };
