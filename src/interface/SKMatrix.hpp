@@ -29,6 +29,5 @@ class SKMatrix {
         virtual vector<int>& dimensions(void) const = 0;
 
         virtual SKMatrix<T>& mult(SKMatrix<T>& rhs) const = 0;
-
 };
 

@@ -24,7 +24,7 @@ class Boost_Wrapper public SKMatrix {
             return matrix.size1 * matrix.size2
         }
 
-        SKMatrix<T> data() const { return matrix(elems) };
+        matrix<T> data() const { return matrix(elems) };
 
         std::vector<int>& dimensions() const {
             return std::vector<int>(elems.size1, elems.size2)
@@ -32,25 +32,22 @@ class Boost_Wrapper public SKMatrix {
 
         Boost_Wrapper<T>& mult(Boost_Wrapper<T>& rhs) const;
 
-        template<typename F>
-        SKMatrix<T>& col_op(const F& lambda, const int col) const;
-
-        SKMatrix<T>& rand_n(int row, int col, int mean, int std) const;
-        SKMatrix<T>& elem_div(const T a) const;
+        Boost_Wrapper& rand_n(int row, int col, int mean, int std) const;
+        Boost_Wrapper& elem_div(const T a) const;
 
         /* Count Sketch */
         vector<int>& flip_signs(const int col...) const;
         vector<int>& bucket(const int num_buckets) const;
 
-        SKMatrix<T>& count_sketch() const;
+        Boost_Wrapper& count_sketch() const;
 
         /* Regression */
-        SKMatrix<T>& concat(const SKMatrix<T>& col) const;
-        SKMatrix<T>& solve_x(const SKMatrix<T>& A, const SKMatrix& B) const;
+        Boost_Wrapper& concat(const Boost_Wrapper& col) const;
+        Boost_Wrapper& solve_x(const Boost_Wrapper& A, const SKMatrix& B) const;
 
         /* TODO: K-SVD */
-        SKMatrix<T>& overridce_col(const int col, const SKMatrix& B) const;
-        vector<SKMatrix<T> > qr_decompose();
+        Boost_Wrapper& overridce_col(const int col, const SKMatrix& B) const;
+        vector<Boost_Wrapper > qr_decompose();
 };
 
 template <typename T>
@@ -82,7 +79,12 @@ SKMatrix<double>& rand_n(int row, int col, int mean, int std) const {
     }
 }
 
-SKMatrix<T>& elem_div(const T a) const {
+Boost_Wrapper& elem_div(const T a) const {
     matrix<T> prod(elems);
     return prod / a;
+}
+
+
+vector<int>& flip_signs(const int col...) const {
+
 }
