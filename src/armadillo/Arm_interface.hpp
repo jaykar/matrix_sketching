@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../interface/SKMatrix.hpp"
 #include <armadillo>
+#include <random>
 
 using namespace arma; 
 class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
@@ -20,7 +21,7 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
             matrix_data = mat(r,c); 
         }
 
-        mat data() const{
+        mat data(){
             return mat(matrix_data); 
         }
 
@@ -76,6 +77,48 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
                std::cout << "cannot divide by 0" << std::endl; 
            }
            return std::move(Armadillo_Matrix(a)); 
+        }
+
+        std::vector<int> flip_signs(){
+            auto indices = std::vector<int>(); 
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> dis(1, 2);
+            int n_cols = this->matrix_data.n_cols; 
+            for(int i=0; i<n_cols; i++){
+                int num = dis(gen); 
+                if (num == 2){
+                    indices.push_back(-1); 
+                } 
+                else{
+                    indices.push_back(1); 
+                }
+            }
+            return std::move(indices); 
+        }
+
+        std::vector<int> bucket(const int num_buckets){
+            auto indices = std::vector<int>(); 
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> dis(0, num_buckets-1);
+            int n_cols = this->matrix_data.n_cols; 
+            for(int i=0; i<n_cols; i++){
+                int num = dis(gen); 
+                indices.push_back(num); 
+            }
+            return std::move(indices); 
+        }
+        
+        Armadillo_Matrix concat(const Armadillo_Matrix& column){
+            mat a = data(); 
+            a.insert_cols(a.n_cols-1, column.matrix_data); 
+            return std::move(Armadillo_Matrix(a)); 
+        }
+
+        Armadillo_Matrix solve_x(const Armadillo_Matrix& A, const Armadillo_Matrix& B){
+                auto X = solve(A.matrix_data, B.matrix_data); 
+                return std::move(Armadillo_Matrix(X)); 
         }
 };
 

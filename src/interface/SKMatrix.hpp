@@ -5,8 +5,10 @@ class SKMatrix {
     public:
         SKMatrix(){}
         ~SKMatrix(){}
+        virtual int size() const = 0;
+        virtual std::vector<int>& dimensions() const = 0;
 
-        virtual C data() const = 0; //if we want this function then fix the other SKMatrix<T> instances
+        virtual C data() = 0; //if we want this function then fix the other SKMatrix<T> instances
 
         // Gaussian projection
         virtual T rand_n(int row, int col, int mean, int std) = 0; 
@@ -14,22 +16,20 @@ class SKMatrix {
         virtual T elem_div(const double a) = 0;
 
         // Count Sketch 
-        virtual std::vector<int>& flip_signs(const int col...) const = 0;
-        virtual std::vector<int>& bucket(const int num_buckets) const = 0;
+        virtual std::vector<int> flip_signs()  = 0;
+        virtual std::vector<int> bucket(const int num_buckets) = 0;
 
-        /*
-        virtual T& count_sketch(void) const = 0;
+        //virtual T count_sketch() = 0;
 
         // Regression 
-        virtual T& concat(const T& col) const  = 0;
-        virtual T& solve_x(const T& A, const T& B) const = 0;
+        virtual T concat(const T& col)  = 0;
+        virtual T solve_x(const T& A, const T& B) = 0;
 
+        /*
         // TODO: K-SVD 
         virtual T& overridce_col(const int col, const SKMatrix& B) const = 0;
         virtual std::vector<T> qr_decompose() const = 0;
 
-        virtual int size(void) const = 0;
-        virtual std::vector<int>& dimensions(void) const = 0;
 
         virtual SKMatrix<T, C>& mult(SKMatrix<T, C>& rhs) const = 0;
         */
