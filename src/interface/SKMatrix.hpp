@@ -13,15 +13,14 @@ class SKMatrix {
 
         virtual std::vector<int>& dimensions(void) const = 0;
         virtual C& data() const = 0;
-        virtual T& mult(T& rhs) const = 0;
+
+        virtual SKMatrix<T>& mult(SKMatrix<T>& rhs) const = 0;
 
         // Gaussian projection
         virtual T& rand_n(int row, int col, int mean, int std) const = 0;
         virtual T& elem_div(const T a) const = 0;
 
-        /* Count Sketch */
-        template<typename Col, typename... Cols>
-        T& flip_signs(const std::vector<int> cols) = 0;
+        virtual T& flip_signs(const std::vector<int> cols) = 0;
 
         std::vector<std::vector<int> >& bucket(const int num_buckets) const {
             if(num_buckets > this.cols){
