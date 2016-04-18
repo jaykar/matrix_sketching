@@ -37,6 +37,7 @@ TESTS = sample1_unittest
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
+LD_FLAGS = -larmadillo -framework Accelerate
 # House-keeping build targets.
 
 all : $(TESTS)
@@ -83,4 +84,4 @@ sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc
 
 sample1_unittest : sample1_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LD_FLAGS)

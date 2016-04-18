@@ -9,7 +9,7 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
     public:
 
         Armadillo_Matrix(){
-            std::cout << "constructor" << std::endl; 
+            //std::cout << "constructor" << std::endl; 
             matrix_data = mat(); 
         }
 
@@ -30,7 +30,7 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
         } 
 
         Armadillo_Matrix(const Armadillo_Matrix& other){
-            std::cout << "using copy operator" << std::endl; 
+            //std::cout << "using copy operator" << std::endl; 
             auto temp = other.matrix_data; 
             this->matrix_data = mat(temp); 
         }
@@ -58,6 +58,10 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
 
         Armadillo_Matrix rand_n(int row, int col, int mean, int std); 
 
+        Armadillo_Matrix mult(Armadillo_Matrix& rhs){
+            mat a = this->matrix_data * rhs.matrix_data;
+            return std::move(Armadillo_Matrix(a)); 
+        }
 };
 
 Armadillo_Matrix Armadillo_Matrix::rand_n(int row, int col, int mean, int std){
