@@ -18,15 +18,15 @@ GTEST_DIR = ../../../google_test/
 
 # Where to find user code.
 USER_DIR = ./
-USER_DIR_MATRIX = ../
-
+USER_DIR_MATRIX = ../../
+DEP_H = Arm_interface.hpp
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra -pthread
+CXXFLAGS += -g -Wall -Wextra
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
@@ -72,12 +72,15 @@ gtest_main.a : gtest-all.o gtest_main.o
 # gtest_main.a, depending on whether it defines its own main()
 # function.
 
-sample1.o : $(USER_DIR)/sample1.cc $(USER_DIR)/sample1.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1.cc
+#sample1.o : $(USER_DIR_MATRIX)/$(DEP_H) $(GTEST_HEADERS)
+#	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR_MATRIX)/$(DEP_H)
+
+sample1.o : $(USER_DIR_MATRIX)/$(DEP_H) $(GTEST_HEADERS)
+	$ cd $(USER_DIR_MATRIX); make; 
 
 sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
-                     $(USER_DIR)/sample1.h $(GTEST_HEADERS)
+                     $(USER_DIR_MATRIX)/$(DEP_H) $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc
 
-sample1_unittest : sample1.o sample1_unittest.o gtest_main.a
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+sample1_unittest : sample1_unittest.o gtest_main.a
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@

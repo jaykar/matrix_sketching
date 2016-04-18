@@ -1,5 +1,5 @@
 #include <iostream>
-#include "SKMatrix.hpp"
+#include "../interface/SKMatrix.hpp"
 #include <armadillo>
 
 using namespace arma; 
