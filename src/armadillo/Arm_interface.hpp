@@ -4,23 +4,21 @@
 
 using namespace arma; 
 class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
-    mat matrix_data; 
+    private:
+        mat matrix_data; 
     public:
-    int row; 
-    int col; 
+        int row; 
+        int col; 
 
-    Armadillo_Matrix(){}
-    Armadillo_Matrix(int r, int c){
-        matrix_data = mat(r,c); 
-    }
+        Armadillo_Matrix(){}
 
-    mat data() const{
-        return mat(matrix_data); 
-    }
+        Armadillo_Matrix(int r, int c){
+            matrix_data = mat(r,c); 
+        }
 
-    int get_row(){
-        return row; 
-    }
+        mat data() const{
+            return mat(matrix_data); 
+        }
 
 };
 
