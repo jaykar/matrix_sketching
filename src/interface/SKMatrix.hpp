@@ -7,12 +7,12 @@ class SKMatrix {
         ~SKMatrix(){}
 
         virtual C data() const = 0; //if we want this function then fix the other SKMatrix<T> instances
-        
+        //virtual T& rand_n(int row, int col, int mean, int std) const = 0;
+
         /*
         virtual T& mult(T& rhs) const = 0; 
 
         // Gaussian projection
-        virtual T& rand_n(int row, int col, int mean, int std) const = 0;
         virtual T& elem_div(const T a) const = 0;
 
         // Count Sketch 
