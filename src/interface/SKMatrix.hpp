@@ -25,7 +25,12 @@ class SKMatrix {
         // Regression 
         virtual T concat(const T& col)  = 0;
         virtual T solve_x(const T& B) = 0;
-
+        virtual T get_cols(int start, int end) = 0; 
+        virtual T get_col(int col_n) = 0; 
+        virtual void t() = 0; 
+        
+        virtual T subtract(const T& rhs) = 0; 
+        virtual double accumulate() = 0; 
         /*
         // TODO: K-SVD 
         virtual T& overridce_col(const int col, const SKMatrix& B) const = 0;

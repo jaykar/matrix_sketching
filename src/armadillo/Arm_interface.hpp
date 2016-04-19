@@ -41,24 +41,26 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
         } 
 
         Armadillo_Matrix(const Armadillo_Matrix& other){
-            //std::cout << "using copy operator" << std::endl; 
+            std::cout << "using copy operator" << std::endl; 
             auto temp = other.matrix_data; 
             this->matrix_data = mat(temp); 
         }
 
         Armadillo_Matrix& operator=(const Armadillo_Matrix& other){
+            std::cout << "using copy operator" << std::endl; 
             this->matrix_data = mat(other.matrix_data); 
             return *this; 
         }
 
         Armadillo_Matrix(Armadillo_Matrix&& other){
+            std::cout << "using move operator" << std::endl; 
             this->matrix_data = other.matrix_data; 
-
             //might not need to do this
             other.matrix_data = mat(); 
         }
 
         Armadillo_Matrix& operator=(Armadillo_Matrix&& other){
+            std::cout << "using move operator" << std::endl; 
             this->matrix_data = other.matrix_data;
             other.matrix_data = mat(); 
             return *this; 
@@ -130,5 +132,30 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
                 auto X = solve(matrix_data, B.matrix_data); 
                 return std::move(Armadillo_Matrix(X)); 
         }
+
+        Armadillo_Matrix get_cols(int start, int end){
+            mat a = matrix_data.cols(start, end); 
+            return std::move(Armadillo_Matrix(a)); 
+        }
+
+
+        Armadillo_Matrix get_col(int col_n){
+            mat a = matrix_data.col(col_n); 
+            return std::move(Armadillo_Matrix(a)); 
+        }
+
+        void t(){
+            matrix_data = matrix_data.t(); 
+        }
+
+        Armadillo_Matrix subtract(const Armadillo_Matrix & rhs){
+            mat a = matrix_data - rhs.matrix_data; 
+            return std::move(Armadillo_Matrix(a)); 
+        }
+
+        double accumulate(){
+            return accu(matrix_data); 
+        }
+
 };
 
