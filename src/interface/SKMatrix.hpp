@@ -6,7 +6,7 @@ class SKMatrix {
         SKMatrix(){}
         ~SKMatrix(){}
         virtual int size() const = 0;
-        virtual std::vector<int>& dimensions() const = 0;
+        virtual std::vector<int> dimensions() const = 0;
 
         virtual C data() = 0; //if we want this function then fix the other SKMatrix<T> instances
 
@@ -23,15 +23,12 @@ class SKMatrix {
 
         // Regression 
         virtual T concat(const T& col)  = 0;
-        virtual T solve_x(const T& A, const T& B) = 0;
+        virtual T solve_x(const T& B) = 0;
 
         /*
         // TODO: K-SVD 
         virtual T& overridce_col(const int col, const SKMatrix& B) const = 0;
         virtual std::vector<T> qr_decompose() const = 0;
-
-
-        virtual SKMatrix<T, C>& mult(SKMatrix<T, C>& rhs) const = 0;
         */
 
 };

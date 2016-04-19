@@ -14,6 +14,16 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
             matrix_data = mat(); 
         }
 
+        int size() const{
+            return matrix_data.n_elem; 
+        }
+        
+        std::vector<int> dimensions() const{
+            auto a = std::vector<int>(); 
+            a.push_back(matrix_data.n_rows); 
+            a.push_back(matrix_data.n_cols); 
+            return std::move(a); 
+        }
         ~Armadillo_Matrix(){
         }
 
@@ -61,13 +71,13 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
         }
 
         Armadillo_Matrix rand_n(int row, int col, int mean, int std){
-            std::cout << "filling with gaussian noise" << std::endl; 
             mat a(row, col); 
             a.randn(); 
             a = a*std + mean; 
             this->matrix_data = a; 
             return *this; 
         }
+
         Armadillo_Matrix elem_div(const double b){
            mat a = data(); 
            if (b != 0.0){
@@ -78,7 +88,7 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
            }
            return std::move(Armadillo_Matrix(a)); 
         }
-
+        
         std::vector<int> flip_signs(){
             auto indices = std::vector<int>(); 
             std::random_device rd;
@@ -116,8 +126,8 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
             return std::move(Armadillo_Matrix(a)); 
         }
 
-        Armadillo_Matrix solve_x(const Armadillo_Matrix& A, const Armadillo_Matrix& B){
-                auto X = solve(A.matrix_data, B.matrix_data); 
+        Armadillo_Matrix solve_x(const Armadillo_Matrix& B){
+                auto X = solve(matrix_data, B.matrix_data); 
                 return std::move(Armadillo_Matrix(X)); 
         }
 };
