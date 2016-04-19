@@ -70,10 +70,10 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
             return std::move(Armadillo_Matrix(a)); 
         }
 
-        Armadillo_Matrix rand_n(int row, int col, int mean, int std){
+        Armadillo_Matrix rand_n(int row, int col){
             mat a(row, col); 
             a.randn(); 
-            a = a*std + mean; 
+            //a = a*std + mean; 
             this->matrix_data = a; 
             return *this; 
         }

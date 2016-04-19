@@ -11,7 +11,8 @@ class SKMatrix {
         virtual C data() = 0; //if we want this function then fix the other SKMatrix<T> instances
 
         // Gaussian projection
-        virtual T rand_n(int row, int col, int mean, int std) = 0; 
+        //virtual T rand_n(int row, int col, int mean, int std) = 0; 
+        virtual T rand_n(int row, int col) = 0; 
         virtual T mult(T& rhs) = 0; 
         virtual T elem_div(const double a) = 0;
 

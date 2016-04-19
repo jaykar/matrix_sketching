@@ -23,9 +23,9 @@ TEST(construct_arm_interface_row_col, TRIVIAL){
 
 TEST(arm_interface_rand_n, TRIVIAL){
     auto A = Armadillo_Matrix(); 
-    A.rand_n(10,10, 0, 1.0); 
+    A.rand_n(10,10); 
     auto B = Armadillo_Matrix(); 
-    B.rand_n(10,10, 0, 1.0); 
+    B.rand_n(10,10); 
     for (int i=0; i<3; i++){
         auto c = B.mult(A); 
     }
@@ -35,7 +35,7 @@ TEST(arm_interface_rand_n, TRIVIAL){
 TEST(arm_interface_elem_div, TRIVIAL){
     auto A = Armadillo_Matrix(); 
     double const_num = 3.0; 
-    A.rand_n(10,10, 0, 1.0); 
+    A.rand_n(10,10); 
     for (int i=0; i<3; i++){
         auto c = A.elem_div(const_num); 
     }
@@ -44,9 +44,9 @@ TEST(arm_interface_elem_div, TRIVIAL){
 
 TEST(arm_solve_x, TRIVIAL){
     auto A = Armadillo_Matrix(); 
-    A.rand_n(30,30, 0.0, 1.0); 
+    A.rand_n(30,30); 
     auto B = Armadillo_Matrix(); 
-    B.rand_n(30, 1, 0.0, 1.0); 
+    B.rand_n(30, 1); 
     auto X = A.solve_x(B); 
     //std::cout << X.data() << std::endl; 
 
@@ -54,7 +54,7 @@ TEST(arm_solve_x, TRIVIAL){
 Armadillo_Matrix f(){
     auto A = Armadillo_Matrix(); 
     cout << A.data() << endl; 
-    return A.rand_n(3,4, 0, 1.0); 
+    return A.rand_n(3,4); 
 }
 
 int main(int argc, char **argv){
