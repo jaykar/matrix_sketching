@@ -1,11 +1,9 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -g -I../interface/
+LDLIBS = -larmadillo
 
-arm_interface: arm_interface.o
-	$(CXX) $(CXXFLAGS) -o arm_interface arm_interface.o 
-
-arm_interface.o: Arm_interface.cpp 
-	$(CXX) $(CXXFLAGS) -c Arm_interface.cpp ../interface/SKMatrix.hpp
+arm_interface.o: Arm_interface.hpp 
+	$(CXX) $(CXXFLAGS) -c Arm_interface.hpp ../interface/SKMatrix.hpp
 
 .PHONY: clean
 clean:
