@@ -1,88 +1,192 @@
+#include "../interface/SKMatrix.hpp"
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/operation.hpp>
-#include <vector>
-#include <iostream>
-#include <random>
 
-using namespace boost::numeric::ublas;
+namespace bnu = boost::numeric::ublas;
 
-template <typename T, typename C>
-class Boost_Wrapper public SKMatrix {
+template <typename F>
+class Boost_Wrapper: public SKMatrix<Boost_Wrapper<F>, bnu::matrix<F> >{
     private:
-        matrix<T> elems;
-    public:
-        Boost_Wrapper(int row, int col) {
-            elems = matrix(row, col);
-        }
+        bnu::matrix<F> elems;
 
-        Boost_Wrapper(matrix<T>& m){
-            this.elems = m;
+    public:
+        Boost_Wrapper<F>(bnu::matrix<F>& m){
+            this->elems = m;
         }
+        ~Boost_Wrapper<F>() = default;
+
+        // Boost_Wrapper<F>(Boost_Wrapper<F>&& other){
+        //     std::cout << "using move operator" << std::endl;
+        //     this->matrix_data = other.matrix_data;
+        //     //might not need to do this
+        //     other.matrix_data = mat();
+        // }
+
+        // Boost_Wrapper<F>& operator=(Boost_Wrapper<F>&& other){
+        //     std::cout << "using move operator" << std::endl;
+        //     this->matrix_data = other.matrix_data;
+        //     other.matrix_data = mat();
+        //     return *this;
+        // }
 
         int size() const {
-            return matrix.size1 * matrix.size2
+            return elems.size1 * elems.size2;
         }
 
-        SKMatrix<T> data() const { return matrix(elems) };
-
-        std::vector<int>& dimensions() const {
-            return std::vector<int>(elems.size1, elems.size2)
+        int num_rows(void) const {
+            return elems.size1;
         }
 
-        Boost_Wrapper<T>& mult(Boost_Wrapper<T>& rhs) const;
+        int num_cols(void) const {
+            return elems.size2;
+        }
 
-        template<typename F>
-        SKMatrix<T>& col_op(const F& lambda, const int col) const;
+        bnu::matrix<F> data(void) const { return bnu::matrix<F>(elems); };
 
-        SKMatrix<T>& rand_n(int row, int col, int mean, int std) const;
-        SKMatrix<T>& elem_div(const T a) const;
+        Boost_Wrapper<F> mult(const Boost_Wrapper<F>& rhs) const;
+
+        Boost_Wrapper<F> rand_n(const int row, const int col, const int mean, const int std) const;
+        Boost_Wrapper<F> elem_div(const F a) const;
 
         /* Count Sketch */
-        vector<int>& flip_signs(const int col...) const;
-        vector<int>& bucket(const int num_buckets) const;
-
-        SKMatrix<T>& count_sketch() const;
+        Boost_Wrapper<F> flip_signs(const std::vector<int> cols);
 
         /* Regression */
-        SKMatrix<T>& concat(const SKMatrix<T>& col) const;
-        SKMatrix<T>& solve_x(const SKMatrix<T>& A, const SKMatrix& B) const;
+        Boost_Wrapper<F> concat(const Boost_Wrapper<F>& col) const;
+        Boost_Wrapper<F> solve_x(const Boost_Wrapper<F>& B) const;
 
-        /* TODO: K-SVD */
-        SKMatrix<T>& overridce_col(const int col, const SKMatrix& B) const;
-        vector<SKMatrix<T> > qr_decompose();
+        /* FODO: K-SVD */
+        Boost_Wrapper<F> override_col(const int col, const Boost_Wrapper<F>& new_col) const;
+
+        void qr_decompose(Boost_Wrapper<F>& Q, Boost_Wrapper<F>& R) const;
 };
 
-template <typename T>
-Boost_Wrapper<T>& mult(const Boost_Wrapper<T>& rhs) const {
-    if(rhs.size1 != matrix.size_2) {
-        cout << "Column of left matrix: " << elems.size_2 << " does not match row of right matrix: " << rhs.data.size_2 << "";
+template <typename F>
+Boost_Wrapper<F> Boost_Wrapper<F>::mult(const Boost_Wrapper<F>& rhs) const {
+    if(rhs.size1 != this->elems.size_2) {
+        std::cout << "Column of left matrix: " << this->elems.size_2 << " does not match row of right matrix: " << rhs.data.size_2 << "\n";
         throw;
     } else {
-        matrix<T> prod(elems.size_1, rhs.data.size_2);
-        noalias(C) = prod(elems, rhs.data);
-        return Boost_Wrapper(prod);
+        F prod(this->elems.size_1, rhs.data.size_2);
+        bnu::noalias(prod) = bnu::prod(this->elems, rhs.data);
+        return std::move(Boost_Wrapper<F>(prod));
     }
 }
 
-SKMatrix<double>& rand_n(int row, int col, int mean, int std) const {
+template <typename F>
+Boost_Wrapper<F> Boost_Wrapper<F>::rand_n(const int row, const int col, const int mean, const int std) const {
     if(row < 0 || col < 0) {
-        cout << "Column and row lengths must be non-negative integers";
+        std::cout << "Column and row lengths must be non-negative integers" << std::endl;
         throw;
     } else {
         std::default_random_engine generator;
-        std::normal_distribution<double> distribution(mean, std);
+        std::normal_distribution<F> distribution(mean, std);
 
-        matrix<double> rand_matrix(row, col);
+        bnu::matrix<F> rand_matrix(row, col);
         for (unsigned i = 0; i < rand_matrix.size1 (); ++ i){
             for (unsigned j = 0; j < rand_matrix.size2 (); ++ j){
                 rand_matrix(i, j) = distribution(generator);
             }
         }
+        return std::move(Boost_Wrapper<F>(rand_matrix));
     }
 }
 
-SKMatrix<T>& elem_div(const T a) const {
-    matrix<T> prod(elems);
-    return prod / a;
+template <typename F>
+Boost_Wrapper<F> Boost_Wrapper<F>::elem_div(const F a) const {
+    bnu::matrix<F> prod(this->elems);
+    return std::move(Boost_Wrapper<F>(prod / a));
+}
+
+template <typename F>
+Boost_Wrapper<F> Boost_Wrapper<F>::flip_signs(const std::vector<int> cols) {
+    srand( time(NULL) ); //Randomize seed initialization
+    for(int col : cols){
+        if(rand() % 2){
+            bnu::column(this->elems, col) *= -1;
+        }
+    }
+    return std::move(this);
+}
+
+template <typename F>
+Boost_Wrapper<F> Boost_Wrapper<F>::concat(const Boost_Wrapper<F>& new_col) const {
+    if(new_col.num_rows != this->num_rows) {
+        std::cout << "Number of rows don't match" << std::endl;
+        throw;
+    } else {
+        bnu::matrix<F> concat_mat(this->elems);
+        return std::move(Boost_Wrapper<F>(concat_mat += new_col));
+    }
+}
+
+template <typename F>
+Boost_Wrapper<F> Boost_Wrapper<F>::solve_x(const Boost_Wrapper<F>& B) const {
+    bnu::matrix<F> Q(this->num_rows, this->num_cols);
+    bnu::matrix<F> R(this->num_cols, this->num_cols);
+
+    this->qr_decompose(Q, R);
+}
+
+// http://www.keithlantz.net/2012/05/qr-decomposition-using-householder-transformations/
+//
+template <typename F>
+void Boost_Wrapper<F>::qr_decompose(Boost_Wrapper<F>& Q, Boost_Wrapper<F>& R) const {
+    F mag;
+    F alpha;
+
+    bnu::matrix<F> u(this->num_rows, 1);
+    bnu::matrix<F> v(this->num_rows, 1);
+
+    bnu::identity_matrix<F> I(this->num_rows);
+    R = this->elems;
+
+    for (int i = 0; i < this->num_rows; i++) {
+        bnu::matrix<F> P(this->num_rows, this->num_rows);
+
+        u *= 0;
+        v *= 0;
+
+        mag = 0.0;
+
+        for (int j = i; j < this->num_cols; j++) {
+            u(j,1) = R(j, i);
+            mag += u(j,1) * u(j,1);
+        }
+
+        mag = std::sqrt(mag);
+
+        alpha = u(i,1) < 0 ? mag : -1 * mag;
+
+        mag = 0.0;
+
+        for (int j = i; j < this->num_cols; j++) {
+            v(j,1) = j == i ? u(j,1) + alpha : u(j,1);
+            mag += v(j,1) * v(j,1);
+        }
+        mag = std::sqrt(mag); // norm
+
+        if (mag < 0.0000000001) continue;
+
+        v /= mag;
+
+        P = I - (v * bnu::trans(v)) * 2.0;
+
+        Q *= P;
+        R = P * R;
+    }
+}
+
+template <typename F>
+Boost_Wrapper<F> Boost_Wrapper<F>::override_col(const int col_index, const Boost_Wrapper<F>& new_col) const {
+    if(col_index < 0 || col_index >= this->num_cols) {
+        std::cout << "Column index out of bound" << std::endl;
+        throw;
+    } else if (new_col.num_rows != this->num_rows) {
+        std::cout << "Number of rows don't match" << std::endl;
+        throw;
+    } else {
+        bnu::column(this->elems, col_index) = new_col.data();
+    }
 }
