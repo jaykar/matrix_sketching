@@ -1,4 +1,7 @@
-#import <vector>
+#ifndef __SKMATRIX_H__
+#define __SKMATRIX_H__
+
+#include <vector>
 #include <random>
 #include <cstdarg>
 #include <time.h>
@@ -72,6 +75,6 @@ class SKMatrix {
         // TODO: K-SVD
         virtual T overridce_col(const int col, const SKMatrix& B) const = 0;
         virtual void qr_decompose(T& a, T& b) const = 0;
-        virtual std::vector<T> qr_decompose() const = 0;
 };
 
+#endif
