@@ -31,7 +31,7 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
             matrix_data = mat(r,c); 
         }
 
-        mat data(){
+        mat data() const{
             return mat(matrix_data); 
         }
 
@@ -122,7 +122,7 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
             return std::move(indices); 
         }
         
-        Armadillo_Matrix concat(const Armadillo_Matrix& column){
+        Armadillo_Matrix concat(const Armadillo_Matrix& column) const{
             mat a = data(); 
             a.insert_cols(a.n_cols-1, column.matrix_data); 
             return std::move(Armadillo_Matrix(a)); 

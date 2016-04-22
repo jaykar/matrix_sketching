@@ -8,7 +8,7 @@ class SKMatrix {
         virtual int size() const = 0;
         virtual std::vector<int> dimensions() const = 0;
 
-        virtual C data() = 0; //if we want this function then fix the other SKMatrix<T> instances
+        virtual C data() const = 0; //if we want this function then fix the other SKMatrix<T> instances
 
         // Gaussian projection
         //virtual T rand_n(int row, int col, int mean, int std) = 0; 
@@ -23,7 +23,7 @@ class SKMatrix {
         //virtual T count_sketch() = 0;
 
         // Regression 
-        virtual T concat(const T& col)  = 0;
+        virtual T concat(const T& col) const  = 0;
         virtual T solve_x(const T& B) = 0;
         virtual T get_cols(int start, int end) = 0; 
         virtual T get_col(int col_n) = 0; 
