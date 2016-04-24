@@ -7,16 +7,45 @@
 #include <time.h>
 #include <iostream>
 
-template <typename T, class C>
+template <typename T, typename C, typename F>
 class SKMatrix {
+    private:
+        C matrix_data;
     public:
         SKMatrix(){}
         ~SKMatrix(){}
+        T& operator=(const T& rhs){};
+        T& operator=(const C& rhs){};
 
+        // to do
+        // T operator+(const T& rhs){};
+        // T operator+(const C& rhs){};
+        // T& operator+=(const T& rhs){};
+        // T& operator+=(const C& rhs){};
+
+        // T operator-(const T& rhs){};
+        // T operator-(const C& rhs){};
+        // T& operator-=(const T& rhs){};
+        // T& operator-=(const C& rhs){};
+
+        // T operator/(const T& rhs){};
+        // T operator/(const C& rhs){};
+        // T& operator/=(const T& rhs){};
+        // T& operator/=(const C& rhs){};
+
+        // T operator*(const T& rhs){};
+        // T operator*(const C& rhs){};
+        // T& operator*=(const T& rhs){};
+        // T& operator*=(const C& rhs){};
+
+
+        virtual void clear(void) = 0;
         virtual int size() const = 0;
         virtual int num_rows(void) const = 0;
         virtual int num_cols(void) const = 0;
+
         virtual C data(void) const = 0; //if we want this function then fix the other SKMatrix<T> instances
+        virtual C& data(void) = 0; //if we want this function then fix the other SKMatrix<T> instances
 
         // Gaussian projection
         virtual T rand_n(const int row, const int col) const = 0;
@@ -86,7 +115,6 @@ class SKMatrix {
         virtual double accumulate() const = 0;
 
         // TODO: K-SVD
-        virtual T override_col(const int col, const T& B) const = 0;
         virtual void qr_decompose(T& a, T& b) const = 0;
 };
 

@@ -1,6 +1,8 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -g -I /usr/local/include/
 
+#-O3 -D -DNDEBUG -DBOOST_UBLAS_NDEBUG
+
 boost_wrapper_test: boost_wrapper_test.o
 	$(CXX) $(CXXFLAGS) -o boost_wrapper_test boost_wrapper_test.o
 
