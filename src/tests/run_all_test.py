@@ -2,7 +2,7 @@ import glob
 import os
 import subprocess
 
-list_files = glob.glob('test/*')
+list_files = glob.glob('./*')
 for file_name in list_files:
     command = "make" 
     print command, file_name

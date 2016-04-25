@@ -16,7 +16,8 @@ class SKMatrix {
         ~SKMatrix(){}
         T& operator=(const T& rhs){};
         T& operator=(const C& rhs){};
-
+        
+        
         // to do
         // T operator+(const T& rhs){};
         // T operator+(const C& rhs){};
@@ -37,7 +38,7 @@ class SKMatrix {
         // T operator*(const C& rhs){};
         // T& operator*=(const T& rhs){};
         // T& operator*=(const C& rhs){};
-
+        
         virtual void clear(void) = 0;
         virtual int size() const = 0;
         virtual int num_rows(void) const = 0;
@@ -47,7 +48,7 @@ class SKMatrix {
         virtual C& data(void) = 0; //if we want this function then fix the other SKMatrix<T> instances
 
         // Gaussian projection
-        virtual T rand_n(const int row, const int col) const = 0;
+        virtual T rand_n(const int row, const int col) = 0;
         virtual T mult(const T& rhs) const = 0;
         virtual T elem_div(const double a) const= 0;
 
@@ -113,10 +114,8 @@ class SKMatrix {
         virtual T subtract(const T& rhs) const = 0;
         virtual double accumulate() const = 0;
 
-        /*
         // TODO: K-SVD
         virtual void qr_decompose(T& a, T& b) const = 0;
-        */
 };
 
 #endif
