@@ -7,51 +7,52 @@
 #include <time.h>
 #include <iostream>
 
-template <typename T, typename C, typename F>
-class SKMatrix {
-    private:
-        C matrix_data;
+template <typename t, typename c, typename f>
+class SKmatrix {
+    protected:
+        c matrix_data;
     public:
-        SKMatrix(){}
-        ~SKMatrix(){}
-        T& operator=(const T& rhs){};
-        T& operator=(const C& rhs){};
+        SKmatrix(){}
+        ~SKmatrix(){}
+        t& operator=(const t& rhs){};
+        t& operator=(const c& rhs){};
 
         // to do
-        // T operator+(const T& rhs){};
-        // T operator+(const C& rhs){};
-        // T& operator+=(const T& rhs){};
-        // T& operator+=(const C& rhs){};
+        t operator+(const t& rhs){};
+        // t operator+(const c& rhs){};
+        t& operator+=(const t& rhs){};
+        // t& operator+=(const c& rhs){};
 
-        // T operator-(const T& rhs){};
-        // T operator-(const C& rhs){};
-        // T& operator-=(const T& rhs){};
-        // T& operator-=(const C& rhs){};
+        t operator-(const t& rhs){};
+        // t operator-(const c& rhs){};
+        t& operator-=(const t& rhs){};
+        // t& operator-=(const c& rhs){};
 
-        // T operator/(const T& rhs){};
-        // T operator/(const C& rhs){};
-        // T& operator/=(const T& rhs){};
-        // T& operator/=(const C& rhs){};
+        // t operator/(const t& rhs){};
+        // t operator/(const c& rhs){};
+        // t& operator/=(const t& rhs){};
+        // t& operator/=(const c& rhs){};
 
-        // T operator*(const T& rhs){};
-        // T operator*(const C& rhs){};
-        // T& operator*=(const T& rhs){};
-        // T& operator*=(const C& rhs){};
+        // t operator*(const t& rhs){};
+        // t operator*(const c& rhs){};
+        // t& operator*=(const t& rhs){};
+        // t& operator*=(const c& rhs){};
 
         virtual void clear(void) = 0;
         virtual int size() const = 0;
         virtual int num_rows(void) const = 0;
         virtual int num_cols(void) const = 0;
 
-        virtual C data(void) const = 0; //if we want this function then fix the other SKMatrix<T> instances
-        virtual C& data(void) = 0; //if we want this function then fix the other SKMatrix<T> instances
+        // virtual c data(void) const = 0; //if we want this function then fix the other SKMatrix<T> instances
+        // virtual c& data(void) = 0; //if we want this function then fix the other SKMatrix<T> instances
 
-        // Gaussian projection
-        virtual T rand_n(const int row, const int col) const = 0;
-        virtual T mult(const T& rhs) const = 0;
-        virtual T elem_div(const double a) const= 0;
+        // gaussian projection
+        virtual t rand_n(const int row, const int col) = 0;
+        // virtual t mult(const t& rhs) const = 0;
+        //virtual t elem_div(const double a) const= 0;
 
-        // Count Sketch
+        /*
+        // count sketch
         std::vector<int> flip_signs(){
             std::vector<int> indices(this->num_cols());
             std::random_device rd;
@@ -72,7 +73,7 @@ class SKMatrix {
 
         std::vector<std::vector<int> > bucket(const int num_buckets) const {
             if(num_buckets > this->num_cols()){
-                std::cout << "Number of buckets must be less than or equal to the number of columns";
+                std::cout << "number of buckets must be less than or equal to the number of columns";
                 std::cout << '\n';
                 throw;
             } else {
@@ -100,22 +101,23 @@ class SKMatrix {
                 // return indices;
             }
         }
+        */
 
-        // Regression
-        virtual T concat(const T& col) const = 0;
-        virtual T solve_x(const T& B) const = 0;
+        // regression
+        //virtual t concat(const t& col) const = 0;
+        //virtual t solve_x(const t& b) const = 0;
 
-        virtual T get_cols(int start, int end) const = 0;
-        virtual T get_col(int col_n) const = 0;
+        //virtual t get_cols(int start, int end) const = 0;
+        //virtual t get_col(int col_n) const = 0;
 
-        virtual void transpose() = 0;
+        //virtual void transpose() = 0;
 
-        virtual T subtract(const T& rhs) const = 0;
-        virtual double accumulate() const = 0;
+        virtual t subtract(const t& rhs) const = 0;
+        //virtual double accumulate() const = 0;
 
         /*
         // TODO: K-SVD
-        virtual void qr_decompose(T& a, T& b) const = 0;
+        virtual void qr_decompose(t& a, t& b) const = 0;
         */
 };
 
