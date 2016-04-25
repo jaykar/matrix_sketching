@@ -108,13 +108,37 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
         }
 
 
+        IntelMatrix operator-(const IntelMatrix& rhs) const {
+            if(this->dimensions() != rhs.dimensions())
+                throw std::invalid_argument("mismatched dimensions");
+            IntelMatrix temp(*this);
+            //std::cout << "temp: " << temp << std::endl;
+            /*
+            int i;
+            for(i = 0; i < temp.size(); i++)
+                std::cout << temp.data[i] - rhs.data[i] << '\t';
+            std::cout <<std::endl;
+            */
+            cblas_daxpy(temp.size(), -1, rhs.data, 1, temp.data, 1);
+            /*
+            for(i = 0; i < temp.size(); i++)
+                std::cout << temp.data[i] << '\t';
+            std::cout << std::endl;
+            */
+            return temp;
+        }
+
+        IntelMatrix& operator+=(const IntelMatrix& rhs) {
+            *this = *this + rhs;
+            return *this;
+        }
+
+        IntelMatrix& operator-=(const IntelMatrix& rhs) {
+            *this = *this - rhs;
+            return *this;
+        }
+
         /*
-
-        IntelMatrix operator-(const IntelMatrix& rhs) const;
-
-        IntelMatrix& operator+=(const IntelMatrix& rhs); 
-        IntelMatrix& operator-=(const IntelMatrix& rhs);
-
         IntelMatrix& operator*(const IntelMatrix& rhs); 
         IntelMatrix& operator*=(const IntelMatrix& rhs); 
 

@@ -20,10 +20,10 @@ int main() {
     std::cout << a << std::endl;
     std::cout << "b: ";
     std::cout << b << std::endl;
-    c = a + b;
-    std::cout << "c: ";
+    a -= b;
+    std::cout << "a: ";
 
-    std::cout << c << std::endl;
+    std::cout << a << std::endl;
 
     //std::cout << c.data[2] << " " << a.data[2] + b.data[2] << std::endl;
     return 0;
