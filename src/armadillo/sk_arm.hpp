@@ -38,32 +38,32 @@ class sk_arm: SKMatrix<sk_arm, arma::mat, float>{
         }
 
         sk_arm(const sk_arm& other){
-            std::cout << "using copy operator" << std::endl;
+            //std::cout << "using copy operator" << std::endl;
             auto temp = other.matrix_data;
             this->matrix_data = mat(temp);
         }
         
         sk_arm& operator=(const sk_arm& other){
-            std::cout << "using copy operator" << std::endl;
+            //std::cout << "using copy operator" << std::endl;
             this->matrix_data = mat(other.matrix_data);
             return *this;
         }
 
 
         sk_arm& operator=(const mat& other){
-            std::cout << "using copy operator" << std::endl;
+            //std::cout << "using copy operator" << std::endl;
             this->matrix_data = mat(other);
             return *this;
         }
 
         sk_arm(sk_arm&& other){
-            std::cout << "using move operator" << std::endl;
+            //std::cout << "using move operator" << std::endl;
             this->matrix_data = other.matrix_data;
             other.matrix_data = mat();
         }
 
         sk_arm& operator=(sk_arm&& other){
-            std::cout << "using move operator" << std::endl;
+            //std::cout << "using move operator" << std::endl;
             this->matrix_data = other.matrix_data;
             other.matrix_data = mat();
             return *this;
@@ -93,10 +93,10 @@ class sk_arm: SKMatrix<sk_arm, arma::mat, float>{
         }
 
         sk_arm rand_n(int row, int col){
-            this->matrix_data = mat(row, col);
-            this->matrix_data.randn();
+            mat a; 
+            a.randn(row, col);
             //a = a*std + mean;
-            //this->matrix_data = a;
+            this->matrix_data = a;
             return *this;
         }
 
