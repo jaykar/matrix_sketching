@@ -2,7 +2,6 @@
 
 int main() {
     IntelMatrix a;
-    a.init();
     std::cout << "a: ";
     std::cout << a << std::endl;
     IntelMatrix b(4, 3);

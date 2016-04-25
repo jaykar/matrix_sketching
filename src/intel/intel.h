@@ -1,4 +1,4 @@
-#include "Matrix.hpp"
+#include "SKMatrix.hpp"
 #include "mkl.h"
 #include "mkl_blas.h"
 #include <iostream>
@@ -7,13 +7,13 @@
 #include <chrono>
 #include <random>
 
-class IntelMatrix : SKMatrix<IntelMatrix>  {
+class IntelMatrix : SKmatrix<IntelMatrix, float *, float>  {
     private:
         int rows;
         int cols;
 
     public:
-        double *data;
+        float *data;
         IntelMatrix() {
             //std::cout << "intel constructor" << std::endl;
             data = NULL;
@@ -23,8 +23,8 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
 
         IntelMatrix(const int row, const int col) {
             //std::cout << "intel parametric constructor" << std::endl;
-            data = (double *) mkl_malloc(row * col * sizeof(double), sizeof(double));
-            memset(data, 0, row * col * sizeof(double));
+            data = (float *) mkl_malloc(row * col * sizeof(float), sizeof(float));
+            memset(data, 0, row * col * sizeof(float));
             rows = row;
             cols = col;
         }
@@ -36,37 +36,53 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
 
         IntelMatrix(const IntelMatrix& im) {
             //std::cout << "copy constructor" << std::endl;
-            data = (double *) mkl_malloc(im.size() * sizeof(double), sizeof(double));
-            cblas_dcopy(im.size(), im.data, 1, data, 1);
+            data = (float *) mkl_malloc(im.size() * sizeof(float), sizeof(float));
+            cblas_scopy(im.size(), im.data, 1, data, 1);
             rows = im.rows;
             cols = im.cols;
         }
 
+        /*
         void init() {
-            int i, j;
             if(!this->data) {
-                this->data = (double *) mkl_malloc(sizeof(double), sizeof(double));
+                this->data = (float *) mkl_malloc(sizeof(float), sizeof(float));
                 this->rows = 1;
                 this->cols = 1;
             }
-            memset(this->data, 0, this->size() * sizeof(double));
+            memset(this->data, 0, this->size() * sizeof(float));
         }
+        */
 
         IntelMatrix& operator=(const IntelMatrix& rhs) {
             if(this->data)
                 mkl_free(this->data);
             this->rows = rhs.rows;
             this->cols = rhs.cols;
-            this->data = (double *) mkl_malloc(rhs.size() * sizeof(double), sizeof(double));
-            cblas_dcopy(rhs.size(), rhs.data, 1, this->data, 1);
+            this->data = (float *) mkl_malloc(rhs.size() * sizeof(float), sizeof(float));
+            cblas_scopy(rhs.size(), rhs.data, 1, this->data, 1);
             return *this;
+        }
+
+        void clear() {
+            if(this->data)
+                mkl_free(this->data);
+            this->rows = 0;
+            this->cols = 0;
         }
 
         int size() const {
             return this->rows * this->cols;
         }
 
-        IntelMatrix rand_n(int row = -1, int col = -1) {
+        int num_rows(void) const {
+            return this->rows;
+        }
+
+        int num_cols(void) const {
+            return this->cols;
+        }
+
+        IntelMatrix rand_n(const int row = -1, const int col = -1) {
 
             if(row != -1)
                 this->rows = row;
@@ -74,11 +90,11 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
                 this->cols = col;
             if(this->data)
                 mkl_free(this->data);
-            this->data = (double *) mkl_malloc(this->size() * sizeof(double), sizeof(double));
+            this->data = (float *) mkl_malloc(this->size() * sizeof(float), sizeof(float));
             int i;
             unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
             std::mt19937 gen(seed);
-            std::normal_distribution<double> n;
+            std::normal_distribution<float> n;
             
             for(i = 0; i < this->size(); i++) {
                 this->data[i] = n(gen);
@@ -103,12 +119,12 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
                 throw std::invalid_argument("mismatched dimensions");
             IntelMatrix temp(*this);
             std::cout << "temp: " << temp << std::endl;
-            cblas_daxpy(temp.size(), 1, rhs.data, 1, temp.data, 1);
+            cblas_saxpy(temp.size(), 1, rhs.data, 1, temp.data, 1);
             return temp;
         }
 
 
-        IntelMatrix operator-(const IntelMatrix& rhs) const {
+        IntelMatrix subtract(const IntelMatrix& rhs) const {
             if(this->dimensions() != rhs.dimensions())
                 throw std::invalid_argument("mismatched dimensions");
             IntelMatrix temp(*this);
@@ -119,13 +135,17 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
                 std::cout << temp.data[i] - rhs.data[i] << '\t';
             std::cout <<std::endl;
             */
-            cblas_daxpy(temp.size(), -1, rhs.data, 1, temp.data, 1);
+            cblas_saxpy(temp.size(), -1, rhs.data, 1, temp.data, 1);
             /*
             for(i = 0; i < temp.size(); i++)
                 std::cout << temp.data[i] << '\t';
             std::cout << std::endl;
             */
             return temp;
+        }
+
+        IntelMatrix operator-(const IntelMatrix& rhs) const {
+            return this->subtract(rhs);
         }
 
         IntelMatrix& operator+=(const IntelMatrix& rhs) {
@@ -167,6 +187,7 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
          */
 
         friend std::ostream& operator<<(std::ostream&os, const IntelMatrix& im);
+
 };
 
 std::ostream& operator<<(std::ostream&os, const IntelMatrix& im) {

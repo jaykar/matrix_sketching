@@ -5,7 +5,7 @@ LDFLAGS =  -L$(MKLROOT)/lib -Wl,-rpath,$(MKLROOT)/lib -L$(MKLROOT)/../compiler//
 
 OBJECTS = main.o #intel.o
 
-main: $(OBJECTS) intel.h ../interface/Matrix.hpp
+main: $(OBJECTS) intel.h ../interface/SKMatrix.hpp
 	$(CXX) $(CXXFLAGS) -o main $(OBJECTS) $(LDFLAGS) 
 
 #~/mkl/mac/mkl/lib/libmkl_core.dylib 
