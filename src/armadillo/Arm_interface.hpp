@@ -8,12 +8,12 @@ using namespace arma;
 template<typename F>
 class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
     private:
-        mat matrix_data;
+        Mat<F> matrix_data;
     public:
         sk_arm(){
             matrix_data = mat();
         }
-
+        
         std::vector<int> dimensions() const{
             auto a = std::vector<int>();
             a.push_back(matrix_data.n_rows);
