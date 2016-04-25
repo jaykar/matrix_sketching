@@ -7,17 +7,17 @@
 #include <time.h>
 #include <iostream>
 
-template <typename T, typename C, typename F>
+template <typename T, typename C>
 class SKMatrix {
     private:
         C matrix_data;
+
     public:
         SKMatrix(){}
+
         ~SKMatrix(){}
         T& operator=(const T& rhs){};
         T& operator=(const C& rhs){};
-        
-        
         // to do
         // T operator+(const T& rhs){};
         // T operator+(const C& rhs){};
@@ -88,17 +88,6 @@ class SKMatrix {
                 }
 
                 return buckets;
-
-                // std::vector<int> indices(num_buckets);
-                // std::random_device rd;
-                // std::mt19937 gen(rd());
-                // std::uniform_int_distribution<> dis(0, num_buckets-1);
-                // int n_cols = this->matrix_data.n_cols;
-                // for(int i=0; i<n_cols; i++){
-                //     int num = dis(gen);
-                //     indices.push_back(num);
-                // }
-                // return indices;
             }
         }
 
@@ -106,8 +95,8 @@ class SKMatrix {
         virtual T concat(const T& col) const = 0;
         virtual T solve_x(const T& B) const = 0;
 
-        virtual T get_cols(int start, int end) const = 0;
-        virtual T get_col(int col_n) const = 0;
+        virtual T get_cols(const int start, const int end) const = 0;
+        virtual T get_col(const int col_n) const = 0;
 
         virtual void transpose() = 0;
 
