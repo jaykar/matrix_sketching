@@ -1,6 +1,7 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -g -I../interface/ -I/Users/adam/mkl/mac/mkl/include  -I/Users/adam/mkl/mac/mkl/lib
-LDFLAGS = /Users/adam/mkl/mac/mkl/lib/*.a -rpath /Users/adam/mkl/mac/mkl/lib 
+CXXFLAGS = -std=c++14 -Wall -g -I../interface/  -L$(MKLROOT)/../compiler/lib  -m64 -I$(MKLROOT)/include
+
+LDFLAGS =  -L$(MKLROOT)/lib -Wl,-rpath,$(MKLROOT)/lib -L$(MKLROOT)/../compiler//lib -Wl,-rpath,$(MKLROOT)/../compiler/lib -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm
 
 OBJECTS = main.o #intel.o
 
