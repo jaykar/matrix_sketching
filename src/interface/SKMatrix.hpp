@@ -7,15 +7,15 @@
 #include <time.h>
 #include <iostream>
 
-template <typename T, typename C, typename F>
+template <typename T, typename C>
 class SKMatrix {
     private:
         C matrix_data;
+
     public:
         SKMatrix(){}
+
         ~SKMatrix(){}
-        T& operator=(const T& rhs){};
-        T& operator=(const C& rhs){};
 
         // to do
         // T operator+(const T& rhs){};
@@ -38,7 +38,6 @@ class SKMatrix {
         // T& operator*=(const T& rhs){};
         // T& operator*=(const C& rhs){};
 
-
         virtual void clear(void) = 0;
         virtual int size() const = 0;
         virtual int num_rows(void) const = 0;
@@ -48,7 +47,7 @@ class SKMatrix {
         virtual C& data(void) = 0; //if we want this function then fix the other SKMatrix<T> instances
 
         // Gaussian projection
-        virtual T rand_n(const int row, const int col) const = 0;
+        virtual T rand_n(const int row, const int col) = 0;
         virtual T mult(const T& rhs) const = 0;
         virtual T elem_div(const double a) const= 0;
 
@@ -88,17 +87,6 @@ class SKMatrix {
                 }
 
                 return buckets;
-
-                // std::vector<int> indices(num_buckets);
-                // std::random_device rd;
-                // std::mt19937 gen(rd());
-                // std::uniform_int_distribution<> dis(0, num_buckets-1);
-                // int n_cols = this->matrix_data.n_cols;
-                // for(int i=0; i<n_cols; i++){
-                //     int num = dis(gen);
-                //     indices.push_back(num);
-                // }
-                // return indices;
             }
         }
 
@@ -106,8 +94,8 @@ class SKMatrix {
         virtual T concat(const T& col) const = 0;
         virtual T solve_x(const T& B) const = 0;
 
-        virtual T get_cols(int start, int end) const = 0;
-        virtual T get_col(int col_n) const = 0;
+        virtual T get_cols(const int start, const int end) const = 0;
+        virtual T get_col(const int col_n) const = 0;
 
         virtual void transpose() = 0;
 

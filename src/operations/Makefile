@@ -23,8 +23,8 @@ DEP_H = Arm_interface.hpp
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += 
-
+CPPFLAGS +=
+CXX = g++
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -std=c++14 -O2
 
@@ -40,8 +40,7 @@ all : $(TESTS)
 clean :
 	rm -f $(TESTS) *.o
 
-sample1_unittest.o : $(USER_DIR)/sketching.cpp \
-                     $(USER_DIR_MATRIX)/$(DEP_H)
+sample1_unittest.o : $(USER_DIR)/sketching.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sketching.cpp
 
 test : sketching.o
