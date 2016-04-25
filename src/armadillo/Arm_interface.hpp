@@ -5,72 +5,87 @@
 #include <armadillo>
 
 using namespace arma;
-class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
+template<typename F>
+class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
     private:
-        mat matrix_data;
+        Mat<F> matrix_data;
     public:
-        Armadillo_Matrix(){
+        sk_arm(){
             matrix_data = mat();
         }
-
-        int size() const{
-            return matrix_data.n_elem;
-        }
-
+        
         std::vector<int> dimensions() const{
             auto a = std::vector<int>();
             a.push_back(matrix_data.n_rows);
             a.push_back(matrix_data.n_cols);
             return std::move(a);
         }
-        ~Armadillo_Matrix() = default;
+        ~sk_arm() = default;
 
-        Armadillo_Matrix(int r, int c){
+        sk_arm(int r, int c){
             matrix_data = mat(r,c);
         }
 
-        mat data(){
-            return mat(matrix_data);
+        mat data() const{
+            return mat(matrix_data); 
         }
 
+        mat& data(){
+            return std::move(matrix_data);
+        }
 
-        Armadillo_Matrix(mat other){
+        sk_arm(mat other){
             this->matrix_data = other;
         }
 
-        Armadillo_Matrix(const Armadillo_Matrix& other){
+        sk_arm(const sk_arm& other){
             std::cout << "using copy operator" << std::endl;
             auto temp = other.matrix_data;
             this->matrix_data = mat(temp);
         }
 
-        Armadillo_Matrix& operator=(const Armadillo_Matrix& other){
+        sk_arm& operator=(const sk_arm& other){
             std::cout << "using copy operator" << std::endl;
             this->matrix_data = mat(other.matrix_data);
             return *this;
         }
 
-        Armadillo_Matrix(Armadillo_Matrix&& other){
+        sk_arm(sk_arm&& other){
             std::cout << "using move operator" << std::endl;
             this->matrix_data = other.matrix_data;
-            //might not need to do this
             other.matrix_data = mat();
         }
 
-        Armadillo_Matrix& operator=(Armadillo_Matrix&& other){
+        sk_arm& operator=(sk_arm&& other){
             std::cout << "using move operator" << std::endl;
             this->matrix_data = other.matrix_data;
             other.matrix_data = mat();
             return *this;
         }
 
+        void clear(){
+            this->matrix_data = mat(); 
 
-        Armadillo_Matrix mult(Armadillo_Matrix& rhs){
-            mat a = this->matrix_data * rhs.matrix_data;
-            return std::move(Armadillo_Matrix(a));
         }
 
-        Armadillo_Matrix rand_n(int row, int col){
+        int size() const{
+            return this->matrix_data.n_elem;
+        }
+
+        int num_rows() const{
+            return this->matrix_data.n_rows; 
+        }
+
+        int num_cols() const{
+            return this->matrix_data.n_cols; 
+        }
+
+        sk_arm mult(sk_arm& rhs) const{
+            mat a = this->matrix_data * rhs.matrix_data;
+            return std::move(sk_arm(a));
+        }
+
+        sk_arm rand_n(int row, int col) const{
             mat a(row, col);
             a.randn();
             //a = a*std + mean;
@@ -78,7 +93,7 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
             return *this;
         }
 
-        Armadillo_Matrix elem_div(const double b){
+        sk_arm elem_div(const double b) const{
            mat a = data();
            if (b != 0.0){
                a = a/b;
@@ -86,73 +101,49 @@ class Armadillo_Matrix: SKMatrix<Armadillo_Matrix, arma::mat>{
            else{
                std::cout << "cannot divide by 0" << std::endl;
            }
-           return std::move(Armadillo_Matrix(a));
+           return std::move(sk_arm(a));
         }
 
-        std::vector<int> flip_signs(){
-            auto indices = std::vector<int>();
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::uniform_int_distribution<> dis(1, 2);
-            int n_cols = this->matrix_data.n_cols;
-            for(int i=0; i<n_cols; i++){
-                int num = dis(gen);
-                if (num == 2){
-                    indices.push_back(-1);
-                }
-                else{
-                    indices.push_back(1);
-                }
-            }
-            return std::move(indices);
+        
+        sk_arm concat(const sk_arm& column) const{
+            mat a = data(); 
+            a.insert_cols(a.n_cols-1, column.matrix_data); 
+            return std::move(sk_arm(a)); 
         }
 
-        std::vector<int> bucket(const int num_buckets){
-            auto indices = std::vector<int>();
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::uniform_int_distribution<> dis(0, num_buckets-1);
-            int n_cols = this->matrix_data.n_cols;
-            for(int i=0; i<n_cols; i++){
-                int num = dis(gen);
-                indices.push_back(num);
-            }
-            return std::move(indices);
-        }
-
-        Armadillo_Matrix concat(const Armadillo_Matrix& column){
-            mat a = data();
-            a.insert_cols(a.n_cols-1, column.matrix_data);
-            return std::move(Armadillo_Matrix(a));
-        }
-
-        Armadillo_Matrix solve_x(const Armadillo_Matrix& B){
+        sk_arm solve_x(const sk_arm& B) const{
                 auto X = solve(matrix_data, B.matrix_data);
-                return std::move(Armadillo_Matrix(X));
+                return std::move(sk_arm(X));
         }
 
-        Armadillo_Matrix get_cols(int start, int end){
+        sk_arm get_cols(int start, int end) const{
             mat a = matrix_data.cols(start, end);
-            return std::move(Armadillo_Matrix(a));
+            return std::move(sk_arm(a));
         }
 
 
-        Armadillo_Matrix get_col(int col_n){
+        sk_arm get_col(int col_n) const{
             mat a = matrix_data.col(col_n);
-            return std::move(Armadillo_Matrix(a));
+            return std::move(sk_arm(a));
         }
 
-        void t(){
+        void transpose(){
             matrix_data = matrix_data.t();
         }
 
-        Armadillo_Matrix subtract(const Armadillo_Matrix & rhs){
+        sk_arm subtract(const sk_arm& rhs) const{
             mat a = matrix_data - rhs.matrix_data;
-            return std::move(Armadillo_Matrix(a));
+            return std::move(sk_arm(a));
         }
 
-        double accumulate(){
+        double accumulate() const{
             return accu(matrix_data);
+        }
+
+        void qr_decompose(sk_arm& a, sk_arm& b){
+                mat Q = a.matrix_data;
+                mat R = b.matrix_data; 
+                qr(Q, R, matrix_data); 
         }
 
 };

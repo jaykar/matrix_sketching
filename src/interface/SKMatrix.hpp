@@ -102,8 +102,10 @@ class SKMatrix {
         virtual T subtract(const T& rhs) const = 0;
         virtual double accumulate() const = 0;
 
+        /*
         // TODO: K-SVD
         virtual void qr_decompose(T& a, T& b) const = 0;
+        */
 };
 
 #endif
