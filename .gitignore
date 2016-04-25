@@ -1,0 +1,5 @@
+*.gch
+*.o
+*.out
+src/google_test/*
+*.swp
