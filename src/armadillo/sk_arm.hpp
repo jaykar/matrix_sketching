@@ -5,7 +5,7 @@
 #include <armadillo>
 
 using namespace arma;
-class sk_arm: SKMatrix<sk_arm, arma::mat, float>{
+class sk_arm: SKMatrix<sk_arm, arma::mat>{
     private:
         mat matrix_data;
     public:
