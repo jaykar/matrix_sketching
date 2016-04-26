@@ -3,9 +3,9 @@ CXXFLAGS = -std=c++14 -Wall -g -I../interface/  -L$(MKLROOT)/../compiler/lib  -m
 
 LDFLAGS =  -L$(MKLROOT)/lib -Wl,-rpath,$(MKLROOT)/lib -L$(MKLROOT)/../compiler//lib -Wl,-rpath,$(MKLROOT)/../compiler/lib -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm
 
-OBJECTS = main.o #intel.o
+OBJECTS = main.o #sk_intel.o
 
-main: $(OBJECTS) intel.h ../interface/SKMatrix.hpp
+main: $(OBJECTS) sk_intel.h ../interface/SKMatrix.hpp
 	$(CXX) $(CXXFLAGS) -o main $(OBJECTS) $(LDFLAGS) 
 
 #~/mkl/mac/mkl/lib/libmkl_core.dylib 
@@ -13,8 +13,8 @@ main: $(OBJECTS) intel.h ../interface/SKMatrix.hpp
 main.o: main.cpp 
 	$(CXX) main.cpp -c $(CXXFLAGS) 
 
-#intel.o: intel.cpp intel.h
-#	$(CXX) $(CXXFLAGS) -c intel.cpp
+#sk_intel.o: sk_intel.cpp sk_intel.h
+#	$(CXX) $(CXXFLAGS) -c sk_intel.cpp
 
 .PHONY: clean
 clean:
