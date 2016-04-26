@@ -11,36 +11,36 @@
 namespace bnu = boost::numeric::ublas;
 
 // use assert instead of throw
-template <typename F>
-class sk_boost: public SKMatrix<sk_boost<F>, bnu::matrix<F> >{
+class sk_boost: public SKMatrix<sk_boost, bnu::matrix<float> >{
     private:
-        bnu::matrix<F> matrix_data;
+        bnu::matrix<float> matrix_data;
 
     public:
-        sk_boost<F>(){
-            this->matrix_data = bnu::matrix<F>();
+        sk_boost(){
+            this->matrix_data = bnu::matrix<float>();
         }
 
-        sk_boost<F>(const int row, const int col){
-            this->matrix_data = bnu::matrix<F>(row, col);
+        sk_boost(const int row, const int col){
+            this->matrix_data = bnu::matrix<float>(row, col, 0);
         }
 
-        sk_boost<F>(const bnu::matrix<F>& mat){
+        sk_boost(const bnu::matrix<float>& mat){
             this->matrix_data = mat;
         }
 
-        ~sk_boost<F>() = default;
+        ~sk_boost() = default;
 
-        sk_boost<F>& operator=(const sk_boost<F>& rhs){
+        sk_boost& operator=(const sk_boost& rhs){
             matrix_data = rhs.data();
             return *this;
         }
 
-        sk_boost<F>& operator=(const bnu::matrix<F>& rhs){
-            matrix_data = bnu::matrix<F>(rhs);
+        sk_boost& operator=(const bnu::matrix<float>& rhs){
+            matrix_data = bnu::matrix<float>(rhs);
             return *this;
         }
 
+        friend std::ostream& operator<<(std::ostream&os, const sk_boost& mat);
 
         void clear() { matrix_data.clear(); }
         int size() const { return matrix_data.size1() * matrix_data.size2(); }
@@ -48,59 +48,66 @@ class sk_boost: public SKMatrix<sk_boost<F>, bnu::matrix<F> >{
         int num_rows(void) const { return matrix_data.size1(); }
         int num_cols(void) const { return matrix_data.size2(); }
 
-        bnu::matrix<F> data(void) const { return bnu::matrix<F>(matrix_data); };
-        bnu::matrix<F>& data(void) { return matrix_data; };
+        bnu::matrix<float> data(void) const { return bnu::matrix<float>(matrix_data); };
+        bnu::matrix<float>& data(void) { return matrix_data; };
 
-        sk_boost<F> mult(const sk_boost<F>& rhs) const;
+        sk_boost mult(const sk_boost& rhs) const;
+        sk_boost mult_scalar(const sk_boost& rhs) const;
 
-        sk_boost<F> rand_n(const int row, const int col);
-        sk_boost<F> elem_div(const double a) const;
+        sk_boost rand_n(const int row, const int col);
+        sk_boost elem_div(const double a) const;
 
 
         /* Regression */
-        sk_boost<F> concat(const sk_boost<F>& col) const;
-        sk_boost<F> solve_x(const sk_boost<F>& B) const;
+        sk_boost concat(const sk_boost& col) const;
+        sk_boost solve_x(const sk_boost& B) const;
 
-        sk_boost<F> get_cols(const int start, const int end) const;
-        sk_boost<F> get_col(const int col_n) const;
+        sk_boost get_cols(const int start, const int end) const;
+        sk_boost get_col(const int col_n) const;
 
         void transpose() {
             matrix_data = bnu::trans(matrix_data);
         };
 
-        sk_boost<F> subtract(const sk_boost<F>& rhs) const;
+        sk_boost subtract(const sk_boost& rhs) const;
 
         double accumulate() const {
-            bnu::matrix<F> temp(data());
-            return bnu::sum(bnu::prod(bnu::scalar_vector<F>(temp.size1()), temp));
+            bnu::matrix<float> temp(data());
+            return bnu::sum(bnu::prod(bnu::scalar_vector<float>(temp.size1()), temp));
         }
 
-        /* FODO: K-SVD */
-        void qr_decompose(sk_boost<F>& Q, sk_boost<F>& R) const;
+        /* floatODO: K-SVD */
+        void qr_decompose(sk_boost& Q, sk_boost& R) const;
 };
 
-template <typename F>
-sk_boost<F> sk_boost<F>::mult(const sk_boost<F>& rhs) const {
+
+std::ostream& operator<<(std::ostream&os, const sk_boost& mat){
+    std::ostringstream out;
+    out << mat.data();
+    os << out.str();
+    return os;
+}
+
+sk_boost sk_boost::mult(const sk_boost& rhs) const {
     if (rhs.num_rows() != num_cols()) {
         std::cout << "Column of left matrix: " << num_cols() << " does not match row of right matrix: " << rhs.num_rows() << "\n";
         throw;
     } else {
-        bnu::matrix<F> prod(num_rows(), rhs.num_cols());
+        bnu::matrix<float> prod(num_rows(), rhs.num_cols());
         bnu::noalias(prod) = bnu::prod(this->data(), rhs.data());
-        return std::move(sk_boost<F>(prod));
+        return std::move(sk_boost(prod));
     }
 }
 
-template <typename F>
-sk_boost<F> sk_boost<F>::rand_n(const int row, const int col) {
+sk_boost sk_boost::rand_n(const int row, const int col) {
     if (row < 0 || col < 0) {
         std::cout << "Column and row lengths must be non-negative integers" << std::endl;
         throw;
     } else {
         std::default_random_engine generator;
-        std::normal_distribution<F> distribution(0, 1);
+        std::normal_distribution<float> distribution(0, 1);
 
-        bnu::matrix<F> rand_matrix(row, col);
+        bnu::matrix<float> rand_matrix(row, col);
         for (unsigned i = 0; i < rand_matrix.size1 (); ++ i){
             for (unsigned j = 0; j < rand_matrix.size2 (); ++ j){
                 rand_matrix(i, j) = distribution(generator);
@@ -111,66 +118,60 @@ sk_boost<F> sk_boost<F>::rand_n(const int row, const int col) {
     }
 }
 
-template <typename F>
-sk_boost<F> sk_boost<F>::elem_div(const double a) const {
-    bnu::matrix<F> mat(data());
-    bnu::matrix<F> result = mat/a;
-    return std::move(sk_boost<F>(result));
+sk_boost sk_boost::elem_div(const double a) const {
+    bnu::matrix<float> mat(data());
+    bnu::matrix<float> result = mat/a;
+    return std::move(sk_boost(result));
 }
 
-
-template <typename F>
-sk_boost<F> sk_boost<F>::concat(const sk_boost<F>& new_col) const {
+sk_boost sk_boost::concat(const sk_boost& new_col) const {
     if (new_col.num_rows() != num_rows()) {
         std::cout << "Number of rows don't match" << std::endl;
         throw;
     } else {
-        bnu::matrix<F> concat_mat(data());
+        bnu::matrix<float> concat_mat(data());
         int end_index1 = concat_mat.size2();
         concat_mat.resize(concat_mat.size1(), end_index1 + new_col.data().size2(), true);
-        std::cout << concat_mat.size2() << std::endl;
 
         for(unsigned int i = end_index1, j = 0; i < concat_mat.size2(); i++, j++){
             bnu::column(concat_mat, i) = bnu::column(new_col.data(), j);
         }
 
-        return std::move(sk_boost<F>(concat_mat));
+        return std::move(sk_boost(concat_mat));
     }
 }
 
-template <typename F>
-sk_boost<F> sk_boost<F>::solve_x(const sk_boost<F>& B) const {
-    bnu::matrix<F> A(this->data());
-    bnu::matrix<F> y = bnu::trans(B.data());
+sk_boost sk_boost::solve_x(const sk_boost& B) const {
+    bnu::matrix<float> A(this->data());
+    bnu::matrix<float> y = bnu::trans(B.data());
 
-    bnu::vector<F> b(B.num_rows());
+    bnu::vector<float> b(B.num_rows());
     std::copy(y.begin1(), y.end1(), b.begin());
 
     bnu::permutation_matrix<> piv(b.size());
     bnu::lu_factorize(A, piv);
     bnu::lu_substitute(A, piv, b);
 
-    bnu::matrix<F> x(this->num_rows(), 1);
+    bnu::matrix<float> x(this->num_rows(), 1);
     std::copy(b.begin(), b.end(), x.begin1());
-    return std::move(sk_boost<F>(x));
+    return std::move(sk_boost(x));
 }
 
 // http://www.keithlantz.net/2012/05/qr-decomposition-using-householder-transformations/
-template <typename F>
-void sk_boost<F>::qr_decompose(sk_boost<F>& Q, sk_boost<F>& R) const {
-    F mag;
-    F alpha;
+void sk_boost::qr_decompose(sk_boost& Q, sk_boost& R) const {
+    float mag;
+    float alpha;
 
-    bnu::matrix<F> u(this->num_rows(), 1);
-    bnu::matrix<F> v(this->num_rows(), 1);
+    bnu::matrix<float> u(this->num_rows(), 1);
+    bnu::matrix<float> v(this->num_rows(), 1);
 
-    bnu::identity_matrix<F> I(this->num_rows());
+    bnu::identity_matrix<float> I(this->num_rows());
 
-    bnu::matrix<F> q = bnu::identity_matrix<F>(this->num_rows());;
-    bnu::matrix<F> r(data());
+    bnu::matrix<float> q = bnu::identity_matrix<float>(this->num_rows());;
+    bnu::matrix<float> r(data());
 
     for (int i = 0; i < num_rows(); i++) {
-        bnu::matrix<F> p(num_rows(), num_rows());
+        bnu::matrix<float> p(num_rows(), num_rows());
 
         u.clear();
         v.clear();
@@ -204,29 +205,26 @@ void sk_boost<F>::qr_decompose(sk_boost<F>& Q, sk_boost<F>& R) const {
         r = bnu::prod(p, r);
     }
 
-    Q = sk_boost<F>(q);
-    R = sk_boost<F>(r);
+    Q = sk_boost(q);
+    R = sk_boost(r);
 }
 
-template <typename F>
-sk_boost<F> sk_boost<F>::subtract(const sk_boost<F>& rhs) const {
-    bnu::matrix<F> diff = data() - rhs.data();
-    return std::move(sk_boost<F>(diff));
+sk_boost sk_boost::subtract(const sk_boost& rhs) const {
+    bnu::matrix<float> diff = data() - rhs.data();
+    return std::move(sk_boost(diff));
 }
 
-template <typename F>
-sk_boost<F> sk_boost<F>::get_col(const int col_n) const {
+sk_boost sk_boost::get_col(const int col_n) const {
     if(col_n < 0 || col_n >= num_cols()) {
         std::cout << "Column index out of bound" << std::endl;
         throw;
     } else {
-        bnu::matrix<F> column = bnu::subrange(data(), 0, num_rows(), col_n, col_n+1);
-        return std::move(sk_boost<F>(column));
+        bnu::matrix<float> column = bnu::subrange(data(), 0, num_rows(), col_n, col_n+1);
+        return std::move(sk_boost(column));
     }
 };
 
-template <typename F>
-sk_boost<F> sk_boost<F>::get_cols(const int start, const int end) const {
+sk_boost sk_boost::get_cols(const int start, const int end) const {
     if (start < 0 || end > num_cols()) {
         std::cout << "Column indices out of bound" << std::endl;
         throw;
@@ -234,8 +232,8 @@ sk_boost<F> sk_boost<F>::get_cols(const int start, const int end) const {
         std::cout << "Start column greater than end column" << std::endl;
         throw;
     }else {
-        bnu::matrix<F> columns = bnu::subrange(data(), 0, num_rows(), start, end);
-        return sk_boost<F>(columns);
+        bnu::matrix<float> columns = bnu::subrange(data(), 0, num_rows(), start, end);
+        return sk_boost(columns);
     }
 }
 

@@ -14,34 +14,58 @@
 
 # Points to the root of Google Test, relative to where this file is.
 # Remember to tweak this if you move this file.
-GTEST_DIR = ../../../google_test/
+# GTEST_DIR = ../../../google_test/
 
-# Where to find user code.
-USER_DIR = ./
-USER_DIR_MATRIX = ../armadillo
-DEP_H = Arm_interface.hpp
-# Flags passed to the preprocessor.
-# Set Google Test's header directory as a system directory, such that
-# the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS +=
+# # Where to find user code.
+# USER_DIR = ./
+# USER_DIR_MATRIX = ../armadillo
+# DEP_H = Arm_interface.hpp
+# # Flags passed to the preprocessor.
+# # Set Google Test's header directory as a system directory, such that
+# # the compiler doesn't generate warnings in Google Test headers.
+# CPPFLAGS +=
+# CXX = g++
+# # Flags passed to the C++ compiler.
+# CXXFLAGS += -g -Wall -Wextra -std=c++14 -O2
+
+# # All tests produced by this Makefile.  Remember to add new tests you
+# # created to the list.
+# TESTS = test
+
+# LD_FLAGS = -larmadillo -framework Accelerate
+# # House-keeping build targets.
+
+# all : $(TESTS)
+
+# clean :
+# 	rm -f $(TESTS) *.o
+
+# sample1_unittest.o : $(USER_DIR)/sketching.cpp
+# 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sketching.cpp
+
+# test : sketching.o
+# 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LD_FLAGS)
+
+
 CXX = g++
-# Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra -std=c++14 -O2
+CXXFLAGS = -std=c++14 -Wall -g
 
-# All tests produced by this Makefile.  Remember to add new tests you
-# created to the list.
-TESTS = test
+BOOST_LIB_PATH = -I /usr/local/include/
 
-LD_FLAGS = -larmadillo -framework Accelerate
-# House-keeping build targets.
+# INTERFACE = -I ../interface
+BOOST_INTERFACE = -I ../boost
 
-all : $(TESTS)
+#-O3 -D -DNDEBUG -DBOOST_UBLAS_NDEBUG
 
-clean :
-	rm -f $(TESTS) *.o
+operations_test: operations_test.o
+	$(CXX) $(CXXFLAGS) $(INTERFACE) -o operations_test operations_test.o
 
-sample1_unittest.o : $(USER_DIR)/sketching.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sketching.cpp
+operations_test.o: operations_test.cpp
+	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH)m $(BOOST_INTERFACE) -c operations_test.cpp
 
-test : sketching.o
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LD_FLAGS)
+.PHONY: clean
+clean:
+	rm -f *.o a.out core main operations_test
+
+.PHONY: all
+all: clean main
