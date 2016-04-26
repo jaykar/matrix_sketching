@@ -195,20 +195,14 @@ class sk_intel : SKmatrix<sk_intel, float *, float>  {
             if(B.cols != 1)
                 throw std::invalid_argument("B must be nx1 vector in Ax = B");
             sk_intel X(B.rows, 1);
-            char trans = 'N';
             MKL_INT lda = this->rows; // rows in A
             MKL_INT n = this->cols; // cols in A
             MKL_INT nrhs = 1; // cols in B
             MKL_INT ldb = nrhs;
-            MKL_INT ia = 0;
-            MKL_INT ja = 0;
             MKL_INT ipiv[n];
-            MKL_INT info;
 
             sk_intel copy(B);
             LAPACKE_sgesv(LAPACK_ROW_MAJOR, n, nrhs, this->matrix_data, lda, ipiv, copy.matrix_data, ldb);
-            //psgetrf(&m, &n, copy.matrix_data, &ia, &ja, (MKL_INT *) &copy.matrix_data, ipiv, &info);
-            //psgetrs(
 
             return copy;
         }
