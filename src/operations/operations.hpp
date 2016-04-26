@@ -1,27 +1,26 @@
 #ifndef __OPERATIONS_H__
 #define __OPERATIONS_H__
 
-#include "../interface/SKMatrix.hpp"
 #include <math.h>
 #include <vector>
 
-template <typename SKMatrix>
-SKMatrix& gaussian_projection(const SKMatrix& input, const int s){
+template <typename SK>
+SK gaussian_projection(const SK& input, const int s){
     int n_col = input.num_cols();
-    SKMatrix a = SKMatrix();
+    SK a = SK();
     a.rand_n(n_col, s);
     a.elem_div(sqrt(s*1.0));
     return input.mult(a);
 }
 
-template <typename SKMatrix>
-SKMatrix& lin_regress(const SKMatrix& A, const SKMatrix& B, const int s){
+template <typename SK>
+SK& lin_regress(const SK& A, const SK& B, const int s){
     int n_col = A.num_cols();
 
     auto concat_mat = A.concat(B);
     concat_mat.transpose();
 
-    auto sketch = gaussian_projection<SKMatrix>(concat_mat, s);
+    auto sketch = gaussian_projection<SK>(concat_mat, s);
     sketch.transpose();
 
     auto A_sketch = sketch.get_cols(0, n_col -1);
@@ -31,23 +30,23 @@ SKMatrix& lin_regress(const SKMatrix& A, const SKMatrix& B, const int s){
     return X_tilde;
 }
 
-template <typename SKMatrix>
-SKMatrix count_sketch(const SKMatrix& A, const int num_buckets) {
+template <typename SK>
+SK count_sketch(const SK& A, const int num_buckets) {
     std::vector<std::vector<int> > buckets = A.bucket(num_buckets);
     std::vector<bool> flipped = A.flip_signs();
 
-    SKMatrix sum;
+    SK sum(A.num_rows(), 0);
 
     for(auto hash_set : buckets){
-        SKMatrix set;
+        SK set(A.num_rows(), 1);
         for(int index : hash_set) {
-            SKMatrix col = A.get_col(index);
+            SK col = A.get_col(index);
             if(flipped[index]) {
                 col.data() *= -1;
             }
             set.data() += col.data();
         }
-        sum.concat(set);
+        sum = sum.concat(set);
     }
     return sum;
 }

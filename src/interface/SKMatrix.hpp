@@ -38,7 +38,7 @@ class SKMatrix {
         // T operator*(const C& rhs){};
         // T& operator*=(const T& rhs){};
         // T& operator*=(const C& rhs){};
-        
+
         virtual void clear(void) = 0;
         virtual int size() const = 0;
         virtual int num_rows(void) const = 0;
@@ -53,19 +53,19 @@ class SKMatrix {
         virtual T elem_div(const double a) const= 0;
 
         // Count Sketch
-        std::vector<bool> flip_signs(){
+        std::vector<bool> flip_signs() const {
             std::vector<bool> indices(this->num_cols());
             std::random_device rd;
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> dis(1, 2);
-            bool n_cols = this->matrix_data.n_cols;
-            for(int i=0; i<n_cols; i++){
+            int n_cols = num_cols();
+            for(int i=0; i< n_cols; i++){
                 int num = dis(gen);
                 if (num == 2){
-                    indices.push_back(true);
+                    indices[i] = true;
                 }
                 else{
-                    indices.push_back(false);
+                    indices[i] = false;
                 }
             }
             return indices;
