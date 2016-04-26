@@ -1,4 +1,4 @@
-#include "../armadillo/Arm_interface.hpp"
+#include "../armadillo/sk_arm.hpp"
 // #include "../boost/sk_boost.hpp"
 #include <iostream>
 #include <math.h>
