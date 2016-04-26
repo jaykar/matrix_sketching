@@ -9,7 +9,7 @@
 
 template <typename T, typename C>
 class SKMatrix {
-    private:
+    protected:
         C matrix_data;
 
     public:
@@ -52,19 +52,19 @@ class SKMatrix {
         virtual T elem_div(const double a) const= 0;
 
         // Count Sketch
-        std::vector<int> flip_signs(){
-            std::vector<int> indices(this->num_cols());
+        std::vector<bool> flip_signs(){
+            std::vector<bool> indices(this->num_cols());
             std::random_device rd;
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> dis(1, 2);
-            int n_cols = this->matrix_data.n_cols;
+            bool n_cols = this->matrix_data.n_cols;
             for(int i=0; i<n_cols; i++){
                 int num = dis(gen);
                 if (num == 2){
-                    indices.push_back(-1);
+                    indices.push_back(true);
                 }
                 else{
-                    indices.push_back(1);
+                    indices.push_back(false);
                 }
             }
             return indices;
@@ -102,10 +102,8 @@ class SKMatrix {
         virtual T subtract(const T& rhs) const = 0;
         virtual double accumulate() const = 0;
 
-        /*
         // TODO: K-SVD
         virtual void qr_decompose(T& a, T& b) const = 0;
-        */
 };
 
 #endif

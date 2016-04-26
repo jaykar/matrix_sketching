@@ -52,6 +52,7 @@ class sk_boost: public SKMatrix<sk_boost<F>, bnu::matrix<F> >{
         bnu::matrix<F>& data(void) { return matrix_data; };
 
         sk_boost<F> mult(const sk_boost<F>& rhs) const;
+        sk_boost<F> mult_scalar(const sk_boost<F>& rhs) const;
 
         sk_boost<F> rand_n(const int row, const int col);
         sk_boost<F> elem_div(const double a) const;
