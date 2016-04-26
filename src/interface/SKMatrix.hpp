@@ -16,7 +16,8 @@ class SKMatrix {
         SKMatrix(){}
 
         ~SKMatrix(){}
-
+        T& operator=(const T& rhs){};
+        T& operator=(const C& rhs){};
         // to do
         // T operator+(const T& rhs){};
         // T operator+(const C& rhs){};
@@ -37,7 +38,7 @@ class SKMatrix {
         // T operator*(const C& rhs){};
         // T& operator*=(const T& rhs){};
         // T& operator*=(const C& rhs){};
-
+        
         virtual void clear(void) = 0;
         virtual int size() const = 0;
         virtual int num_rows(void) const = 0;
