@@ -48,20 +48,22 @@
 
 
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -g
+CXXFLAGS = -std=c++14 -Wall -g -O2
 
 BOOST_LIB_PATH = -I /usr/local/include/
 
 # INTERFACE = -I ../interface
 BOOST_INTERFACE = -I ../boost
+ARM_INTERFACE = -I ../armadillo
+LDLIBS = -larmadillo -lArpack -framework Accelerate
 
 #-O3 -D -DNDEBUG -DBOOST_UBLAS_NDEBUG
 
 operations_test: operations_test.o
-	$(CXX) $(CXXFLAGS) $(INTERFACE) -o operations_test operations_test.o
+	$(CXX) $(CXXFLAGS) $(INTERFACE) $(LDLIBS) -o operations_test operations_test.o
 
 operations_test.o: operations_test.cpp
-	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH)m $(BOOST_INTERFACE) -c operations_test.cpp
+	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH)m $(BOOST_INTERFACE) $(ARM_INTERFACE) -c operations_test.cpp
 
 .PHONY: clean
 clean:

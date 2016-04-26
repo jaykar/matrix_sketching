@@ -51,4 +51,27 @@ SK count_sketch(const SK& A, const int num_buckets) {
     return sum;
 }
 
+
+template <typename SK>
+std::vector<SK> k_svd(const SK&A, int k, int s){
+    auto ans = std::vector<SK>(3); 
+    //auto sketch = count_sketch(A, s); 
+    auto sketch = gaussian_projection(A, s); 
+    std::cout << sketch.size() << std::endl; 
+    SK Q; 
+    SK R; 
+    sketch.qr_decompose(Q,R); 
+
+    std::cout << Q.size() << std::endl; 
+    std::cout << R.size() << std::endl; 
+    auto Q_temp = Q; 
+    Q_temp.transpose(); 
+    Q_temp = Q_temp.mult(A); 
+    auto svd_vec = Q_temp.svds(k); 
+    auto U_tilde = Q.mult(svd_vec[0]); 
+    ans[0] = U_tilde; 
+    ans[1] = svd_vec[1]; 
+    ans[2] = svd_vec[2]; 
+    return ans; 
+}
 #endif
