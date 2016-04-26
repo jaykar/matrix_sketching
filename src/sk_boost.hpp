@@ -1,7 +1,7 @@
 #ifndef __BOOST_WRAPPER_H__
 #define __BOOST_WRAPPER_H__
 
-#include "../interface/SKMatrix.hpp"
+#include "SKMatrix.hpp"
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 #include <boost/numeric/ublas/io.hpp>
@@ -119,14 +119,19 @@ sk_boost sk_boost::rand_n(const int row, const int col) {
 }
 
 sk_boost sk_boost::elem_div(const double a) const {
-    bnu::matrix<float> mat(data());
-    bnu::matrix<float> result = mat/a;
-    return std::move(sk_boost(result));
+    if(a == 0) {
+        std::cout << "Cannot divide by 0" << std::endl;
+        throw;
+    } else{
+        bnu::matrix<float> mat(data());
+        bnu::matrix<float> result = mat/a;
+        return std::move(sk_boost(result));
+    }
 }
 
 sk_boost sk_boost::concat(const sk_boost& new_col) const {
-    if (new_col.num_rows() != num_rows()) {
-        std::cout << "Number of rows don't match" << std::endl;
+    if (new_col.num_rows() != this->num_rows()) {
+        std::cout << "Number of rows do not match" << std::endl;
         throw;
     } else {
         bnu::matrix<float> concat_mat(data());
@@ -209,7 +214,11 @@ void sk_boost::qr_decompose(sk_boost& Q, sk_boost& R) const {
     R = sk_boost(r);
 }
 
-sk_boost sk_boost::subtract(const sk_boost& rhs) const {
+sk_boost sk_boost::subtract(const sk_boost& rhs) const {\
+    if(rhs.num_rows() != this->num_rows()){
+        std::cout << "Number of rows do not match" << std::endl;
+        throw;
+    }
     bnu::matrix<float> diff = data() - rhs.data();
     return std::move(sk_boost(diff));
 }

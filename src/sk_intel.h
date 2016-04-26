@@ -79,12 +79,12 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
             unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
             std::mt19937 gen(seed);
             std::normal_distribution<double> n;
-            
+
             for(i = 0; i < this->size(); i++) {
                 this->data[i] = n(gen);
                 //std::cout << i << ": " << this->data[i] << std::endl;
             }
-            
+
             return *this;
         }
 
@@ -112,18 +112,18 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
 
         IntelMatrix operator-(const IntelMatrix& rhs) const;
 
-        IntelMatrix& operator+=(const IntelMatrix& rhs); 
+        IntelMatrix& operator+=(const IntelMatrix& rhs);
         IntelMatrix& operator-=(const IntelMatrix& rhs);
 
-        IntelMatrix& operator*(const IntelMatrix& rhs); 
-        IntelMatrix& operator*=(const IntelMatrix& rhs); 
+        IntelMatrix& operator*(const IntelMatrix& rhs);
+        IntelMatrix& operator*=(const IntelMatrix& rhs);
 
-        IntelMatrix& operator/(const IntelMatrix& rhs); 
-        IntelMatrix& operator/=(const IntelMatrix& rhs); 
+        IntelMatrix& operator/(const IntelMatrix& rhs);
+        IntelMatrix& operator/=(const IntelMatrix& rhs);
 
         IntelMatrix& mult(IntelMatrix& m) const;
 
-        // Gaussian projection 
+        // Gaussian projection
         IntelMatrix& rand_n(const int row, const int col) const;
         IntelMatrix& elem_div(const float a) const;
 
@@ -132,11 +132,11 @@ class IntelMatrix : SKMatrix<IntelMatrix>  {
         std::vector<int>& bucket(const int num_buckets) const;
         IntelMatrix& count_sketch() const;
 
-        // Regression 
+        // Regression
         IntelMatrix& concat(const IntelMatrix& col) const ;
         IntelMatrix& solve_x(const IntelMatrix& A, const IntelMatrix& B) const;
 
-        // TODO: K-SVD 
+        // TODO: K-SVD
         IntelMatrix& override_col(const int col, const IntelMatrix& B) const;
         std::vector<IntelMatrix> qr_decompose() const;
         IntelMatrix& svd() const;
