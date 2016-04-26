@@ -17,7 +17,7 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
             auto a = std::vector<int>();
             a.push_back(matrix_data.n_rows);
             a.push_back(matrix_data.n_cols);
-            return std::move(a);
+            return a;
         }
         ~sk_arm() = default;
 
@@ -89,7 +89,7 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
 
         sk_arm mult(const sk_arm& rhs) const{
             mat a = this->matrix_data * rhs.matrix_data;
-            return std::move(sk_arm(a));
+            return a; 
         }
 
         sk_arm rand_n(int row, int col){
@@ -108,30 +108,30 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
            else{
                std::cout << "cannot divide by 0" << std::endl;
            }
-           return std::move(sk_arm(a));
+           return sk_arm(a); 
         }
 
         
         sk_arm concat(const sk_arm& column) const{
             mat a = data(); 
             a.insert_cols(a.n_cols-1, column.matrix_data); 
-            return std::move(sk_arm(a)); 
+            return sk_arm(a); 
         }
 
         sk_arm solve_x(const sk_arm& B) const{
                 auto X = solve(matrix_data, B.matrix_data);
-                return std::move(sk_arm(X));
+                return sk_arm(X); 
         }
 
         sk_arm get_cols(int start, int end) const{
             mat a = matrix_data.cols(start, end);
-            return std::move(sk_arm(a));
+            return sk_arm(a); 
         }
 
 
         sk_arm get_col(int col_n) const{
             mat a = matrix_data.col(col_n);
-            return std::move(sk_arm(a));
+            return sk_arm(a); 
         }
 
         void transpose(){
@@ -140,7 +140,7 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
 
         sk_arm subtract(const sk_arm& rhs) const{
             mat a = matrix_data - rhs.matrix_data;
-            return std::move(sk_arm(a));
+            return sk_arm(a); 
         }
 
         double accumulate() const{
