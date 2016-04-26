@@ -27,6 +27,6 @@ int main(){
     auto output = c.subtract(skt_d);
     cout << output.accumulate() << endl;
 
-    auto x = count_sketch<sk_boost>(input, 3);
+    auto x = count_sketch<sk_boost>(input, sketch_size);
     return 0;
 }

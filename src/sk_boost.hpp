@@ -48,9 +48,6 @@ class sk_boost: public SKMatrix<sk_boost, bnu::matrix<float> >{
         int num_rows(void) const { return matrix_data.size1(); }
         int num_cols(void) const { return matrix_data.size2(); }
 
-        bnu::matrix<float> data(void) const { return bnu::matrix<float>(matrix_data); };
-        bnu::matrix<float>& data(void) { return matrix_data; };
-
         sk_boost mult(const sk_boost& rhs) const;
         sk_boost mult_scalar(const sk_boost& rhs) const;
 
@@ -59,7 +56,7 @@ class sk_boost: public SKMatrix<sk_boost, bnu::matrix<float> >{
 
 
         /* Regression */
-        sk_boost concat(const sk_boost& col) const;
+        sk_boost concat(const sk_boost& mat) const;
         sk_boost solve_x(const sk_boost& B) const;
 
         sk_boost get_cols(const int start, const int end) const;
@@ -129,17 +126,17 @@ sk_boost sk_boost::elem_div(const double a) const {
     }
 }
 
-sk_boost sk_boost::concat(const sk_boost& new_col) const {
-    if (new_col.num_rows() != this->num_rows()) {
+sk_boost sk_boost::concat(const sk_boost& mat) const {
+    if (mat.num_rows() != this->num_rows()) {
         std::cout << "Number of rows do not match" << std::endl;
         throw;
     } else {
         bnu::matrix<float> concat_mat(data());
         int end_index1 = concat_mat.size2();
-        concat_mat.resize(concat_mat.size1(), end_index1 + new_col.data().size2(), true);
+        concat_mat.resize(concat_mat.size1(), end_index1 + mat.data().size2(), true);
 
         for(unsigned int i = end_index1, j = 0; i < concat_mat.size2(); i++, j++){
-            bnu::column(concat_mat, i) = bnu::column(new_col.data(), j);
+            bnu::column(concat_mat, i) = bnu::column(mat.data(), j);
         }
 
         return std::move(sk_boost(concat_mat));
