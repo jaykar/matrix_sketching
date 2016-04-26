@@ -12,17 +12,21 @@ namespace bnu = boost::numeric::ublas;
 
 // use assert instead of throw
 template <typename F>
-class sk_boost: public SKMatrix<sk_boost<F>, bnu::matrix<F>, F>{
+class sk_boost: public SKMatrix<sk_boost<F>, bnu::matrix<F> >{
     private:
         bnu::matrix<F> matrix_data;
 
     public:
+        sk_boost<F>(){
+            this->matrix_data = bnu::matrix<F>();
+        }
+
         sk_boost<F>(const int row, const int col){
             this->matrix_data = bnu::matrix<F>(row, col);
         }
 
-        sk_boost<F>(const bnu::matrix<F>& m){
-            this->matrix_data = m;
+        sk_boost<F>(const bnu::matrix<F>& mat){
+            this->matrix_data = mat;
         }
 
         ~sk_boost<F>() = default;
@@ -49,7 +53,7 @@ class sk_boost: public SKMatrix<sk_boost<F>, bnu::matrix<F>, F>{
 
         sk_boost<F> mult(const sk_boost<F>& rhs) const;
 
-        sk_boost<F> rand_n(const int row, const int col) const;
+        sk_boost<F> rand_n(const int row, const int col);
         sk_boost<F> elem_div(const double a) const;
 
 
@@ -57,8 +61,8 @@ class sk_boost: public SKMatrix<sk_boost<F>, bnu::matrix<F>, F>{
         sk_boost<F> concat(const sk_boost<F>& col) const;
         sk_boost<F> solve_x(const sk_boost<F>& B) const;
 
-        sk_boost<F> get_cols(int start, int end) const;
-        sk_boost<F> get_col(int col_n) const;
+        sk_boost<F> get_cols(const int start, const int end) const;
+        sk_boost<F> get_col(const int col_n) const;
 
         void transpose() {
             matrix_data = bnu::trans(matrix_data);
@@ -88,7 +92,7 @@ sk_boost<F> sk_boost<F>::mult(const sk_boost<F>& rhs) const {
 }
 
 template <typename F>
-sk_boost<F> sk_boost<F>::rand_n(const int row, const int col) const {
+sk_boost<F> sk_boost<F>::rand_n(const int row, const int col) {
     if (row < 0 || col < 0) {
         std::cout << "Column and row lengths must be non-negative integers" << std::endl;
         throw;
@@ -102,7 +106,8 @@ sk_boost<F> sk_boost<F>::rand_n(const int row, const int col) const {
                 rand_matrix(i, j) = distribution(generator);
             }
         }
-        return std::move(sk_boost<F>(rand_matrix));
+        matrix_data = rand_matrix;
+        return *this;
     }
 }
 
@@ -125,7 +130,7 @@ sk_boost<F> sk_boost<F>::concat(const sk_boost<F>& new_col) const {
         concat_mat.resize(concat_mat.size1(), end_index1 + new_col.data().size2(), true);
         std::cout << concat_mat.size2() << std::endl;
 
-        for(int i = end_index1, j = 0; i < concat_mat.size2(); i++, j++){
+        for(unsigned int i = end_index1, j = 0; i < concat_mat.size2(); i++, j++){
             bnu::column(concat_mat, i) = bnu::column(new_col.data(), j);
         }
 
@@ -210,7 +215,7 @@ sk_boost<F> sk_boost<F>::subtract(const sk_boost<F>& rhs) const {
 }
 
 template <typename F>
-sk_boost<F> sk_boost<F>::get_col(int col_n) const {
+sk_boost<F> sk_boost<F>::get_col(const int col_n) const {
     if(col_n < 0 || col_n >= num_cols()) {
         std::cout << "Column index out of bound" << std::endl;
         throw;
@@ -221,7 +226,7 @@ sk_boost<F> sk_boost<F>::get_col(int col_n) const {
 };
 
 template <typename F>
-sk_boost<F> sk_boost<F>::get_cols(int start, int end) const {
+sk_boost<F> sk_boost<F>::get_cols(const int start, const int end) const {
     if (start < 0 || end > num_cols()) {
         std::cout << "Column indices out of bound" << std::endl;
         throw;

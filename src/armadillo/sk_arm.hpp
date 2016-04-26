@@ -5,10 +5,9 @@
 #include <armadillo>
 
 using namespace arma;
-template<typename F>
-class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
+class sk_arm: SKMatrix<sk_arm, arma::mat, float>{
     private:
-        Mat<F> matrix_data;
+        mat matrix_data;
     public:
         sk_arm(){
             matrix_data = mat();
@@ -25,13 +24,13 @@ class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
         sk_arm(int r, int c){
             matrix_data = mat(r,c);
         }
-
+        
         mat data() const{
             return mat(matrix_data); 
         }
 
         mat& data(){
-            return std::move(matrix_data);
+            return matrix_data; 
         }
 
         sk_arm(mat other){
@@ -39,29 +38,37 @@ class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
         }
 
         sk_arm(const sk_arm& other){
-            std::cout << "using copy operator" << std::endl;
+            //std::cout << "using copy operator" << std::endl;
             auto temp = other.matrix_data;
             this->matrix_data = mat(temp);
         }
-
+        
         sk_arm& operator=(const sk_arm& other){
-            std::cout << "using copy operator" << std::endl;
+            //std::cout << "using copy operator" << std::endl;
             this->matrix_data = mat(other.matrix_data);
             return *this;
         }
 
+
+        sk_arm& operator=(const mat& other){
+            //std::cout << "using copy operator" << std::endl;
+            this->matrix_data = mat(other);
+            return *this;
+        }
+
         sk_arm(sk_arm&& other){
-            std::cout << "using move operator" << std::endl;
+            //std::cout << "using move operator" << std::endl;
             this->matrix_data = other.matrix_data;
             other.matrix_data = mat();
         }
 
         sk_arm& operator=(sk_arm&& other){
-            std::cout << "using move operator" << std::endl;
+            //std::cout << "using move operator" << std::endl;
             this->matrix_data = other.matrix_data;
             other.matrix_data = mat();
             return *this;
         }
+        
 
         void clear(){
             this->matrix_data = mat(); 
@@ -80,14 +87,14 @@ class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
             return this->matrix_data.n_cols; 
         }
 
-        sk_arm mult(sk_arm& rhs) const{
+        sk_arm mult(const sk_arm& rhs) const{
             mat a = this->matrix_data * rhs.matrix_data;
             return std::move(sk_arm(a));
         }
 
-        sk_arm rand_n(int row, int col) const{
-            mat a(row, col);
-            a.randn();
+        sk_arm rand_n(int row, int col){
+            mat a; 
+            a.randn(row, col);
             //a = a*std + mean;
             this->matrix_data = a;
             return *this;
@@ -140,11 +147,12 @@ class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
             return accu(matrix_data);
         }
 
-        void qr_decompose(sk_arm& a, sk_arm& b){
+        void qr_decompose(sk_arm& a, sk_arm& b) const{
                 mat Q = a.matrix_data;
                 mat R = b.matrix_data; 
                 qr(Q, R, matrix_data); 
         }
+
 
 };
 
