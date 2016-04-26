@@ -1,5 +1,7 @@
 #include "SKMatrix.hpp"
 #include "mkl.h"
+//#include "mkl_scalapack.h"
+//#include "mkl_lapacke.h"
 #include <sstream>
 #include <chrono>
 
@@ -27,6 +29,10 @@ class sk_intel : SKmatrix<sk_intel, float *, float>  {
             int i;
             for(i = 0; i < n; i++)
                 matrix_data[i*cols + i] = 1.0;
+        }
+
+        void set(int r, int c, float a) {
+            this->matrix_data[r*this->rows + c] = a;
         }
 
         ~sk_intel() {
@@ -121,7 +127,7 @@ class sk_intel : SKmatrix<sk_intel, float *, float>  {
             cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, this->rows, 
                     rhs.cols, this->cols, 1, this->matrix_data, rhs.rows, 
                     rhs.matrix_data, rhs.cols, 0, product.matrix_data, rhs.cols);
-            std::cout << "p: " << product << std::endl;
+            //std::cout << "p: " << product << std::endl;
             return product;
         }
 
@@ -179,27 +185,55 @@ class sk_intel : SKmatrix<sk_intel, float *, float>  {
 
         // Regression 
         sk_intel& concat(const sk_intel& col) const ;
-        sk_intel& solve_x(const sk_intel& A, const sk_intel& B) const;
+        */
 
+        sk_intel solve_x(const sk_intel& B) const {
+            if(this->rows != this->cols)
+                throw std::invalid_argument("A must be square in Ax = B");
+            if(this->cols != B.rows)
+                throw std::invalid_argument("B.rows must equal A.cols in Ax = B");
+            if(B.cols != 1)
+                throw std::invalid_argument("B must be nx1 vector in Ax = B");
+            sk_intel X(B.rows, 1);
+            char trans = 'N';
+            MKL_INT lda = this->rows; // rows in A
+            MKL_INT n = this->cols; // cols in A
+            MKL_INT nrhs = 1; // cols in B
+            MKL_INT ldb = nrhs;
+            MKL_INT ia = 0;
+            MKL_INT ja = 0;
+            MKL_INT ipiv[n];
+            MKL_INT info;
+
+            sk_intel copy(B);
+            LAPACKE_sgesv(LAPACK_ROW_MAJOR, n, nrhs, this->matrix_data, lda, ipiv, copy.matrix_data, ldb);
+            //psgetrf(&m, &n, copy.matrix_data, &ia, &ja, (MKL_INT *) &copy.matrix_data, ipiv, &info);
+            //psgetrs(
+
+            return copy;
+        }
+
+
+        /*
         // TODO: K-SVD 
         sk_intel& override_col(const int col, const sk_intel& B) const;
         std::vector<sk_intel> qr_decompose() const;
         sk_intel& svd() const;
          */
 
-        bool operator==(const sk_intel& a) {
-            if(a.rows != this->rows || a.cols != this->cols)
-                return false;
-            int i;
-            for(i = 0; i < this->size(); i++)
-                if(this->matrix_data[i] != a.matrix_data[i])
-                    return false;
-            return true;
-        }
-
+        friend bool operator==(const sk_intel& lhs, const sk_intel& rhs);
         friend std::ostream& operator<<(std::ostream&os, const sk_intel& im);
-
 };
+
+bool operator==(const sk_intel& lhs, const sk_intel& rhs) {
+    if(rhs.rows != lhs.rows || rhs.cols != lhs.cols)
+        return false;
+    int i;
+    for(i = 0; i < lhs.size(); i++)
+        if(lhs.matrix_data[i] != rhs.matrix_data[i])
+            return false;
+    return true;
+}
 
 std::ostream& operator<<(std::ostream&os, const sk_intel& im) {
     int i;
