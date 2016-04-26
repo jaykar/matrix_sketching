@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -g -I../interface/
+CXXFLAGS = -std=c++14 -Wall -g -I../interface/ -I../libraries/include
 LDLIBS = -larmadillo
 
 arm_interface.o: Arm_interface.hpp 
