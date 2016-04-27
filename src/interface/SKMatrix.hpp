@@ -33,9 +33,9 @@ class SKmatrix {
         // t& operator/=(const t& rhs){};
         // t& operator/=(const c& rhs){};
 
-        // t operator*(const t& rhs){};
+        t operator*(const t& rhs){};
         // t operator*(const c& rhs){};
-        // t& operator*=(const t& rhs){};
+        t& operator*=(const t& rhs){};
         // t& operator*=(const c& rhs){};
 
         virtual void clear(void) = 0;
@@ -48,10 +48,9 @@ class SKmatrix {
 
         // gaussian projection
         virtual t rand_n(const int row, const int col) = 0;
-        // virtual t mult(const t& rhs) const = 0;
-        //virtual t elem_div(const double a) const= 0;
+        virtual t mult(const t& rhs) const = 0;
+        virtual t elem_div(const float a) const= 0;
 
-        /*
         // count sketch
         std::vector<int> flip_signs(){
             std::vector<int> indices(this->num_cols());
@@ -101,11 +100,10 @@ class SKmatrix {
                 // return indices;
             }
         }
-        */
 
         // regression
         //virtual t concat(const t& col) const = 0;
-        //virtual t solve_x(const t& b) const = 0;
+        virtual t solve_x(const t& b) const = 0;
 
         //virtual t get_cols(int start, int end) const = 0;
         //virtual t get_col(int col_n) const = 0;

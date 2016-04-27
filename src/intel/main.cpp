@@ -26,8 +26,12 @@ int main() {
 //b.rand_n(4, 4);
     std::cout << "a: ";
     std::cout << a << std::endl;
-    std::cout << "b: ";
+    std::cout << "X: ";
     std::cout << X << std::endl;
+    std::cout << "Xt: ";
+    a.transpose();
+    std::cout << a << std::endl;
+
     /*
     a -= b;
     std::cout << "a: ";

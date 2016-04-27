@@ -10,9 +10,9 @@ CXX=g++
 
 # flags configured by CMake
 ifeq (macos,macos)
-  LIB_FLAGS = -larmadillo -framework Accelerate
+  LIB_FLAGS = -larmadillo -L$(MKLROOT)/lib -Wl,-rpath,$(MKLROOT)/lib -L$(MKLROOT)/../compiler//lib -Wl,-rpath,$(MKLROOT)/../compiler/lib -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -lmkl_scalapack_lp64 -lmkl_blacs_mpich_lp64 
 else
-  LIB_FLAGS = -larmadillo
+  LIB_FLAGS = -larmadillo -lmkl -L$(MKLROOT)/lib -Wl,-rpath,$(MKLROOT)/lib -L$(MKLROOT)/../compiler//lib -Wl,-rpath,$(MKLROOT)/../compiler/lib -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -lmkl_scalapack_lp64 -lmkl_blacs_mpich_lp64 
   ## NOTE: on Ubuntu and Debian based systems you may need to add -lgfortran
   
   #LIB_FLAGS = -larmadillo -library=sunperf

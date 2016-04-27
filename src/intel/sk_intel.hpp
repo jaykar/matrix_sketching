@@ -179,13 +179,18 @@ class sk_intel : SKmatrix<sk_intel, float *, float>  {
 
         /*
         // Count Sketch
-        std::vector<int>& flip_signs(const int col...) const;
-        std::vector<int>& bucket(const int num_buckets) const;
-        sk_intel& count_sketch() const;
 
         // Regression 
         sk_intel& concat(const sk_intel& col) const ;
         */
+
+        void transpose() {
+            mkl_simatcopy('r', 't', this->rows, this->cols, 1.0, this->matrix_data, 
+                    this->cols, this->rows);
+            int i = this->rows;
+            this->rows = this->cols;
+            this->cols = i;
+        }
 
         sk_intel solve_x(const sk_intel& B) const {
             if(this->rows != this->cols)

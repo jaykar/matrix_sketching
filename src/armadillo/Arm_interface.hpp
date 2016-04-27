@@ -6,7 +6,7 @@
 
 using namespace arma;
 template<typename F>
-class sk_arm: SKMatrix<sk_arm <F>, arma::mat, F>{
+class sk_arm: SKmatrix<sk_arm <F>, arma::mat, F>{
     private:
         Mat<F> matrix_data;
     public:
