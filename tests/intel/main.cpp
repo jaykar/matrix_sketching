@@ -1,17 +1,17 @@
 #include "intel.h"
 
 int main() {
-    IntelMatrix a;
+    sk::intel a;
     a.init();
     std::cout << "a: ";
     std::cout << a << std::endl;
-    IntelMatrix b(4, 3);
+    sk::intel b(4, 3);
     std::cout << "b: ";
     std::cout << b << std::endl;
-    IntelMatrix c(b);
+    sk::intel c(b);
     std::cout << "c: ";
     std::cout << c << std::endl;
-    IntelMatrix d = c;
+    sk::intel d = c;
     std::cout << "d: ";
     std::cout << d << std::endl;
     a.rand_n(3, 4);
