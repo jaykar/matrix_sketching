@@ -96,14 +96,14 @@ class SKMatrix {
         * @see matrix_data
         * @return copy of matrix_data
         */
-        virtual C data(void) const = { return C(matrix_data) };
+        virtual C data(void) const { return C(matrix_data); };
 
        /**
         * Returns matrix_data for accessing
         * @see matrix_data
         * @return matrix_data
         */
-        virtual C& data(void) = { return matrix_data; };
+        virtual C& data(void) { return matrix_data; };
 
        /**
         * Create matrix filled with random normal values
@@ -230,7 +230,7 @@ class SKMatrix {
         * @param Q n by n Q matrix to be overwritten
         * @param R n by m R matrix to be overwritten
         */
-        virtual void qr_decompose(T& Q, T& R) const = 0;
+        virtual void qr_decompose(T& Q, T& R) const = 0
 };
 
 #endif
