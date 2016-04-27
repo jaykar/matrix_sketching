@@ -230,7 +230,9 @@ class SKMatrix {
         * @param Q n by n Q matrix to be overwritten
         * @param R n by m R matrix to be overwritten
         */
-        virtual void qr_decompose(T& Q, T& R) const = 0
+        virtual void qr_decompose(T& Q, T& R) const = 0;
+
+        virtual std::vector<T> svds(const int k) const = 0;
 };
 
 #endif

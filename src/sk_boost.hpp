@@ -21,11 +21,12 @@ class sk_boost: public SKMatrix<sk_boost, bnu::matrix<float> >{
         }
 
         sk_boost(const int row, const int col){
-            this->matrix_data = bnu::matrix<float>(row, col, 0);
+            this->matrix_data = bnu::matrix<float>(row, col);
         }
 
         sk_boost(const bnu::matrix<float>& mat){
             this->matrix_data = mat;
+                        std::cout << matrix_data << std::endl;
         }
 
         ~sk_boost() = default;
@@ -75,6 +76,11 @@ class sk_boost: public SKMatrix<sk_boost, bnu::matrix<float> >{
 
         /* floatODO: K-SVD */
         void qr_decompose(sk_boost& Q, sk_boost& R) const;
+        virtual std::vector<sk_boost> svds(const int k) const {
+            // bnu::matrix<float> m1(5,5, 1.0);
+            // sk_boost mat1(m1);
+            return std::vector<sk_boost>();
+        };
 };
 
 

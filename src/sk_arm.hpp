@@ -1,13 +1,14 @@
 #ifndef __ARM_INTERFACE_H__
 #define __ARM_INTERFACE_H__
 
-#include "../interface/SKMatrix.hpp"
+#include "SKMatrix.hpp"
 #include <armadillo>
 
 using namespace arma;
 class sk_arm: SKMatrix<sk_arm, arma::mat>{
     private:
         mat matrix_data;
+
     public:
         sk_arm(){
             matrix_data = mat();
@@ -19,6 +20,7 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
             a.push_back(matrix_data.n_cols);
             return a;
         }
+
         ~sk_arm() = default;
 
         sk_arm(int r, int c){
@@ -38,34 +40,31 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
         }
 
         sk_arm(const sk_arm& other){
-            //std::cout << "using copy operator" << std::endl;
+            // std::cout << "using copy constructor" << std::endl;
             auto temp = other.matrix_data;
-            this->matrix_data = mat(temp);
+            this->matrix_data = temp;
         }
 
         sk_arm& operator=(const sk_arm& other){
-            //std::cout << "using copy operator" << std::endl;
+            // std::cout << "using copy assignment" << std::endl;
             this->matrix_data = mat(other.matrix_data);
             return *this;
         }
 
-
         sk_arm& operator=(const mat& other){
-            //std::cout << "using copy operator" << std::endl;
+            // std::cout << "using copy assignmnet for mat" << std::endl;
             this->matrix_data = mat(other);
             return *this;
         }
 
         sk_arm(sk_arm&& other){
-            //std::cout << "using move operator" << std::endl;
+            // std::cout << "using move constructor" << std::endl;
             this->matrix_data = other.matrix_data;
-            other.matrix_data = mat();
         }
 
         sk_arm& operator=(sk_arm&& other){
-            //std::cout << "using move operator" << std::endl;
+            // std::cout << "using move assignment" << std::endl;
             this->matrix_data = other.matrix_data;
-            other.matrix_data = mat();
             return *this;
         }
 
@@ -95,7 +94,6 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
         sk_arm rand_n(int row, int col){
             mat a;
             a.randn(row, col);
-            //a = a*std + mean;
             this->matrix_data = a;
             return *this;
         }
@@ -148,12 +146,30 @@ class sk_arm: SKMatrix<sk_arm, arma::mat>{
         }
 
         void qr_decompose(sk_arm& a, sk_arm& b) const{
-                mat Q = a.matrix_data;
-                mat R = b.matrix_data;
-                qr(Q, R, matrix_data);
+            mat Q;
+            mat R;
+            qr(Q, R, matrix_data);
+            a.matrix_data = Q;
+            b.matrix_data = R;
         }
 
+        friend std::ostream& operator<<(std::ostream&os, const sk_arm& out);
 
+        std::vector<sk_arm> svds(int k){
+            mat U;
+            vec s;
+            mat V;
+            arma::svds(U, s, V, sp_mat(matrix_data), k);
+            auto ans = std::vector<sk_arm>(3);
+            ans[0] = sk_arm(U);
+            ans[1] = sk_arm(mat(s));
+            ans[2] = sk_arm(V);
+            return ans;
+        }
 };
+
+std::ostream& operator<<(std::ostream& os, const sk_arm&out){
+    return os << out.matrix_data ;
+}
 
 #endif

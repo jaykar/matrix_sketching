@@ -23,7 +23,7 @@ int main(){
 
   cout << "mat 1 concat mat 2" << endl;
   cout << mat1.concat(mat2) << endl;
-
+  cout << mat1 <<endl;
   cout << "mat 1 mult mat 2" << endl;
   cout << mat1.mult(mat2) << endl;
 
