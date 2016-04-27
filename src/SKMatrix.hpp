@@ -223,7 +223,7 @@ class SKMatrix {
         * @see matrix_data
         * @return sum of elements
         */
-        virtual double accumulate() const = 0;
+        virtual float accumulate() const = 0;
 
        /**
         * Performs QR decomposition of matrix_data
