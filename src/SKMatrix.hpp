@@ -41,7 +41,7 @@ class SKMatrix {
         * @param rhs another object of tyoe matrix_data
         * @see matrix_data
         */
-        T& operator=(const C& rhs){};
+        //T& operator=(const C& rhs){};
 
         // to do
         // T operator+(const T& rhs){};
@@ -104,7 +104,6 @@ class SKMatrix {
         * @see matrix_data
         * @return matrix_data
         */
-        virtual C& data(void) = 0;
 
        /**
         * Create matrix filled with random normal values
