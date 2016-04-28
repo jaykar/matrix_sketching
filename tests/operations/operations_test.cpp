@@ -1,7 +1,7 @@
 #include <iostream>
 #include "operations.hpp"
-#include "sketchy_boost.hpp"
-// #include "sketchy_arm.hpp"
+#include "sk_boost.hpp"
+#include "sk_arm.hpp"
 
 using namespace std;
 
@@ -33,7 +33,6 @@ int main(){
 
     boost::numeric::ublas::matrix<float> mat;
     sketchy::boost boost_matrix(mat);
-
 
     // = rand_n<sketchy_boost>(total_size);
     // input_arm = rand_n<sketchy::arm>(total_size);
