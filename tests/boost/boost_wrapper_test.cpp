@@ -90,5 +90,8 @@ int main(){
 
   cout << matE.solve_x(matD) << endl;
 
+  cout << matB << endl;
+  matB.svd(matE, matD, mat2, 1);
+
   return 0;
 }

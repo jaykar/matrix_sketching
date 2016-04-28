@@ -100,13 +100,6 @@ class SKMatrix {
         virtual C data(void) const = 0;
 
        /**
-        * Returns matrix_data for accessing
-        * @see matrix_data
-        * @return matrix_data
-        */
-        virtual C& data(void) = 0;
-
-       /**
         * Create matrix filled with random normal values
         * with mean 0 and standard deviation 1
         * @param row number of rows for a new random matrix
