@@ -99,7 +99,7 @@ class SKMatrix {
         */
         virtual C data(void) const = 0;
 
-       /*
+       /**
         * Create matrix filled with random normal values
         * with mean 0 and standard deviation 1
         * @param row number of rows for a new random matrix
