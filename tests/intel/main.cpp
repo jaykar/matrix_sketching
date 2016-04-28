@@ -1,4 +1,4 @@
-#include "sk_intel.hpp"
+#include "../../src/sk_intel.hpp"
 
 int main() {
     sk_intel a(2,2);
