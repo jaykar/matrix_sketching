@@ -41,7 +41,7 @@ class SKMatrix {
         * @param rhs another object of tyoe matrix_data
         * @see matrix_data
         */
-        T& operator=(const C& rhs){};
+        //T& operator=(const C& rhs){};
 
         // to do
         // T operator+(const T& rhs){};
@@ -99,7 +99,7 @@ class SKMatrix {
         */
         virtual C data(void) const = 0;
 
-       /**
+       /*
         * Create matrix filled with random normal values
         * with mean 0 and standard deviation 1
         * @param row number of rows for a new random matrix
@@ -115,6 +115,7 @@ class SKMatrix {
         * @return product of two matrices
         */
         virtual T mult(const T& rhs) const = 0;
+
        /**
         * Divides internal matrix by a scalar
         * @param a divisor
