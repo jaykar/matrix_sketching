@@ -11,7 +11,7 @@
 namespace bnu = boost::numeric::ublas;
 
 // use assert instead of throw
-namespace sk {
+namespace sketchy {
     class boost: public SKMatrix<boost, bnu::matrix<float> >{
         public:
             boost(){
@@ -89,8 +89,7 @@ namespace sk {
 
     boost boost::mult(const boost& rhs) const {
         if (rhs.num_rows() != num_cols()) {
-            std::cout << "Column of left matrix: " << num_cols() << " does not match row of right matrix: " << rhs.num_rows() << "\n";
-            throw;
+            throw std::range_error("Column of left matrix does not match row of right matrix");
         } else {
             bnu::matrix<float> prod(num_rows(), rhs.num_cols());
             bnu::noalias(prod) = bnu::prod(this->data(), rhs.data());
@@ -100,8 +99,7 @@ namespace sk {
 
     boost boost::rand_n(const int row, const int col) {
         if (row < 0 || col < 0) {
-            std::cout << "Column and row lengths must be non-negative integers" << std::endl;
-            throw;
+            throw std::range_error("Column and row lengths must be non-negative integers");
         } else {
             std::default_random_engine generator;
             std::normal_distribution<float> distribution(0, 1);
@@ -119,8 +117,7 @@ namespace sk {
 
     boost boost::elem_div(const double a) const {
         if(a == 0) {
-            std::cout << "Cannot divide by 0" << std::endl;
-            throw;
+            throw std::overflow_error("Cannot divide by 0" );
         } else{
             bnu::matrix<float> mat(data());
             bnu::matrix<float> result = mat/a;
@@ -130,8 +127,7 @@ namespace sk {
 
     boost boost::concat(const boost& mat) const {
         if (mat.num_rows() != this->num_rows()) {
-            std::cout << "Number of rows do not match" << std::endl;
-            throw;
+            throw std::range_error("Number of rows do not match");
         } else {
             bnu::matrix<float> concat_mat(data());
             int end_index1 = concat_mat.size2();
@@ -215,8 +211,7 @@ namespace sk {
 
     boost boost::subtract(const boost& rhs) const {\
         if(rhs.num_rows() != this->num_rows()){
-            std::cout << "Number of rows do not match" << std::endl;
-            throw;
+            throw std::range_error("Number of rows do not match");
         }
         bnu::matrix<float> diff = data() - rhs.data();
         return std::move(boost(diff));
@@ -224,8 +219,7 @@ namespace sk {
 
     boost boost::get_col(const int col_n) const {
         if(col_n < 0 || col_n >= num_cols()) {
-            std::cout << "Column index out of bound" << std::endl;
-            throw;
+            throw std::range_error("Column index out of bound");
         } else {
             bnu::matrix<float> column = bnu::subrange(data(), 0, num_rows(), col_n, col_n+1);
             return std::move(boost(column));
@@ -234,11 +228,10 @@ namespace sk {
 
     boost boost::get_cols(const int start, const int end) const {
         if (start < 0 || end > num_cols()) {
-            std::cout << "Column indices out of bound" << std::endl;
+            throw std::range_error("Column index out of bound");
             throw;
         } else if (start > end){
-            std::cout << "Start column greater than end column" << std::endl;
-            throw;
+            throw std::range_error("Start column greater than end column");
         }else {
             bnu::matrix<float> columns = bnu::subrange(data(), 0, num_rows(), start, end);
             return boost(columns);

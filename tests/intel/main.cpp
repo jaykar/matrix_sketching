@@ -1,17 +1,17 @@
 #include "intel.h"
 
 int main() {
-    sk::intel a;
+    sketchy::intel a;
     a.init();
     std::cout << "a: ";
     std::cout << a << std::endl;
-    sk::intel b(4, 3);
+    sketchy::intel b(4, 3);
     std::cout << "b: ";
     std::cout << b << std::endl;
-    sk::intel c(b);
+    sketchy::intel c(b);
     std::cout << "c: ";
     std::cout << c << std::endl;
-    sk::intel d = c;
+    sketchy::intel d = c;
     std::cout << "d: ";
     std::cout << d << std::endl;
     a.rand_n(3, 4);
