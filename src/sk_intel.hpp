@@ -81,6 +81,10 @@ namespace sketchy {
                 return this->cols;
             }
 
+            float *data() const {
+                return this->matrix_data;
+            }
+
             intel rand_n(const int row = -1, const int col = -1) {
 
                 if(row != -1)
@@ -197,8 +201,8 @@ namespace sketchy {
             }
 
             //TODO
-            std::vector<intel> svds(const int k) const {
-                return std::vector<intel>();
+            void svd(intel& U, intel& S, intel& V, const int k) const {
+                // return std::vector<intel>();
             }
 
             std::vector<int> dimensions() const {

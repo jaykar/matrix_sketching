@@ -97,14 +97,13 @@ class SKMatrix {
         * @see matrix_data
         * @return copy of matrix_data
         */
-        //virtual C data(void) const { return C(matrix_data); };
+        virtual C data(void) const = 0;
 
        /**
         * Returns matrix_data for accessing
         * @see matrix_data
         * @return matrix_data
         */
-        //virtual C& data(void) { return matrix_data; };
 
        /**
         * Create matrix filled with random normal values
@@ -233,7 +232,7 @@ class SKMatrix {
         */
         virtual void qr_decompose(T& Q, T& R) const = 0;
 
-        virtual std::vector<T> svds(const int k) const = 0;
+        virtual void svd(T& U, T& S, T& V, const int k) const = 0;
 };
 
 #endif
