@@ -5,6 +5,7 @@
 #include <armadillo>
 
 using namespace arma;
+
 namespace sketchy {
     class arm: SKMatrix<arm, arma::mat>{
         public:
@@ -85,38 +86,49 @@ namespace sketchy {
             }
 
             arm mult(const arm& rhs) const{
-                mat a = this->matrix_data * rhs.matrix_data;
-                return a;
+                if (rhs.num_rows() != num_cols()) {
+                    throw std::range_error("Column of left matrix does not match row of right matrix");
+                } else {
+                    mat a = this->matrix_data * rhs.matrix_data;
+                    return a;
+                }
             }
 
             arm rand_n(int row, int col){
-                mat a;
-                a.randn(row, col);
-                this->matrix_data = a;
-                return *this;
+                if (row < 0 || col < 0) {
+                    throw std::range_error("Column and row lengths must be non-negative integers");
+                } else {
+                    mat a;
+                    a.randn(row, col);
+                    this->matrix_data = a;
+                    return *this;
+                }
             }
 
-            arm elem_div(const double b) const{
-               mat a = data();
-               if (b != 0.0){
-                   a = a/b;
-               }
-               else{
-                   std::cout << "cannot divide by 0" << std::endl;
-               }
-               return arm(a);
+            arm elem_div(const double a) const{
+                if(a == 0) {
+                    throw std::overflow_error("Cannot divide by 0" );
+                } else{
+                    mat b = data();
+                    b = b/a;
+                    return arm(b);
+                }
             }
 
 
-            arm concat(const arm& column) const{
-                mat a = data();
-                a.insert_cols(a.n_cols-1, column.matrix_data);
-                return arm(a);
+            arm concat(const arm& mat) const{
+                if (mat.num_rows() != this->num_rows()) {
+                    throw std::range_error("Number of rows do not match");
+                } else {
+                    mat a = data();
+                    a.insert_cols(a.n_cols-1, mat.matrix_data);
+                    return arm(a);
+                }
             }
 
             arm solve_x(const arm& B) const{
-                    auto X = solve(matrix_data, B.matrix_data);
-                    return arm(X);
+                auto X = solve(matrix_data, B.matrix_data);
+                return arm(X);
             }
 
             arm get_cols(int start, int end) const{
@@ -135,34 +147,37 @@ namespace sketchy {
             }
 
             arm subtract(const arm& rhs) const{
-                mat a = matrix_data - rhs.matrix_data;
-                return arm(a);
+                if(rhs.num_rows() != this->num_rows()){
+                    throw std::range_error("Number of rows do not match");
+                } else {
+                    mat a = matrix_data - rhs.matrix_data;
+                    return arm(a);
+                }
             }
 
-            double accumulate() const{
+            float accumulate() const{
                 return accu(matrix_data);
             }
 
-            void qr_decompose(arm& a, arm& b) const{
-                mat Q;
-                mat R;
-                qr(Q, R, matrix_data);
-                a.matrix_data = Q;
-                b.matrix_data = R;
+            void qr_decompose(arm& Q, arm& R) const{
+                mat q;
+                mat r;
+                qr(q, r, matrix_data);
+                Q.matrix_data = q;
+                R.matrix_data = r;
             }
 
             friend std::ostream& operator<<(std::ostream&os, const arm& out);
 
-            std::vector<arm> svds(int k){
-                mat U;
+            void svd(arm& U, arm& S, arm& V, const int k){
+                mat u;
                 vec s;
-                mat V;
-                arma::svds(U, s, V, sp_mat(matrix_data), k);
+                mat v;
+                arma::svds(u, s, v, sp_mat(matrix_data), k);
                 auto ans = std::vector<arm>(3);
-                ans[0] = arm(U);
-                ans[1] = arm(mat(s));
-                ans[2] = arm(V);
-                return ans;
+                U.matrix_data = u;
+                S.matrix_data = mat(s));
+                V.matrix_data = v;
             }
     };
 

@@ -38,6 +38,10 @@ namespace sketchy {
                 return *this;
             }
 
+            bnu::matrix<float> data(void) const { return bnu::matrix<float>(matrix_data); }
+
+            bnu::matrix<float>& data(void) { return matrix_data; }
+
             friend std::ostream& operator<<(std::ostream&os, const boost& mat);
 
             void clear() { matrix_data.clear(); }
@@ -73,10 +77,10 @@ namespace sketchy {
 
             /* floatODO: K-SVD */
             void qr_decompose(boost& Q, boost& R) const;
-            std::vector<boost> svds(const int k) const {
+
+            void svd(boost& U, boost& S, boost& V, const int k) const {
                 // bnu::matrix<float> m1(5,5, 1.0);
                 // boost mat1(m1);
-                return std::vector<boost>();
             };
     };
 
@@ -212,9 +216,10 @@ namespace sketchy {
     boost boost::subtract(const boost& rhs) const {\
         if(rhs.num_rows() != this->num_rows()){
             throw std::range_error("Number of rows do not match");
+        } else {
+            bnu::matrix<float> diff = data() - rhs.data();
+            return std::move(boost(diff));
         }
-        bnu::matrix<float> diff = data() - rhs.data();
-        return std::move(boost(diff));
     }
 
     boost boost::get_col(const int col_n) const {
