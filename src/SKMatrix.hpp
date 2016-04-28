@@ -213,6 +213,7 @@ class SKMatrix {
         * @return resultant matrix of subtraction
         */
         virtual T subtract(const T& rhs) const = 0;
+
        /**
         * Sums up all the values in matrix_data
         * @see matrix_data

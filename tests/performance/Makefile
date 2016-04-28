@@ -8,14 +8,14 @@ LAPACK_LIB_PATH = -L /usr/local/lib/ -llapack -L /usr/local/lib/ -lblas
 BOOST_INTERFACE = -I ../../src/
 
 #-O3 -D -DNDEBUG -DBOOST_UBLAS_NDEBUG
-boost_wrapper_test: boost_wrapper_test.o
-	$(CXX) $(CXXFLAGS) $(LAPACK_LIB_PATH) $(BOOST_COMPILE_OPTION) -o boost_wrapper_test boost_wrapper_test.o
+time: time.o
+	$(CXX) $(CXXFLAGS) $(LAPACK_LIB_PATH) $(BOOST_COMPILE_OPTION) -o time time.o
 
-boost_wrapper_test.o: boost_wrapper_test.cpp
-	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(BOOST_INTERFACE) -c boost_wrapper_test.cpp
+time.o: time.cpp
+	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(BOOST_INTERFACE) -c time.cpp
 
 .PHONY: clean
 clean:
-	rm -f *.o a.out core main boost_wrapper_test
+	rm -f *.o a.out core main time
 .PHONY: all
 all: clean main
