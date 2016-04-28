@@ -5,10 +5,10 @@
 #include <armadillo>
 
 using namespace arma;
-namespace sk {
-    class arm: SKMatrix<sk_arm, arma::mat>{
+namespace sketchy {
+    class arm: SKMatrix<arm, arma::mat>{
         public:
-            sk_arm(){
+            arm(){
                 matrix_data = mat();
             }
 
@@ -19,9 +19,9 @@ namespace sk {
                 return a;
             }
 
-            ~sk_arm() = default;
+            ~arm() = default;
 
-            sk_arm(int r, int c){
+            arm(int r, int c){
                 matrix_data = mat(r,c);
             }
 
@@ -33,34 +33,34 @@ namespace sk {
                 return matrix_data;
             }
 
-            sk_arm(mat other){
+            arm(mat other){
                 this->matrix_data = other;
             }
 
-            sk_arm(const sk_arm& other){
+            arm(const arm& other){
                 // std::cout << "using copy constructor" << std::endl;
                 auto temp = other.matrix_data;
                 this->matrix_data = temp;
             }
 
-            sk_arm& operator=(const sk_arm& other){
+            arm& operator=(const arm& other){
                 // std::cout << "using copy assignment" << std::endl;
                 this->matrix_data = mat(other.matrix_data);
                 return *this;
             }
 
-            sk_arm& operator=(const mat& other){
+            arm& operator=(const mat& other){
                 // std::cout << "using copy assignmnet for mat" << std::endl;
                 this->matrix_data = mat(other);
                 return *this;
             }
 
-            sk_arm(sk_arm&& other){
+            arm(arm&& other){
                 // std::cout << "using move constructor" << std::endl;
                 this->matrix_data = other.matrix_data;
             }
 
-            sk_arm& operator=(sk_arm&& other){
+            arm& operator=(arm&& other){
                 // std::cout << "using move assignment" << std::endl;
                 this->matrix_data = other.matrix_data;
                 return *this;
@@ -84,19 +84,19 @@ namespace sk {
                 return this->matrix_data.n_cols;
             }
 
-            sk_arm mult(const sk_arm& rhs) const{
+            arm mult(const arm& rhs) const{
                 mat a = this->matrix_data * rhs.matrix_data;
                 return a;
             }
 
-            sk_arm rand_n(int row, int col){
+            arm rand_n(int row, int col){
                 mat a;
                 a.randn(row, col);
                 this->matrix_data = a;
                 return *this;
             }
 
-            sk_arm elem_div(const double b) const{
+            arm elem_div(const double b) const{
                mat a = data();
                if (b != 0.0){
                    a = a/b;
@@ -104,46 +104,46 @@ namespace sk {
                else{
                    std::cout << "cannot divide by 0" << std::endl;
                }
-               return sk_arm(a);
+               return arm(a);
             }
 
 
-            sk_arm concat(const sk_arm& column) const{
+            arm concat(const arm& column) const{
                 mat a = data();
                 a.insert_cols(a.n_cols-1, column.matrix_data);
-                return sk_arm(a);
+                return arm(a);
             }
 
-            sk_arm solve_x(const sk_arm& B) const{
+            arm solve_x(const arm& B) const{
                     auto X = solve(matrix_data, B.matrix_data);
-                    return sk_arm(X);
+                    return arm(X);
             }
 
-            sk_arm get_cols(int start, int end) const{
+            arm get_cols(int start, int end) const{
                 mat a = matrix_data.cols(start, end);
-                return sk_arm(a);
+                return arm(a);
             }
 
 
-            sk_arm get_col(int col_n) const{
+            arm get_col(int col_n) const{
                 mat a = matrix_data.col(col_n);
-                return sk_arm(a);
+                return arm(a);
             }
 
             void transpose(){
                 matrix_data = matrix_data.t();
             }
 
-            sk_arm subtract(const sk_arm& rhs) const{
+            arm subtract(const arm& rhs) const{
                 mat a = matrix_data - rhs.matrix_data;
-                return sk_arm(a);
+                return arm(a);
             }
 
             double accumulate() const{
                 return accu(matrix_data);
             }
 
-            void qr_decompose(sk_arm& a, sk_arm& b) const{
+            void qr_decompose(arm& a, arm& b) const{
                 mat Q;
                 mat R;
                 qr(Q, R, matrix_data);
@@ -151,22 +151,22 @@ namespace sk {
                 b.matrix_data = R;
             }
 
-            friend std::ostream& operator<<(std::ostream&os, const sk_arm& out);
+            friend std::ostream& operator<<(std::ostream&os, const arm& out);
 
-            std::vector<sk_arm> svds(int k){
+            std::vector<arm> svds(int k){
                 mat U;
                 vec s;
                 mat V;
                 arma::svds(U, s, V, sp_mat(matrix_data), k);
-                auto ans = std::vector<sk_arm>(3);
-                ans[0] = sk_arm(U);
-                ans[1] = sk_arm(mat(s));
-                ans[2] = sk_arm(V);
+                auto ans = std::vector<arm>(3);
+                ans[0] = arm(U);
+                ans[1] = arm(mat(s));
+                ans[2] = arm(V);
                 return ans;
             }
     };
 
-    std::ostream& operator<<(std::ostream& os, const sk_arm&out){
+    std::ostream& operator<<(std::ostream& os, const arm&out){
         return os << out.matrix_data ;
     }
 }

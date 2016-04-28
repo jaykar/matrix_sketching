@@ -6,7 +6,7 @@
 using namespace std;
 TEST(construct_arm_interface, TRIVIAL){
     for(int i=0; i<1000; i++){
-        auto A = sk::arm();
+        auto A = sketchy::arm();
     }
     EXPECT_EQ(1,1);
 }
@@ -14,13 +14,13 @@ TEST(construct_arm_interface, TRIVIAL){
 
 TEST(construct_arm_interface_num, TRIVIAL){
     for(int i=0; i<1000; i++){
-        auto A = sk::arm(20, 20);
+        auto A = sketchy::arm(20, 20);
     }
     EXPECT_EQ(1,1);
 }
 
 TEST(construct_arm_interface_mat_copy, TRIVIAL){
-    auto B = sk::arm(30,30);
+    auto B = sketchy::arm(30,30);
     for(int i=0; i<1000; i++){
         auto A = B;
     }
@@ -29,7 +29,7 @@ TEST(construct_arm_interface_mat_copy, TRIVIAL){
 
 
 TEST(construct_arm_interface_mat_move, TRIVIAL){
-    auto B = sk::arm();
+    auto B = sketchy::arm();
     B.rand_n(30,30);
     auto C = B;
     auto A = std::move(B);

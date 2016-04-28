@@ -7,10 +7,10 @@ using namespace std;
 
 int main(){
   bnu::matrix<float> m1(5,5, 1.0);
-  sk_boost mat1(m1);
+  sketchy::boost mat1(m1);
 
   bnu::matrix<float> m2(5,5, 2.0);
-  sk_boost mat2(m2);
+  sketchy::boost mat2(m2);
 
   cout << "mat 1" << endl;
   cout << mat1 << endl;
@@ -64,9 +64,9 @@ int main(){
   bnu::matrix<double> q(3, 3);
   bnu::matrix<double> r(3, 3);
 
-  sk_boost matB(B);
-  sk_boost Q(q);
-  sk_boost R(r);
+  sketchy::boost matB(B);
+  sketchy::boost Q(q);
+  sketchy::boost R(r);
   cout << endl;
   matB.qr_decompose(Q, R);
 
@@ -76,7 +76,7 @@ int main(){
   bnu::matrix<float> D(2,1);
   D(0,0) = 5;
   D(1,0) = 7;
-  sk_boost matD(D);
+  sketchy::boost matD(D);
 
   bnu::matrix<float> E(2,2);
   E(0,0) = 3;
@@ -84,7 +84,7 @@ int main(){
 
   E(1,0) = 2;
   E(1,1) = -1;
-  sk_boost matE(E);
+  sketchy::boost matE(E);
 
   cout << "Ax = B" << endl;
 

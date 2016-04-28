@@ -6,6 +6,7 @@
 #include <cstdarg>
 #include <time.h>
 #include <iostream>
+#include <exception>
 
 template <typename T, typename C>
 class SKMatrix {

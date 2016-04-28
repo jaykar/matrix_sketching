@@ -4,10 +4,10 @@
 #include <math.h>
 #include <vector>
 
-namespace sk {
+namespace sketchy {
     namespace ops {
         /**
-         * Funciton that returns a gaussian projection of given
+         * Funciton that returns a gaussian projection of given matrix
          * @param input SKMatrix to take gaussian projection of
          * @param n a constant number of dimension to reduce input to
          * @return gaussian projection of a given graph in n dimensions

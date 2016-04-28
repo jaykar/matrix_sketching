@@ -7,7 +7,7 @@
 #include <chrono>
 #include <random>
 
-namespace sk {
+namespace sketchy {
     class intel : SKMatrix<intel>  {
         private:
             int rows;
