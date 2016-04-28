@@ -237,7 +237,7 @@ namespace sketchy {
             throw;
         } else if (start > end){
             throw std::range_error("Start column greater than end column");
-        }else {
+        } else {
             bnu::matrix<float> columns = bnu::subrange(data(), 0, num_rows(), start, end);
             return boost(columns);
         }
