@@ -111,8 +111,8 @@ namespace sketchy {
                 if(this->cols != rhs.rows)
                     throw std::invalid_argument("mismatched dimensions");
                 intel product(this->rows, rhs.cols);
-                cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, this->rows, 
-                        rhs.cols, this->cols, 1, this->matrix_data, rhs.rows, 
+                cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, this->rows,
+                        rhs.cols, this->cols, 1, this->matrix_data, rhs.rows,
                         rhs.matrix_data, rhs.cols, 0, product.matrix_data, rhs.cols);
                 //std::cout << "p: " << product << std::endl;
                 return product;
@@ -176,7 +176,7 @@ namespace sketchy {
             }
 
             void transpose() {
-                mkl_simatcopy('r', 't', this->rows, this->cols, 1.0, this->matrix_data, 
+                mkl_simatcopy('r', 't', this->rows, this->cols, 1.0, this->matrix_data,
                         this->cols, this->rows);
                 int i = this->rows;
                 this->rows = this->cols;
@@ -243,7 +243,7 @@ namespace sketchy {
             }
 
             intel& operator*=(const intel& rhs) {
-                *this = this->mult(rhs); 
+                *this = this->mult(rhs);
                 return *this;
             }
 
@@ -259,12 +259,12 @@ namespace sketchy {
             /*
             // Count Sketch
 
-            // Regression 
+            // Regression
              */
 
 
             /*
-            // TODO: K-SVD 
+            // TODO: K-SVD
             intel& override_col(const int col, const intel& B) const;
              */
 
