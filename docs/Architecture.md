@@ -1,5 +1,5 @@
 # Architecture
-![Architecture](./architecture.png)
+![Architecture](./images/architecture.png)
 
 `SKMatrix`, which stands for SKetching Matrix, is the core interface that allows different matrix libraries to share methods in `sketchy/operations.hpp` for matrix sketching, such as
 
