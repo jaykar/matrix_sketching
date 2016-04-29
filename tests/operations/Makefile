@@ -53,7 +53,7 @@ CXXFLAGS = -std=c++14 -Wall -g
 BOOST_LIB_PATH = -I /usr/local/include/
 
 # INTERFACE = -I ../interface
-INTERFACE = -I ../../src/
+INTERFACE = -I ../../sketchy/
 # BOOST_INTERFACE = -I ../boost
 # LDLIBS = -larmadillo -lArpack -framework Accelerate
 

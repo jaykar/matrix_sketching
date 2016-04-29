@@ -1,7 +1,3 @@
-Adam Incera (aji2112) </br>
-Jaykar Nayeck (jan2150) </br>
-Howon Byun (hb2458) </br>
-
 # Sketchy
 
 Sketchy is a high level library that acts as a wrapper for various
@@ -22,9 +18,7 @@ Release 0.8: Matrix Sketching, Wrappers for cuBLAS, easy interface to load csv f
 Release 1.0: Matrix Inversion using sketching, Linear Regression
 Release 1.2: SVD using sketching, maybe Kernel PCA (we need to figure what that is)
 
-
-Matrix: general, interface for other matrix libraries to plug into
-
-## Dependencies
-http://arma.sourceforge.net/
-https://github.com/google/googletest
+# Collaborators
+Adam Incera (aji2112) </br>
+Jaykar Nayeck (jan2150) </br>
+Howon Byun (hb2458) </br>
