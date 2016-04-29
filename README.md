@@ -12,6 +12,20 @@ Our library also provides a easy to use, general interface design that
 can easily be extended to incorporate other matrix libraries, such as
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) and [Elemental](http://libelemental.org/)
 
+## Organization / Structure
+```bash
+.
+├── docs             # Doxygen and Markdown Documentations
+├── sketchy          # Sketchy interface and wrappers
+│   ├── SKMatrix     # primary Interface
+│   ├── armadillo    # wrapper for Armadillo
+│   ├── boost        # wrapper for oost
+│   ├── intel        # wrapper for Intel MKL 
+│   ├── cuda         # wrapper for Nvidea cuda
+├── tests            # testing directory
+└── Doxyfile         # configuration for Doxygen
+```
+
 ## Libraries Supported
 1. [Boost](http://www.boost.org/doc/libs/1_60_0/libs/numeric/ublas/doc/)
 2. [Armadillo](http://arma.sourceforge.net/docs.html)

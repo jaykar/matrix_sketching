@@ -23,7 +23,11 @@ namespace sketchy {
             }
 
             boost(const int row, const int col){
-                this->matrix_data = bnu::matrix<float>(row, col, 0);
+                if(row < 0 || col < 0) {
+                    throw std::invalid_argument("Column and row lengths must be non-negative integers");
+                } else {
+                    this->matrix_data = bnu::matrix<float>(row, col, 0);
+                }
             }
 
             boost(const bnu::matrix<float>& mat){
@@ -31,6 +35,10 @@ namespace sketchy {
             }
 
             ~boost() = default;
+
+            void eye(const int n) {
+                matrix_data = bnu::identity_matrix<float>(n);
+            }
 
             boost& operator=(const boost& rhs){
                 matrix_data = rhs.data();
@@ -91,7 +99,7 @@ namespace sketchy {
 
     boost boost::mult(const boost& rhs) const {
         if (rhs.num_rows() != num_cols()) {
-            throw std::range_error("Column of left matrix does not match row of right matrix");
+            throw std::invalid_argument("Column of left matrix does not match row of right matrix");
         } else {
             bnu::matrix<float> prod(num_rows(), rhs.num_cols());
             bnu::noalias(prod) = bnu::prod(this->data(), rhs.data());
@@ -101,7 +109,7 @@ namespace sketchy {
 
     boost boost::rand_n(const int row, const int col) {
         if (row < 0 || col < 0) {
-            throw std::range_error("Column and row lengths must be non-negative integers");
+            throw std::invalid_argument("Column and row lengths must be non-negative integers");
         } else {
             std::default_random_engine generator;
             std::normal_distribution<float> distribution(0, 1);
@@ -128,7 +136,7 @@ namespace sketchy {
 
     boost boost::concat(const boost& mat) const {
         if (mat.num_rows() != this->num_rows()) {
-            throw std::range_error("Number of rows do not match");
+            throw std::invalid_argument("Number of rows do not match");
         } else {
             int rows = this->num_rows();
             int cols = this->num_cols();
@@ -143,6 +151,13 @@ namespace sketchy {
     }
 
     boost boost::solve_x(const boost& B) const {
+        if(this->num_rows() != this->num_cols())
+            throw std::invalid_argument("A must be square in Ax = B");
+        if(this->num_cols() != B.num_rows())
+            throw std::invalid_argument("B.rows must equal A.cols in Ax = B");
+        if(B.num_cols() != 1)
+            throw std::invalid_argument("B must be n x 1 vector in Ax = B");
+
         bnu::matrix<float> A(this->data());
         bnu::matrix<float> y = bnu::trans(B.data());
 
@@ -167,7 +182,7 @@ namespace sketchy {
 
         bnu::identity_matrix<float> I(this->num_rows());
 
-        bnu::matrix<float> q = bnu::identity_matrix<float>(this->num_rows());;
+        bnu::matrix<float> q = bnu::identity_matrix<float>(this->num_rows());
         bnu::matrix<float> r(data());
 
         for (int i = 0; i < num_rows(); i++) {
@@ -211,7 +226,7 @@ namespace sketchy {
 
     boost boost::subtract(const boost& rhs) const {\
         if(rhs.num_rows() != this->num_rows()){
-            throw std::range_error("Number of rows do not match");
+            throw std::invalid_argument("Number of rows do not match");
         } else {
             return std::move(boost(this->data() - rhs.data()));
         }
@@ -231,7 +246,7 @@ namespace sketchy {
             throw std::range_error("Column index out of bound");
             throw;
         } else if (start > end){
-            throw std::range_error("Start column greater than end column");
+            throw std::invalid_argument("Start column greater than end column");
         } else {
             bnu::matrix<float> columns = bnu::subrange(data(), 0, num_rows(), start, end);
             return boost(columns);

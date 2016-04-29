@@ -20,17 +20,25 @@ namespace sketchy {
             }
 
             intel(const int row, const int col) {
-                matrix_data = (float *) mkl_malloc(row * col * sizeof(float), sizeof(float));
-                memset(matrix_data, 0, row * col * sizeof(float));
-                rows = row;
-                cols = col;
+                if(row < 0 || col < 0) {
+                    throw std::invalid_argument("Column and row lengths must be non-negative integers");
+                } else {
+                    matrix_data = (float *) mkl_malloc(row * col * sizeof(float), sizeof(float));
+                    memset(matrix_data, 0, row * col * sizeof(float));
+                    rows = row;
+                    cols = col;
+                }
             }
 
-            void identity(const int n) {
-                *this = intel(n, n);
-                int i;
-                for(i = 0; i < n; i++)
-                    matrix_data[i*cols + i] = 1.0;
+            void eye(const int n) {
+                if(n < 0) {
+                    throw std::invalid_argument("Matrix cannot have a negative dimensino");
+                } else {
+                    *this = intel(n, n);
+                    int i;
+                    for(i = 0; i < n; i++)
+                        matrix_data[i*cols + i] = 1.0;
+                }
             }
 
             void set(int r, int c, float a) {
@@ -81,7 +89,7 @@ namespace sketchy {
 
             intel rand_n(const int row, const int col) {
                  if (row < 0 || col < 0) {
-                    throw std::range_error("Column and row lengths must be non-negative integers");
+                    throw std::invalid_argument("Column and row lengths must be non-negative integers");
                 } else {
                     if(this->matrix_data)
                         mkl_free(this->matrix_data);
@@ -101,7 +109,7 @@ namespace sketchy {
 
             intel mult(const intel& rhs) const {
                 if (rhs.num_rows() != num_cols()) {
-                    throw std::range_error("Column of left matrix does not match row of right matrix");
+                    throw std::invalid_argument("Column of left matrix does not match row of right matrix");
                 } else {
                     intel product(this->rows, rhs.cols);
                     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, this->rows,
@@ -125,7 +133,7 @@ namespace sketchy {
 
             intel concat(const intel& col) const {
                 if (col.num_rows() != this->num_rows()) {
-                    throw std::range_error("Number of rows do not match");
+                    throw std::invalid_argument("Number of rows do not match");
                 } else {
                     intel ret(this->rows, this->cols + col.cols);
                     float *current = ret.matrix_data;
@@ -142,11 +150,12 @@ namespace sketchy {
 
             intel solve_x(const intel& B) const {
                 if(this->rows != this->cols)
-                    throw std::range_error("A must be square in Ax = B");
+                    throw std::invalid_argument("A must be square in Ax = B");
                 if(this->cols != B.rows)
-                    throw std::range_error("B.rows must equal A.cols in Ax = B");
+                    throw std::invalid_argument("B.rows must equal A.cols in Ax = B");
                 if(B.cols != 1)
-                    throw std::range_error("B must be nx1 vector in Ax = B");
+                    throw std::invalid_argument("B must be nx1 vector in Ax = B");
+
                 intel X(B.rows, 1);
                 MKL_INT lda = this->rows;
                 MKL_INT n = this->cols;
@@ -161,7 +170,7 @@ namespace sketchy {
             }
 
             intel get_col(const int n) const {
-                if(col_n < 0 || col_n >= num_cols()) {
+                if(n < 0 || n >= num_cols()) {
                     throw std::range_error("Column index out of bound");
                 } else {
                     return get_cols(n, n);
@@ -173,7 +182,7 @@ namespace sketchy {
                     throw std::range_error("Column index out of bound");
                     throw;
                 } else if (start > end){
-                    throw std::range_error("Start column greater than end column");
+                    throw std::invalid_argument("Start column greater than end column");
                 } else {
                     intel ret(this->rows, end - start + 1);
                     int i;
@@ -196,7 +205,7 @@ namespace sketchy {
 
             intel subtract(const intel& rhs) const {
                 if(rhs.num_rows() != this->num_rows()){
-                    throw std::range_error("Number of rows do not match");
+                    throw std::invalid_argument("Number of rows do not match");
                 } else {
                     intel temp(*this);
                     cblas_saxpy(temp.size(), -1, rhs.matrix_data, 1, temp.matrix_data, 1);
@@ -222,7 +231,7 @@ namespace sketchy {
 
             intel add(const intel& rhs) const {
                 if(this->dimensions() != rhs.dimensions()) {
-                    throw std::range_error("mismatched dimensions");
+                    throw std::invalid_argument("mismatched dimensions");
                 } else {
                     intel temp(*this);
                     cblas_saxpy(temp.size(), 1, rhs.matrix_data, 1, temp.matrix_data, 1);
