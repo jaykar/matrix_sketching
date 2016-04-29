@@ -35,35 +35,6 @@ class SKMatrix {
         */
         T& operator=(const T& rhs){};
 
-        /**
-        * Assignment operators
-        * Allows assignments from other objects of same type as matrix_data
-        * @param rhs another object of tyoe matrix_data
-        * @see matrix_data
-        */
-        //T& operator=(const C& rhs){};
-
-        // to do
-        // T operator+(const T& rhs){};
-        // T operator+(const C& rhs){};
-        // T& operator+=(const T& rhs){};
-        // T& operator+=(const C& rhs){};
-
-        // T operator-(const T& rhs){};
-        // T operator-(const C& rhs){};
-        // T& operator-=(const T& rhs){};
-        // T& operator-=(const C& rhs){};
-
-        // T operator/(const T& rhs){};
-        // T operator/(const C& rhs){};
-        // T& operator/=(const T& rhs){};
-        // T& operator/=(const C& rhs){};
-
-        // T operator*(const T& rhs){};
-        // T operator*(const C& rhs){};
-        // T& operator*=(const T& rhs){};
-        // T& operator*=(const C& rhs){};
-
        /**
         * Clears matrix_data and sets its values to 0
         * @see matrix_data
