@@ -6,3 +6,4 @@ src/libraries/*
 *.swp
 *.csv
 *.xlsx
+docs/html
