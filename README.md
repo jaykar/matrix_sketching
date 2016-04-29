@@ -17,10 +17,14 @@ Many of these normal matrix operations perform in O(n^3) time, and as such do no
 # Linking
 All of our interfaces are written as header files. As such, assuming
 above libraries are installed, you just have to link our sketchy directory 
+```
+gcc -I sketchy/ $(OTHER_FILES)
+```
 
-Release 0.8: Matrix Sketching, Wrappers for cuBLAS, easy interface to load csv files onto GPU
-Release 1.0: Matrix Inversion using sketching, Linear Regression
-Release 1.2: SVD using sketching, maybe Kernel PCA (we need to figure what that is)
+- [x] Release 0.8: Matrix Sketching, Wrappers for cuBLAS, easy interface to load csv files onto GPU
+- [x] Release 1.0: Matrix Inversion using sketching, Linear Regression
+- [ ] Release 1.2: SVD using sketching, maybe Kernel PCA (we need to figure what that is)
+
 
 # Collaborators
 Adam Incera (aji2112) </br>

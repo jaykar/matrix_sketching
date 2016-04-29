@@ -20,7 +20,7 @@ time.o: time.cpp
 
 .PHONY: clean
 clean:
-	rm -f *.o a.out core main time
+	rm -f *.o a.out core main time *.csv
 
 .PHONY: all
 all: clean main
