@@ -4,15 +4,15 @@
 #include <string>
 
 #include "operations.hpp"
-#include "sk_boost.hpp"
-#include "sk_arm.hpp"
-#include "sk_intel.hpp"
+#include "boost.hpp"
+#include "armadillo.hpp"
+#include "intel.hpp"
 
 using namespace std;
 
 template <typename T>
 void test_perf(ofstream& myfile){
-    string header = "Size, Instantiation, Rand_Fill, Mult, Elem_Div, Concat, Subtract, Accumulate, Gaussian Decomposition, Count Sketch\n";
+    string header = "Size, Instantiation, Rand_Fill, Mult, Elem_Div, Concat, Subtract, Accumulate\n";
     cout << header;
     myfile << header;
 
@@ -52,8 +52,8 @@ void test_perf(ofstream& myfile){
 
         start = chrono::system_clock::now();
         matrix.accumulate();
-        std::cout << (chrono::system_clock::now() - start).count() << " ";
-        myfile << (chrono::system_clock::now() - start).count() << ',';
+        std::cout << (chrono::system_clock::now() - start).count() << "\n";
+        myfile << (chrono::system_clock::now() - start).count() << '\n';
 
         // T Q(1, 1);
         // T R(1, 1);

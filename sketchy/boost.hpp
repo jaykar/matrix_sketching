@@ -8,27 +8,19 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/operation.hpp>
 #include <boost/numeric/ublas/storage.hpp>
-<<<<<<< HEAD:src/sk_boost.hpp
 //#include <boost/numeric/bindings/traits/ublas_matrix.hpp>
 //#include <boost/numeric/bindings/traits/ublas_vector.hpp>
 //#include <boost/numeric/bindings/lapack/gesvd.hpp>
 
 namespace bnu = boost::numeric::ublas;
 //namespace lap = boost::numeric::bindings::lapack;
-=======
-// #include <boost/numeric/bindings/traits/ublas_matrix.hpp>
-// #include <boost/numeric/bindings/traits/ublas_vector.hpp>
-// #include <boost/numeric/bindings/lapack/gesvd.hpp>
 
-namespace bnu = boost::numeric::ublas;
-// namespace lap = boost::numeric::bindings::lapack;
->>>>>>> 723f20fd38bec2016d27aec829af4fcb0c49d443:sketchy/boost.hpp
-
+// use assert instead of throw
 namespace sketchy {
     class boost: public SKMatrix<boost, bnu::matrix<float> >{
         public:
             boost(){
-                this->matrix_data = bnu::matrix<float>(0, 0);
+                this->matrix_data = bnu::matrix<float>();
             }
 
             boost(const int row, const int col){
@@ -252,7 +244,6 @@ namespace sketchy {
     }
 
     void boost::svd(boost& U, boost& S, boost& V, const int k) const {
-<<<<<<< HEAD:src/sk_boost.hpp
     /*
         bnu::matrix<float> a(matrix_data);
         bnu::matrix<float> u(this->num_rows(), this->num_rows());
@@ -267,20 +258,6 @@ namespace sketchy {
         S = sS;
         V = v;
     */
-=======
-        // bnu::matrix<float> a(matrix_data);
-        // bnu::matrix<float> u(this->num_rows(), this->num_rows());
-        // bnu::vector<float> s(this->num_cols());
-        // bnu::matrix<float> v(this->num_cols(), this->num_cols());
-
-        // lap::gesvd(a, s, u, v);
-        // U = u;
-        // bnu::matrix<float> sS(k, 1);
-        // std::copy(s.begin(), s.end(), sS.begin1());
-
-        // S = sS;
-        // V = v;
->>>>>>> 723f20fd38bec2016d27aec829af4fcb0c49d443:sketchy/boost.hpp
     };
 }
 
