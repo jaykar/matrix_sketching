@@ -16,6 +16,6 @@ This library has four wrapper classes based on `SKMatrix`. It currently supports
 
 and one GPU backed implementation
 
-4. [NVBlAS](http://docs.nvidia.com/cuda/nvblas/)
+4. [NVBLAS](http://docs.nvidia.com/cuda/nvblas/)
 
 One can easily create a wrapper for other matrix libraries by extending `SKMatrix` interface.
