@@ -15,11 +15,12 @@
 namespace bnu = boost::numeric::ublas;
 // namespace lap = boost::numeric::bindings::lapack;
 
+// use assert instead of throw
 namespace sketchy {
     class boost: public SKMatrix<boost, bnu::matrix<float> >{
         public:
             boost(){
-                this->matrix_data = bnu::matrix<float>(0, 0);
+                this->matrix_data = bnu::matrix<float>();
             }
 
             boost(const int row, const int col){

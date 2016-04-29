@@ -2,7 +2,11 @@
 
 Sketchy is a high level library that acts as a wrapper for various
 matrix implementations in C++ designed to support matrix sketching operations
-Writing GPU code is difficult. We want to write a library that allows C++ developers to easily perform matrix sketching on a GPU. Matrix sketching is a new and exciting topic in Machine Learning. The basic concept in sketching is that we can perform matrix operations such as inversions, svd, and eigenvalue decomposition much faster by forgoing some accuracy. However there are theoretical guarantees that our approximation is within some set threshold from the true value. Many of these normal matrix operations perform in O(n3) time, and as such do not scale well. By parallelizing them and using the new algorithms on a GPU, we will hopefully drastically speed up matrix decomposition time. 
+on both CPU and GPU backed libraries.
+
+Matrix sketching is a new and exciting topic in Machine Learning. The basic concept in sketching is that we can perform matrix operations such as inversions, svd, and eigenvalue decomposition much faster by forgoing some accuracy. However there are theoretical guarantees that our approximation is within some set threshold from the true value.
+
+Many of these normal matrix operations perform in O(n^3) time, and as such do not scale well. By parallelizing them and using the new algorithms on a GPU, we will hopefully drastically speed up matrix decomposition time. 
 
 # Libraries Supported
 1. [Boost](http://www.boost.org/doc/libs/1_60_0/libs/numeric/ublas/doc/)
