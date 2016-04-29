@@ -121,8 +121,7 @@ namespace sketchy {
         if(a == 0) {
             throw std::overflow_error("Cannot divide by 0" );
         } else{
-            bnu::matrix<float> mat(data());
-            bnu::matrix<float> result = mat/a;
+            bnu::matrix<float> result = this->data()/a;
             return std::move(boost(result));
         }
     }
@@ -131,15 +130,15 @@ namespace sketchy {
         if (mat.num_rows() != this->num_rows()) {
             throw std::range_error("Number of rows do not match");
         } else {
-            bnu::matrix<float> concat_mat(data());
-            int end_index1 = concat_mat.size2();
-            concat_mat.resize(concat_mat.size1(), end_index1 + mat.data().size2(), true);
+            int rows = this->num_rows();
+            int cols = this->num_cols();
+            int new_cols = cols + mat.num_cols();
+            bnu::matrix<float> c(rows, new_cols);
 
-            for(unsigned int i = end_index1, j = 0; i < concat_mat.size2(); i++, j++){
-                bnu::column(concat_mat, i) = bnu::column(mat.data(), j);
-            }
+            bnu::project(c, bnu::range(0, rows), bnu::range(0, cols)) = this->data();
+            bnu::project(c, bnu::range(0, rows), bnu::range(cols, new_cols)) = mat.data();
 
-            return std::move(boost(concat_mat));
+            return std::move(boost(c));
         }
     }
 
@@ -159,7 +158,6 @@ namespace sketchy {
         return std::move(boost(x));
     }
 
-    // http://www.keithlantz.net/2012/05/qr-decomposition-using-householder-transformations/
     void boost::qr_decompose(boost& Q, boost& R) const {
         float mag;
         float alpha;
@@ -215,8 +213,7 @@ namespace sketchy {
         if(rhs.num_rows() != this->num_rows()){
             throw std::range_error("Number of rows do not match");
         } else {
-            bnu::matrix<float> diff = data() - rhs.data();
-            return std::move(boost(diff));
+            return std::move(boost(this->data() - rhs.data()));
         }
     }
 
