@@ -1,13 +1,13 @@
-#ifndef __BOOST_WRAPPER_H__
-#define __BOOST_WRAPPER_H__
+#ifndef __BOOST_H__
+#define __BOOST_H__
 
-#include "SKMatrix.hpp"
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/operation.hpp>
 #include <boost/numeric/ublas/storage.hpp>
+#include "SKMatrix.hpp"
 //#include <boost/numeric/bindings/traits/ublas_matrix.hpp>
 //#include <boost/numeric/bindings/traits/ublas_vector.hpp>
 //#include <boost/numeric/bindings/lapack/gesvd.hpp>
@@ -15,7 +15,6 @@
 namespace bnu = boost::numeric::ublas;
 //namespace lap = boost::numeric::bindings::lapack;
 
-// use assert instead of throw
 namespace sketchy {
     class boost: public SKMatrix<boost, bnu::matrix<float> >{
         public:
@@ -119,7 +118,7 @@ namespace sketchy {
         }
     }
 
-    boost boost::elem_div(const double a) const {
+    boost boost::elem_div(const float a) const {
         if(a == 0) {
             throw std::overflow_error("Cannot divide by 0" );
         } else{

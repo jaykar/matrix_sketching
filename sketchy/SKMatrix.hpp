@@ -121,7 +121,7 @@ class SKMatrix {
         * @param a divisor
         * @return matrix of quotients of scalar division
         */
-        virtual T elem_div(const double a) const= 0;
+        virtual T elem_div(const float a) const= 0;
 
        /**
         * Indicates which column needs to be flipped
