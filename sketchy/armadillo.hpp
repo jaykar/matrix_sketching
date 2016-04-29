@@ -1,8 +1,8 @@
-#ifndef __ARM_INTERFACE_H__
-#define __ARM_INTERFACE_H__
+#ifndef __ARMADILLO_H__
+#define __ARMADILLO_H__
 
-#include "SKMatrix.hpp"
 #include <armadillo>
+#include "SKMatrix.hpp"
 
 using namespace arma;
 
@@ -30,41 +30,30 @@ namespace sketchy {
                 return mat(matrix_data);
             }
 
-            /*
-            mat& data(){
-                return matrix_data;
-            }
-            */
-
             arm(mat other){
                 this->matrix_data = other;
             }
 
             arm(const arm& other){
-                // std::cout << "using copy constructor" << std::endl;
                 mat temp = other.matrix_data;
                 this->matrix_data = temp;
             }
 
             arm& operator=(const arm& other){
-                // std::cout << "using copy assignment" << std::endl;
                 this->matrix_data = mat(other.matrix_data);
                 return *this;
             }
 
             arm& operator=(const mat& other){
-                // std::cout << "using copy assignmnet for mat" << std::endl;
                 this->matrix_data = mat(other);
                 return *this;
             }
 
             arm(arm&& other){
-                // std::cout << "using move constructor" << std::endl;
                 this->matrix_data = other.matrix_data;
             }
 
             arm& operator=(arm&& other){
-                // std::cout << "using move assignment" << std::endl;
                 this->matrix_data = other.matrix_data;
                 return *this;
             }
@@ -134,14 +123,25 @@ namespace sketchy {
             }
 
             arm get_cols(int start, int end) const{
-                mat a = matrix_data.cols(start, end);
-                return arm(a);
+                if (start < 0 || end > num_cols()) {
+                    throw std::range_error("Column index out of bound");
+                    throw;
+                } else if (start > end){
+                    throw std::range_error("Start column greater than end column");
+                } else {
+                    mat a = matrix_data.cols(start, end);
+                    return arm(a);
+                }
             }
 
 
             arm get_col(int col_n) const{
-                mat a = matrix_data.col(col_n);
-                return arm(a);
+                if(col_n < 0 || col_n >= num_cols()) {
+                    throw std::range_error("Column index out of bound");
+                } else {
+                    mat a = matrix_data.col(col_n);
+                    return arm(a);
+                }
             }
 
             void transpose(){
@@ -187,4 +187,5 @@ namespace sketchy {
         return os << out.matrix_data ;
     }
 }
+
 #endif
