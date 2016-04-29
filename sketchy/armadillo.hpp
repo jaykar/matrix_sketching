@@ -96,7 +96,7 @@ namespace sketchy {
                 }
             }
 
-            arm elem_div(const double a) const{
+            arm elem_div(const float a) const{
                 if(a == 0) {
                     throw std::overflow_error("Cannot divide by 0" );
                 } else{

@@ -53,10 +53,9 @@ namespace sketchy {
             int num_cols(void) const { return matrix_data.size2(); }
 
             boost mult(const boost& rhs) const;
-            boost mult_scalar(const boost& rhs) const;
 
             boost rand_n(const int row, const int col);
-            boost elem_div(const double a) const;
+            boost elem_div(const float a) const;
 
 
             /* Regression */
