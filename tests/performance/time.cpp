@@ -123,7 +123,7 @@ int main(int argc, char *argv[]){
     myfile << '\n';
 
     myfile << "Armadillo" << '\n';
-    test_perf<sketchy::arm>(myfile);
+    test_perf<sketchy::armadillo>(myfile);
     myfile << '\n';
 
     myfile << "Intel" << '\n';

@@ -92,5 +92,6 @@ int main(){
 
     cout << matB << endl;
     matB.svd(matE, matD, mat2, 1);
+
     return 0;
 }
