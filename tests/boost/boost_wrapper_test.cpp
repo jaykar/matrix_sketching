@@ -6,6 +6,10 @@ namespace bnu = boost::numeric::ublas;
 using namespace std;
 
 int main(){
+    sketchy::boost abc(10, 10);
+    abc.rand_n(10, 10);
+    cout << abc << endl;
+
     bnu::matrix<float> m1(5,5, 1.0);
     sketchy::boost mat1(m1);
 
