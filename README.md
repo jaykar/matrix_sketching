@@ -16,15 +16,13 @@ can easily be extended to incorporate other matrix libraries, such as
 1. [Boost](http://www.boost.org/doc/libs/1_60_0/libs/numeric/ublas/doc/)
 2. [Armadillo](http://arma.sourceforge.net/docs.html)
 3. [Intel MKL](https://software.intel.com/en-us/intel-mkl)
-4. [CUDA](http://docs.nvidia.com/cuda/nvblas/) <\br>
+4. [NVBLAS](http://docs.nvidia.com/cuda/nvblas/)
+
 Obviously, these are necessary to use our library
 
 ## Linking
 All of our interfaces are written as header files. As such, assuming
-above libraries are installed, you just have to link our sketchy directory 
-```
-gcc -I sketchy/ $(OTHER_FILES)
-```
+above libraries are installed, you just have to link our project directory 
 along with whatever is needed to implement the matrix of your choice
 
 ## Documentation
@@ -47,5 +45,7 @@ in docs folder
 
 ## Collaborators
 [Adam Incera](https://github.com/adamincera) (aji2112) </br>
+
 [Jaykar Nayeck](https://github.com/jaykar/) (jan2150) </br>
+
 [Howon Byun](https://github.com/Howon/) (hb2458) </br>
