@@ -27,10 +27,16 @@ int main() {
     std::cout << "a: ";
     std::cout << a << std::endl;
     std::cout << "X: ";
-    std::cout << X << std::endl;
+    std::cout << a << std::endl;
+    std::cout << a.accumulate() << std::endl;
     std::cout << "Xt: ";
     a.transpose();
     std::cout << a << std::endl;
+    std::cout << a.accumulate() << std::endl;
+    std::cout << "[a b]: ";
+    sketchy::intel f = a.concat(b);
+    std::cout << f << std:: endl;
+    std::cout << f.get_cols(1,2) << std::endl;
 
     /*
     a -= b;
