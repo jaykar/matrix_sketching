@@ -137,9 +137,9 @@ namespace sketchy {
                 float *current = ret.matrix_data;
                 int i;
                 for(i = 0; i < this->rows; i++) {
-                    cblas_scopy(this->cols, current, 1, this->matrix_data, 1);
+                    cblas_scopy(this->cols, this->matrix_data + i * this->cols, 1, current, 1);
                     current += this->cols;
-                    cblas_scopy(col.cols, current, 1, col.matrix_data, 1);
+                    cblas_scopy(col.cols, col.matrix_data + i * col.cols, 1, current, 1);
                     current += col.cols;
                 }
                 return ret;
@@ -172,7 +172,15 @@ namespace sketchy {
 
             //TODO
             intel get_cols(const int start, const int end) const {
-                return intel();
+                intel ret(this->rows, end - start + 1);
+                int i;
+                float *current = ret.matrix_data;
+                for(i = 0; i < this->rows; i++) {
+                    cblas_scopy(end - start + 1, this->matrix_data + i * this->cols + start, 1, current, 1);
+                    current += end - start + 1;
+                }
+                return ret;
+
             }
 
             void transpose() {
@@ -193,7 +201,7 @@ namespace sketchy {
 
             //TODO
             float accumulate() const {
-                return 0.0;
+                return cblas_sasum(this->size(), this->matrix_data, 1);
             }
 
             //TODO
