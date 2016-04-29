@@ -3,12 +3,17 @@
 
 #include "SKMatrix.hpp"
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/operation.hpp>
 #include <boost/numeric/ublas/storage.hpp>
+#include <boost/numeric/bindings/traits/ublas_matrix.hpp>
+#include <boost/numeric/bindings/traits/ublas_vector.hpp>
+#include <boost/numeric/bindings/lapack/gesvd.hpp>
 
 namespace bnu = boost::numeric::ublas;
+namespace lap = boost::numeric::bindings::lapack;
 
 // use assert instead of throw
 namespace sketchy {
@@ -39,8 +44,6 @@ namespace sketchy {
             }
 
             bnu::matrix<float> data(void) const { return bnu::matrix<float>(matrix_data); }
-
-            bnu::matrix<float>& data(void) { return matrix_data; }
 
             friend std::ostream& operator<<(std::ostream&os, const boost& mat);
 
@@ -78,10 +81,7 @@ namespace sketchy {
             /* floatODO: K-SVD */
             void qr_decompose(boost& Q, boost& R) const;
 
-            void svd(boost& U, boost& S, boost& V, const int k) const {
-                // bnu::matrix<float> m1(5,5, 1.0);
-                // boost mat1(m1);
-            };
+            void svd(boost& U, boost& S, boost& V, const int k) const;
     };
 
     std::ostream& operator<<(std::ostream&os, const boost& mat){
@@ -237,11 +237,26 @@ namespace sketchy {
             throw;
         } else if (start > end){
             throw std::range_error("Start column greater than end column");
-        }else {
+        } else {
             bnu::matrix<float> columns = bnu::subrange(data(), 0, num_rows(), start, end);
             return boost(columns);
         }
     }
 
+    void boost::svd(boost& U, boost& S, boost& V, const int k) const {
+        bnu::matrix<float> a(matrix_data);
+        bnu::matrix<float> u(this->num_rows(), this->num_rows());
+        bnu::vector<float> s(this->num_cols());
+        bnu::matrix<float> v(this->num_cols(), this->num_cols());
+
+        lap::gesvd(a, s, u, v);
+        U = u;
+        bnu::matrix<float> sS(k, 1);
+        std::copy(s.begin(), s.end(), sS.begin1());
+
+        S = sS;
+        V = v;
+    };
 }
+
 #endif

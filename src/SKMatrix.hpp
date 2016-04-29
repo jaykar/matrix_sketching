@@ -100,12 +100,6 @@ class SKMatrix {
         virtual C data(void) const = 0;
 
        /**
-        * Returns matrix_data for accessing
-        * @see matrix_data
-        * @return matrix_data
-        */
-
-       /**
         * Create matrix filled with random normal values
         * with mean 0 and standard deviation 1
         * @param row number of rows for a new random matrix
@@ -121,6 +115,7 @@ class SKMatrix {
         * @return product of two matrices
         */
         virtual T mult(const T& rhs) const = 0;
+
        /**
         * Divides internal matrix by a scalar
         * @param a divisor
@@ -218,6 +213,7 @@ class SKMatrix {
         * @return resultant matrix of subtraction
         */
         virtual T subtract(const T& rhs) const = 0;
+
        /**
         * Sums up all the values in matrix_data
         * @see matrix_data

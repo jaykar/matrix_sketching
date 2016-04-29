@@ -4,3 +4,5 @@
 src/google_test/*
 src/libraries/*
 *.swp
+*.csv
+*.xlsx
