@@ -1,5 +1,4 @@
 # Tutorial
-
 First download which ever of these implementations you would like to use 
 
 1. [Boost](http://www.boost.org/doc/libs/1_60_0/libs/numeric/ublas/doc/)
@@ -49,7 +48,8 @@ void sample {
 }
 ~~~
 
-Sketching operations are in `operations.hpp` header under namespace `sketchy::ops`. 
+Sketching operations are in `operations.hpp` header under namespace 
+`sketchy::ops`. 
 
 They are templated so explicit type needs to be provided
 

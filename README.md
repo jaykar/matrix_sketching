@@ -16,7 +16,8 @@ can easily be extended to incorporate other matrix libraries, such as
 1. [Boost](http://www.boost.org/doc/libs/1_60_0/libs/numeric/ublas/doc/)
 2. [Armadillo](http://arma.sourceforge.net/docs.html)
 3. [Intel MKL](https://software.intel.com/en-us/intel-mkl)
-4. [NVBLAS](http://docs.nvidia.com/cuda/nvblas/) <\br>
+4. [NVBLAS](http://docs.nvidia.com/cuda/nvblas/)
+
 Obviously, these are necessary to use our library
 
 ## Linking
