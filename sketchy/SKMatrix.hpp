@@ -193,6 +193,12 @@ class SKMatrix {
         virtual float accumulate() const = 0;
 
        /**
+        * Transforms matrix_data into an identity matrix
+        * @see matrix_data
+        */
+        virtual void eye(const int n) = 0;
+
+       /**
         * Performs QR decomposition of matrix_data
         * @param Q n by n Q matrix to be overwritten
         * @param R n by m R matrix to be overwritten

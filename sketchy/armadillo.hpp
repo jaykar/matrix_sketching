@@ -23,7 +23,11 @@ namespace sketchy {
             ~armadillo() = default;
 
             armadillo(int r, int c){
-                matrix_data = mat(r,c);
+                if(row < 0 || col < 0) {
+                    throw std::invalid_argument("Column and row lengths must be non-negative integers");
+                } else {
+                    matrix_data = mat(r,c);
+                }
             }
 
             mat data() const{
@@ -78,7 +82,7 @@ namespace sketchy {
 
             armadillo mult(const armadillo& rhs) const{
                 if (rhs.num_rows() != num_cols()) {
-                    throw std::range_error("Column of left matrix does not match row of right matrix");
+                    throw std::invalid_argument("Column of left matrix does not match row of right matrix");
                 } else {
                     mat a = this->matrix_data * rhs.matrix_data;
                     return a;
@@ -87,7 +91,7 @@ namespace sketchy {
 
             armadillo rand_n(int row, int col){
                 if (row < 0 || col < 0) {
-                    throw std::range_error("Column and row lengths must be non-negative integers");
+                    throw std::invalid_argument("Column and row lengths must be non-negative integers");
                 } else {
                     mat a;
                     a.randn(row, col);
@@ -109,7 +113,7 @@ namespace sketchy {
 
             armadillo concat(const armadillo& m) const{
                 if (m.num_rows() != this->num_rows()) {
-                    throw std::range_error("Number of rows do not match");
+                    throw std::invalid_argument("Number of rows do not match");
                 } else {
                     mat a(data());
                     a.insert_cols(a.n_cols-1, m.matrix_data);
@@ -118,6 +122,13 @@ namespace sketchy {
             }
 
             armadillo solve_x(const armadillo& B) const{
+                if(this->num_rows() != this->num_cols())
+                    throw std::invalid_argument("A must be square in Ax = B");
+                if(this->num_cols() != B.num_rows())
+                    throw std::invalid_argument("B.rows must equal A.cols in Ax = B");
+                if(B.num_cols() != 1)
+                    throw std::invalid_argument("B must be nx1 vector in Ax = B");
+
                 mat X = solve(matrix_data, B.matrix_data);
                 return armadillo(X);
             }
@@ -150,7 +161,7 @@ namespace sketchy {
 
             armadillo subtract(const armadillo& rhs) const{
                 if(rhs.num_rows() != this->num_rows()){
-                    throw std::range_error("Number of rows do not match");
+                    throw std::invalid_argument("Number of rows do not match");
                 } else {
                     mat a = matrix_data - rhs.matrix_data;
                     return armadillo(a);
