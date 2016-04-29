@@ -8,12 +8,12 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/operation.hpp>
 #include <boost/numeric/ublas/storage.hpp>
-#include <boost/numeric/bindings/traits/ublas_matrix.hpp>
-#include <boost/numeric/bindings/traits/ublas_vector.hpp>
-#include <boost/numeric/bindings/lapack/gesvd.hpp>
+//#include <boost/numeric/bindings/traits/ublas_matrix.hpp>
+//#include <boost/numeric/bindings/traits/ublas_vector.hpp>
+//#include <boost/numeric/bindings/lapack/gesvd.hpp>
 
 namespace bnu = boost::numeric::ublas;
-namespace lap = boost::numeric::bindings::lapack;
+//namespace lap = boost::numeric::bindings::lapack;
 
 // use assert instead of throw
 namespace sketchy {
@@ -244,6 +244,7 @@ namespace sketchy {
     }
 
     void boost::svd(boost& U, boost& S, boost& V, const int k) const {
+    /*
         bnu::matrix<float> a(matrix_data);
         bnu::matrix<float> u(this->num_rows(), this->num_rows());
         bnu::vector<float> s(this->num_cols());
@@ -256,6 +257,7 @@ namespace sketchy {
 
         S = sS;
         V = v;
+    */
     };
 }
 

@@ -30,9 +30,11 @@ namespace sketchy {
                 return mat(matrix_data);
             }
 
+            /*
             mat& data(){
                 return matrix_data;
             }
+            */
 
             arm(mat other){
                 this->matrix_data = other;
@@ -116,12 +118,12 @@ namespace sketchy {
             }
 
 
-            arm concat(const arm& mat) const{
-                if (mat.num_rows() != this->num_rows()) {
+            arm concat(const arm& m) const{
+                if (m.num_rows() != this->num_rows()) {
                     throw std::range_error("Number of rows do not match");
                 } else {
-                    mat a = data();
-                    a.insert_cols(a.n_cols-1, mat.matrix_data);
+                    mat a(data());
+                    a.insert_cols(a.n_cols-1, m.matrix_data);
                     return arm(a);
                 }
             }
@@ -169,14 +171,14 @@ namespace sketchy {
 
             friend std::ostream& operator<<(std::ostream&os, const arm& out);
 
-            void svd(arm& U, arm& S, arm& V, const int k){
+            void svd(arm& U, arm& S, arm& V, const int k) const{
                 mat u;
                 vec s;
                 mat v;
                 arma::svds(u, s, v, sp_mat(matrix_data), k);
                 auto ans = std::vector<arm>(3);
                 U.matrix_data = u;
-                S.matrix_data = mat(s));
+                S.matrix_data = mat(s);
                 V.matrix_data = v;
             }
     };
