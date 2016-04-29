@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++14 -Wall -g
 
 BOOST_LIB_PATH = -I /usr/local/include/
-BOOST_COMPILE_OPTION = -O3 -D NDEBUG -DBOOST_UBLAS_NDEBUG
+BOOST_COMPILE_OPTION = -O3 -DNDEBUG -DBOOST_UBLAS_NDEBUG
 
 LAPACK_LIB_PATH = -L /usr/local/lib/ -llapack -L /usr/local/lib/ -lblas
 
@@ -14,10 +14,10 @@ INTERFACE = -I ../../sketchy/
 ARMADILLO_LIB = -L../../src/libraries/armadillo -larmadillo
 
 time: time.o
-	$(CXX) $(CXXFLAGS) $(LAPACK_LIB_PATH) $(BOOST_COMPILE_OPTION) -o time time.o $(MKL_FLAGS) $(ARMADILLO_LIB)
+	$(CXX) $(CXXFLAGS) $(LAPACK_LIB_PATH) $(BOOST_COMPILE_OPTION) -o time time.o #$(MKL_FLAGS) $(ARMADILLO_LIB)
 
 time.o: time.cpp
-	$(CXX) $(CXXFLAGS) $(MKL_INCLUDE) $(BOOST_LIB_PATH) $(INTERFACE) -c time.cpp
+	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(INTERFACE) -c time.cpp
 
 .PHONY: clean
 clean:

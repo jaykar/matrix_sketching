@@ -33,14 +33,14 @@ namespace sketchy {
         SKMatrix lin_regress(const SKMatrix& A, const SKMatrix& B, const int n){
 
             int n_col = A.num_cols();
-            
+
             SKMatrix concat_mat = A.concat(B);
             concat_mat.transpose();
 
             SKMatrix sketch = gaussian_projection<SKMatrix>(concat_mat, n);
             sketch.transpose();
 
-            int n_sketch_col = sketch.num_cols(); 
+            int n_sketch_col = sketch.num_cols();
             SKMatrix A_sketch = sketch.get_cols(0, n_col -1);
             SKMatrix B_sketch = sketch.get_cols(n_col, n_sketch_col -1 );
             SKMatrix X_tilde  = A_sketch.solve_x(B_sketch);
@@ -76,8 +76,7 @@ namespace sketchy {
         }
 
         template <typename SK>
-        std::vector<SK> k_svd(const SK&A, int k, int s){
-            //SK sketch = count_sketch(A, s);
+        void k_svd(const SK& A, SK& U, SK& S, SK& V, const int k, const int s){
             SK sketch = gaussian_projection(A, s);
             std::cout << sketch.size() << std::endl;
             SK Q;
@@ -90,19 +89,15 @@ namespace sketchy {
             Q_temp.transpose();
             Q_temp = Q_temp.mult(A);
 
-            //SK svd_vec = 
-            SK U; 
-            SK V; 
-            SK Sigma; 
-            Q_temp.svd(U, Sigma, V, k);
+            SK u;
+            SK v;
+            SK Sigma;
 
-            SK U_tilde = Q.mult(U);
+            Q_temp.svd(u, Sigma, v, k);
 
-            std::vector<SK> ans = std::vector<SK>(3); 
-            ans[0] = U_tilde;
-            ans[1] = Sigma;
-            ans[2] = V;
-            return ans;
+            U = Q.mult(u);
+            S = Sigma;
+            V = V;
         }
     }
 }

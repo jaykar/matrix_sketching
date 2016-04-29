@@ -64,7 +64,8 @@ void sample {
 }
 ~~~
 
-Two types of exceptions are thrown. The most common is `std::range_error` for matrix indexing
+Three types of exceptions are thrown. One of them is `std::range_error` for matrix indexing
+
 ~~~{.c++}
 try {
     bnu::matrix<float> m1(5,5, 1.0);
@@ -73,6 +74,19 @@ try {
 } catch(std::range_error e) {
     cout << e.what() << endl;
 
+}
+~~~
+`std::invalid_argument` against illegal arguments
+~~~{.cpp}
+intel(const int row, const int col) {
+    if(row < 0 || col < 0) {
+        throw std::invalid_argument("Column and row lengths must be non-negative integers");
+    } else {
+        matrix_data = (float *) mkl_malloc(row * col * sizeof(float), sizeof(float));
+        memset(matrix_data, 0, row * col * sizeof(float));
+        rows = row;
+        cols = col;
+    }
 }
 ~~~
 
