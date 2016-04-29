@@ -14,7 +14,7 @@ namespace sketchy {
             }
 
             std::vector<int> dimensions() const{
-                auto a = std::vector<int>();
+                std::vector<int> a;
                 a.push_back(matrix_data.n_rows);
                 a.push_back(matrix_data.n_cols);
                 return a;
@@ -42,7 +42,7 @@ namespace sketchy {
 
             arm(const arm& other){
                 // std::cout << "using copy constructor" << std::endl;
-                auto temp = other.matrix_data;
+                mat temp = other.matrix_data;
                 this->matrix_data = temp;
             }
 
@@ -129,7 +129,7 @@ namespace sketchy {
             }
 
             arm solve_x(const arm& B) const{
-                auto X = solve(matrix_data, B.matrix_data);
+                mat X = solve(matrix_data, B.matrix_data);
                 return arm(X);
             }
 
@@ -176,7 +176,7 @@ namespace sketchy {
                 vec s;
                 mat v;
                 arma::svds(u, s, v, sp_mat(matrix_data), k);
-                auto ans = std::vector<arm>(3);
+                std::vector<arm> ans(3);
                 U.matrix_data = u;
                 S.matrix_data = mat(s);
                 V.matrix_data = v;

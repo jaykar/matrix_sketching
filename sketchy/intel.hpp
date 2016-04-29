@@ -120,7 +120,7 @@ namespace sketchy {
                 if(a == 0.0)
                     throw std::invalid_argument("can't divide by zero");
                 int i;
-                intel temp;
+                intel temp(*this);
                 for(i = 0; i < this->size(); i++)
                     temp.matrix_data[i] = this->matrix_data[i] / a;
                 return temp;

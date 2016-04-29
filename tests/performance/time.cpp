@@ -18,7 +18,7 @@ void test_perf(ofstream& myfile){
 
     chrono::time_point<chrono::system_clock> start, end;
 
-    for(int matrix_size = 100; matrix_size <= 1000; matrix_size+=100){
+    for(int matrix_size = 100; matrix_size <= 5000; matrix_size+=100){
         start = chrono::system_clock::now();
         T matrix(matrix_size, matrix_size);
         std::cout << matrix_size << " " << (chrono::system_clock::now() - start).count() << " ";
@@ -117,6 +117,7 @@ int main(int argc, char *argv[]){
     } else {
         myfile.open (argv[1]);
     }
+
     myfile << "Boost" << '\n';
     test_perf<sketchy::boost>(myfile);
     myfile << '\n';

@@ -10,7 +10,7 @@ MKL_FLAGS =  -L$(MKLROOT)/lib -Wl,-rpath,$(MKLROOT)/lib -L$(MKLROOT)/../compiler
 MKL_INCLUDE = -I$(MKLROOT)/include
 
 # INTERFACE = -I ../interface
-BOOST_INTERFACE = -I ../../src/
+BOOST_INTERFACE = -I ../../sketchy/
 
 ARMADILLO_LIB = -L../../src/libraries/armadillo -larmadillo
 
