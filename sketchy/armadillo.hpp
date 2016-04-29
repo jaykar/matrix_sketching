@@ -7,9 +7,9 @@
 using namespace arma;
 
 namespace sketchy {
-    class arm: SKMatrix<arm, arma::mat>{
+    class armadillo: SKMatrix<armadillo, arma::mat>{
         public:
-            arm(){
+            armadillo(){
                 matrix_data = mat();
             }
 
@@ -20,9 +20,9 @@ namespace sketchy {
                 return a;
             }
 
-            ~arm() = default;
+            ~armadillo() = default;
 
-            arm(int r, int c){
+            armadillo(int r, int c){
                 matrix_data = mat(r,c);
             }
 
@@ -30,30 +30,30 @@ namespace sketchy {
                 return mat(matrix_data);
             }
 
-            arm(mat other){
+            armadillo(mat other){
                 this->matrix_data = other;
             }
 
-            arm(const arm& other){
+            armadillo(const armadillo& other){
                 mat temp = other.matrix_data;
                 this->matrix_data = temp;
             }
 
-            arm& operator=(const arm& other){
+            armadillo& operator=(const armadillo& other){
                 this->matrix_data = mat(other.matrix_data);
                 return *this;
             }
 
-            arm& operator=(const mat& other){
+            armadillo& operator=(const mat& other){
                 this->matrix_data = mat(other);
                 return *this;
             }
 
-            arm(arm&& other){
+            armadillo(armadillo&& other){
                 this->matrix_data = other.matrix_data;
             }
 
-            arm& operator=(arm&& other){
+            armadillo& operator=(armadillo&& other){
                 this->matrix_data = other.matrix_data;
                 return *this;
             }
@@ -76,7 +76,7 @@ namespace sketchy {
                 return this->matrix_data.n_cols;
             }
 
-            arm mult(const arm& rhs) const{
+            armadillo mult(const armadillo& rhs) const{
                 if (rhs.num_rows() != num_cols()) {
                     throw std::range_error("Column of left matrix does not match row of right matrix");
                 } else {
@@ -85,7 +85,7 @@ namespace sketchy {
                 }
             }
 
-            arm rand_n(int row, int col){
+            armadillo rand_n(int row, int col){
                 if (row < 0 || col < 0) {
                     throw std::range_error("Column and row lengths must be non-negative integers");
                 } else {
@@ -96,33 +96,33 @@ namespace sketchy {
                 }
             }
 
-            arm elem_div(const float a) const{
+            armadillo elem_div(const float a) const{
                 if(a == 0) {
                     throw std::overflow_error("Cannot divide by 0" );
                 } else{
                     mat b = data();
                     b = b/a;
-                    return arm(b);
+                    return armadillo(b);
                 }
             }
 
 
-            arm concat(const arm& m) const{
+            armadillo concat(const armadillo& m) const{
                 if (m.num_rows() != this->num_rows()) {
                     throw std::range_error("Number of rows do not match");
                 } else {
                     mat a(data());
                     a.insert_cols(a.n_cols-1, m.matrix_data);
-                    return arm(a);
+                    return armadillo(a);
                 }
             }
 
-            arm solve_x(const arm& B) const{
+            armadillo solve_x(const armadillo& B) const{
                 mat X = solve(matrix_data, B.matrix_data);
-                return arm(X);
+                return armadillo(X);
             }
 
-            arm get_cols(int start, int end) const{
+            armadillo get_cols(int start, int end) const{
                 if (start < 0 || end > num_cols()) {
                     throw std::range_error("Column index out of bound");
                     throw;
@@ -130,17 +130,17 @@ namespace sketchy {
                     throw std::range_error("Start column greater than end column");
                 } else {
                     mat a = matrix_data.cols(start, end);
-                    return arm(a);
+                    return armadillo(a);
                 }
             }
 
 
-            arm get_col(int col_n) const{
+            armadillo get_col(int col_n) const{
                 if(col_n < 0 || col_n >= num_cols()) {
                     throw std::range_error("Column index out of bound");
                 } else {
                     mat a = matrix_data.col(col_n);
-                    return arm(a);
+                    return armadillo(a);
                 }
             }
 
@@ -148,12 +148,12 @@ namespace sketchy {
                 matrix_data = matrix_data.t();
             }
 
-            arm subtract(const arm& rhs) const{
+            armadillo subtract(const armadillo& rhs) const{
                 if(rhs.num_rows() != this->num_rows()){
                     throw std::range_error("Number of rows do not match");
                 } else {
                     mat a = matrix_data - rhs.matrix_data;
-                    return arm(a);
+                    return armadillo(a);
                 }
             }
 
@@ -161,7 +161,7 @@ namespace sketchy {
                 return accu(matrix_data);
             }
 
-            void qr_decompose(arm& Q, arm& R) const{
+            void qr_decompose(armadillo& Q, armadillo& R) const{
                 mat q;
                 mat r;
                 qr(q, r, matrix_data);
@@ -169,21 +169,21 @@ namespace sketchy {
                 R.matrix_data = r;
             }
 
-            friend std::ostream& operator<<(std::ostream&os, const arm& out);
+            friend std::ostream& operator<<(std::ostream&os, const armadillo& out);
 
-            void svd(arm& U, arm& S, arm& V, const int k) const{
+            void svd(armadillo& U, armadillo& S, armadillo& V, const int k) const{
                 mat u;
                 vec s;
                 mat v;
                 arma::svds(u, s, v, sp_mat(matrix_data), k);
-                std::vector<arm> ans(3);
+                std::vector<armadillo> ans(3);
                 U.matrix_data = u;
                 S.matrix_data = mat(s);
                 V.matrix_data = v;
             }
     };
 
-    std::ostream& operator<<(std::ostream& os, const arm&out){
+    std::ostream& operator<<(std::ostream& os, const armadillo&out){
         return os << out.matrix_data ;
     }
 }
