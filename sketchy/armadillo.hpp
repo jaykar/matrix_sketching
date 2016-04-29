@@ -3,7 +3,7 @@
 
 #include <armadillo>
 #include "SKMatrix.hpp"
-
+#include <string>
 using namespace arma;
 
 namespace sketchy {
@@ -12,6 +12,18 @@ namespace sketchy {
             armadillo(){
                 matrix_data = mat();
             }
+
+            armadillo(std::string filename){
+                mat A;
+                A.load(filename); 
+                matrix_data = A; 
+            }
+
+            void save(std::string fn){
+                matrix_data.save(fn, raw_ascii); 
+            }
+            
+            friend armadillo eye(int row, int col); 
 
             std::vector<int> dimensions() const{
                 std::vector<int> a;
@@ -68,11 +80,11 @@ namespace sketchy {
                 return this->matrix_data.n_elem;
             }
 
-            int num_rows() const{
+            int num_rows(void) const{
                 return this->matrix_data.n_rows;
             }
 
-            int num_cols() const{
+            int num_cols(void) const{
                 return this->matrix_data.n_cols;
             }
 
@@ -118,7 +130,7 @@ namespace sketchy {
             }
 
             armadillo solve_x(const armadillo& B) const{
-                mat X = solve(matrix_data, B.matrix_data);
+                mat X = solve(matrix_data, B.matrix_data, solve_opts::equilibrate);
                 return armadillo(X);
             }
 
@@ -176,7 +188,6 @@ namespace sketchy {
                 vec s;
                 mat v;
                 arma::svds(u, s, v, sp_mat(matrix_data), k);
-                std::vector<armadillo> ans(3);
                 U.matrix_data = u;
                 S.matrix_data = mat(s);
                 V.matrix_data = v;
@@ -186,6 +197,11 @@ namespace sketchy {
     std::ostream& operator<<(std::ostream& os, const armadillo&out){
         return os << out.matrix_data ;
     }
+
+    armadillo eye(int row, int col){
+        return armadillo(eye(row, col)); 
+    }
+
 }
 
 #endif
