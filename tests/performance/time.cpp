@@ -11,7 +11,7 @@
 using namespace std;
 
 template <typename T>
-void test_perf(ofstream& myfile){
+void test(ofstream& myfile) {
     string header = "Size, Instantiation, Rand_Fill, Mult, Elem_Div, Concat, Subtract, Accumulate, Gaussian Decomposition, Count Sketch\n";
     cout << header;
     myfile << header;
@@ -73,60 +73,27 @@ void test_perf(ofstream& myfile){
         // std::cout << (chrono::system_clock::now() - start).count() << '\n';
         // myfile << (chrono::system_clock::now() - start).count() << '\n';
     }
-
-    // myfile << '\n';
-    // myfile << "N x N Linear Regression \n";
-    // myfile << "Size, Intel, Armadillo, Boost \n";
-    // for(int matrix_size = 100; matrix_size <= 1000; matrix_size+=100){
-    //     T matrix(matrix_size, matrix_size);
-    //     T Q(1, 1);
-    //     T R(1, 1);
-    //     sketchy::ops::lin_regress<T>()
-    //     start = chrono::system_clock::now();
-    //     matrix1.qr_decompose(Q, R);
-    //     std::cout << matrix_size << " " << (chrono::system_clock::now() - start).count() << std::endl;
-    //     myfile << matrix_size << "," << (chrono::system_clock::now() - start).count() << '\n';
-    //     // start = chrono::system_clock::now();
-    //     // sketchy::arm arm_matrix(matrix_size, matrix_size);
-    //     // start = chrono::system_clock::now();
-
-    // }
-
-    // myfile << '\n';
-    // myfile << "N x N Count Sketch \n";
-    // myfile << "Size, Intel, Armadillo, Boost \n";
-    // for(int matrix_size = 100; matrix_size <= 1000; matrix_size+=100){
-    //     T matrix1(matrix_size, matrix_size);
-    //     T Q(1, 1);
-    //     T R(1, 1);
-    //     start = chrono::system_clock::now();
-    //     matrix1.qr_decompose(Q, R);
-    //     std::cout << matrix_size << " " << (chrono::system_clock::now() - start).count() << std::endl;
-    //     myfile << matrix_size << "," << (chrono::system_clock::now() - start).count() << '\n';
-    //     // start = chrono::system_clock::now();
-    //     // sketchy::arm arm_matrix(matrix_size, matrix_size);
-    //     // start = chrono::system_clock::now();
-
-    // }
 }
 
 int main(int argc, char *argv[]){
     ofstream myfile;
-    if(argc != 2 ){
+
+    if(argc != 2 ) {
         myfile.open ("construction_test1.csv");
     } else {
         myfile.open (argv[1]);
     }
+
     myfile << "Boost" << '\n';
-    test_perf<sketchy::boost>(myfile);
+    test<sketchy::boost>(myfile) ;
     myfile << '\n';
 
     myfile << "Armadillo" << '\n';
-    test_perf<sketchy::arm>(myfile);
+    test<sketchy::arm>(myfile) ;
     myfile << '\n';
 
     myfile << "Intel" << '\n';
-    test_perf<sketchy::intel>(myfile);
+    test<sketchy::intel>(myfile) ;
     myfile << '\n';
 
     myfile.close();

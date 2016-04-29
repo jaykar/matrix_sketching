@@ -1,7 +1,5 @@
 #include "SKMatrix.hpp"
 #include "mkl.h"
-//#include "mkl_scalapack.h"
-//#include "mkl_lapacke.h"
 #include <sstream>
 #include <chrono>
 
