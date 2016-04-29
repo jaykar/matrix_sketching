@@ -25,7 +25,6 @@ gcc -I sketchy/ $(OTHER_FILES)
 - [x] Release 1.0: Matrix Inversion using sketching, Linear Regression
 - [ ] Release 1.2: SVD using sketching, maybe Kernel PCA (we need to figure what that is)
 
-
 # Collaborators
 Adam Incera (aji2112) </br>
 Jaykar Nayeck (jan2150) </br>
