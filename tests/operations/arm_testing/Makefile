@@ -48,26 +48,28 @@
 
 
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -g -O3
+CXXFLAGS = -std=c++1y -Wall -g -O3
 
-BOOST_LIB_PATH = -I /usr/local/include/
+BOOST_LIB_PATH = -I /usr/local/include/ -I ~/Desktop/armadillo/include 
 
 # INTERFACE = -I ../interface
 INTERFACE = -I ../../../sketchy/
 # BOOST_INTERFACE = -I ../boost
-LDLIBS = -larmadillo -larpack -framework Accelerate
+LDLIBS = /usr/local/cuda/lib64/libnvblas.so /usr/local/cuda/lib64/libcublas.so -lopenblas -llapack /usr/lib/libarpack.so.2
 
 #-O3 -D -DNDEBUG -DBOOST_UBLAS_NDEBUG
-
 operations_test_arm: operations_test_arm.o
 	$(CXX) $(CXXFLAGS) -o operations_test_arm operations_test_arm.o $(LDLIBS)
 
 operations_test_arm.o: operations_test_arm.cpp
 	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(INTERFACE) -c operations_test_arm.cpp
 
+# $(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(BOOST_INTERFACE) -c operations_test_arm.cpp
+
+
 .PHONY: clean
 clean:
-	rm -f *.o a.out core main operations_test
+	rm -f *.o a.out core main operations_test_arm
 
 .PHONY: all
 all: clean main

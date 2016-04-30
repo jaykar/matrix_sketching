@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include <cstdarg>
+#include <cstring>
 #include <time.h>
 #include <iostream>
 #include <exception>
@@ -34,6 +35,14 @@ class SKMatrix {
         * @see matrix_data
         */
         T& operator=(const T& rhs){};
+
+        /**
+        * Assignment operators
+        * Allows assignments from other objects of same type as matrix_data
+        * @param rhs another object of tyoe matrix_data
+        * @see matrix_data
+        */
+        T& operator=(const C& rhs){};
 
        /**
         * Clears matrix_data and sets its values to 0
@@ -132,8 +141,8 @@ class SKMatrix {
                 std::uniform_int_distribution<> dis(0, num_buckets-1);
 
                 for(int i = 0; i < this->num_cols(); i++){
-                    int bucket = dis(gen);
-                    buckets[bucket].push_back(i);
+                    int bkt = dis(gen);
+                    buckets[bkt].push_back(i);
                 }
 
                 return buckets;
@@ -194,7 +203,7 @@ class SKMatrix {
         * Transforms matrix_data into an identity matrix
         * @see matrix_data
         */
-        virtual void eye(const int n) = 0;
+        //virtual void _eye(const int n) = 0;
 
        /**
         * Performs QR decomposition of matrix_data
