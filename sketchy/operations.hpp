@@ -56,7 +56,7 @@ namespace sketchy {
          */
         template <typename SKMatrix>
         SKMatrix count_sketch(const SKMatrix& A, const int n) {
-            std::vector<std::vector<int> > buckets = A.bucket(n);
+            auto buckets = A.bucket(n);
             std::vector<bool> flipped = A.flip_signs();
 
             SKMatrix sum(A.num_rows(), 0);
@@ -76,28 +76,26 @@ namespace sketchy {
         }
 
         template <typename SK>
-        void k_svd(const SK& A, SK& U, SK& S, SK& V, const int k, const int s){
+        void k_svd(const SK& A, SK& U, SK& S, SK& V, const int s){
             SK sketch = gaussian_projection(A, s);
-            std::cout << sketch.size() << std::endl;
+            //SK sketch = count_sketch(A, s);
             SK Q;
             SK R;
-            sketch.qr_decompose(Q,R);
 
-            std::cout << Q.size() << std::endl;
-            std::cout << R.size() << std::endl;
-            SK Q_temp = Q;
+            sketch.qr_decompose(Q,R);
+            //SK Q_temp = SK(Q);
+            SK Q_temp = SK(Q);
             Q_temp.transpose();
             Q_temp = Q_temp.mult(A);
 
-            SK u;
-            SK v;
+            SK u_tilde;
+            SK v_tilde;
             SK Sigma;
 
-            Q_temp.svd(u, Sigma, v, k);
-
-            U = Q.mult(u);
+            Q_temp.svd(u_tilde, Sigma, v_tilde, 0);
+            U = Q.mult(u_tilde); 
             S = Sigma;
-            V = V;
+            V = v_tilde;
         }
     }
 }
