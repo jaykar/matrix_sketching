@@ -15,17 +15,23 @@ namespace sketchy {
 
             armadillo(std::string filename){
                 mat A;
-                A.load(filename); 
-                matrix_data = A; 
+                A.load(filename);
+                matrix_data = A;
             }
 
             void save(std::string fn){
-                matrix_data.save(fn, raw_ascii); 
+                matrix_data.save(fn, raw_ascii);
             }
 
+<<<<<<< HEAD
+            /*
+                          void _eye(const int n){
+                          matrix_data = eye(n);
+=======
             /*            
                           void _eye(const int n){
                           matrix_data = eye(n); 
+>>>>>>> fd6e2ac697c2d4288085bb24cd3d6cd844e6ef6e
 
                           }
                           */
@@ -194,7 +200,11 @@ namespace sketchy {
                 svd_econ(u, s, v, matrix_data);
 
                 U.matrix_data = u;
+<<<<<<< HEAD
+                S.matrix_data = s; //diagmat(s.rows(0, k-1));
+=======
                 S.matrix_data = s; //diagmat(s.rows(0, k-1)); 
+>>>>>>> fd6e2ac697c2d4288085bb24cd3d6cd844e6ef6e
                 V.matrix_data = v;
                 //S.matrix_data = mat(s);
             }
