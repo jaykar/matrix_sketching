@@ -12,21 +12,23 @@ namespace sketchy {
             int rows;
             int cols;
             float *gpu_data;
-            cublasStatus_t stat;
-            cudaError_t err;
+            mutable cublasStatus_t stat;
+            mutable cudaError_t err;
             cublasHandle_t handle;
 
+            /* copies matrix from GPU memory to CPU memory */
             void getMatrix() const {
-                if(cublasGetMatrix(rows, cols, sizeof(float), (void *) gpu_data, 
-                            rows, matrix_data, rows) != CUBLAS_STATUS_SUCCESS) {
+                stat = cublasGetMatrix(rows, cols, sizeof(float), (void *) gpu_data, rows, (void *) matrix_data, rows);
+                std::cout << "getting" << std::endl;
+                if(stat != CUBLAS_STATUS_SUCCESS) {
                     std::cout << "upload failed: " << _cudaGetErrorEnum(stat) << std::endl;
                     exit(1);
                 }
             }
 
+            /* copies matrix from CPU memory to GPU memory */
             void setMatrix() {
                 stat = cublasSetMatrix(rows, cols, sizeof(float), matrix_data, rows, gpu_data, rows);
-
                 if(stat != CUBLAS_STATUS_SUCCESS) {
                     std::cout << "data download failed: " << _cudaGetErrorEnum(stat) << stat << std::endl;
                     cudaFree(gpu_data);
@@ -84,11 +86,17 @@ namespace sketchy {
             }
 
             ~cuda() {
+                
                 cudaFree(gpu_data);
-                cublasDestroy(handle);
+                stat = cublasDestroy(handle);
+                if(stat != CUBLAS_STATUS_SUCCESS) {
+                    std::cout << "CUBLAS destruction failed" << std::endl;
+                    exit(1);
+                }
                 free(matrix_data);
             }
 
+            /*
             cuda(const cuda& c) {
                 std::cout << "copy constructor" << std::endl;
                 matrix_data = (float *) malloc(c.size() * sizeof(float));
@@ -152,6 +160,7 @@ namespace sketchy {
                 setMatrix();
                 return *this;
             }
+            */
 
             /*
             void clear() {
@@ -164,7 +173,6 @@ namespace sketchy {
                 return this->rows * this->cols;
             }
 
-            /*
             int num_rows(void) const {
                 return this->rows;
             }
@@ -174,18 +182,28 @@ namespace sketchy {
             }
 
             float *data() const {
+                getMatrix();
                 return this->matrix_data;
             }
 
-            cuda rand_n(const int row = -1, const int col = -1) {
+            cuda rand_n(const int row, const int col) {
 
-                if(row != -1)
-                    this->rows = row;
-                if(col != -1)
-                    this->cols = col;
                 if(this->matrix_data)
-                    mkl_free(this->matrix_data);
-                this->matrix_data = (float *) mkl_malloc(this->size() * sizeof(float), sizeof(float));
+                    free(this->matrix_data);
+                if(this->gpu_data)
+                    cudaFree(gpu_data);
+
+                this->rows = row;
+                this->cols = col;
+
+                this->matrix_data = (float *) malloc(row * col * sizeof(float));
+                err = cudaMalloc((void **) &this->gpu_data, row * col * sizeof(float));
+                if(err != cudaSuccess) {
+                    std::cout << "gpu memory allocation failed" << std::endl;
+                    cublasDestroy(handle);
+                    exit(1);
+                }
+                stat = cublasCreate(&handle);
                 int i;
                 unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
                 std::mt19937 gen(seed);
@@ -193,12 +211,14 @@ namespace sketchy {
 
                 for(i = 0; i < this->size(); i++) {
                     this->matrix_data[i] = n(gen);
-                    //std::cout << i << ": " << this->matrix_data[i] << std::endl;
                 }
+
+                setMatrix();
 
                 return *this;
             }
 
+            /*
             cuda mult(const cuda& rhs) const {
                 if(this->cols != rhs.rows)
                     throw std::invalid_argument("mismatched dimensions");
@@ -381,7 +401,6 @@ namespace sketchy {
         int i;
         std::ostringstream out;
         im.getMatrix();
-        std::cout << "here" << std::endl;
         for(i = 0; i < im.size(); i++) {
             if(i > 0 && i % im.cols == 0)
                 out << '\n';

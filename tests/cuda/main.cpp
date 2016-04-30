@@ -2,8 +2,7 @@
 
 int main() {
     sketchy::cuda a(3,4);
-    sketchy::cuda b = a;
+    a.rand_n(3,4);
     std::cout << a << std::endl;
-    std::cout << b << std::endl;
     return 1;
 }
