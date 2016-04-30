@@ -123,10 +123,8 @@ class SKMatrix {
         * @return vector representing hashing of columns
         */
         std::vector<std::vector<int> > bucket(const int num_buckets) const {
-            if(num_buckets > this->num_cols()){
-                std::cout << "Number of buckets must be less than or equal to the number of columns";
-                std::cout << '\n';
-                throw;
+            if(row < 0 || col < 0) {
+                throw std::invalid_argument("Number of buckets must be less than or equal to the number of columns");
             } else {
                 std::vector<std::vector<int> > buckets(num_buckets);
                 std::random_device rd;
