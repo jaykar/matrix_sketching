@@ -15,7 +15,7 @@ int main(){
     //sketchy::armadillo ans = sketchy::ops::count_sketch(x_train, 10); 
     //parameters for sketching; 
     
-    int sketch_size = 400; 
+    int sketch_size = 700; 
     sketchy::armadillo U;
     sketchy::armadillo S;
     sketchy::armadillo V;

@@ -59,7 +59,7 @@ namespace sketchy {
             auto buckets = A.bucket(n);
             std::vector<bool> flipped = A.flip_signs();
 
-            SKMatrix sum(A.num_rows(), 1);
+            SKMatrix sum(A.num_rows(), 0);
 
             for(auto hash_set : buckets){
                 SKMatrix set(A.num_rows(), 1);
@@ -77,12 +77,8 @@ namespace sketchy {
 
         template <typename SK>
         void k_svd(const SK& A, SK& U, SK& S, SK& V, const int s){
-            //SK sketch = gaussian_projection(A, s);
-            SK sketch = count_sketch(A, s);
-            
-            std::cout << "num cols in sketch: " <<  sketch.num_cols() << std::endl;
-            std::cout << "num rows in sketch: " << sketch.num_rows() << std::endl;
-            
+            SK sketch = gaussian_projection(A, s);
+            //SK sketch = count_sketch(A, s);
             SK Q;
             SK R;
 
