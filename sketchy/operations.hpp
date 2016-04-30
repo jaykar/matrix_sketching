@@ -76,17 +76,22 @@ namespace sketchy {
         }
 
         template <typename SK>
-        std::vector<SK> k_svd(const SK&A, int k, int s){
+        std::vector<SK> k_svd(const SK& A, int s){
             //SK sketch = count_sketch(A, s);
             SK sketch = gaussian_projection(A, s);
+            
             std::cout << sketch.size() << std::endl;
+            std::cout << sketch.num_cols() << std::endl;
+            std::cout << sketch.num_rows() << std::endl;
+            
             SK Q;
             SK R;
-            sketch.qr_decompose(Q,R);
 
+            sketch.qr_decompose(Q,R);
             std::cout << Q.size() << std::endl;
             std::cout << R.size() << std::endl;
-            SK Q_temp = Q;
+
+            SK Q_temp = SK(Q);
             Q_temp.transpose();
             Q_temp = Q_temp.mult(A);
 
@@ -94,14 +99,12 @@ namespace sketchy {
             SK U; 
             SK V; 
             SK Sigma; 
-            Q_temp.svd(U, Sigma, V, k);
-
+            Q_temp.svd(U, Sigma, V, 0); 
             SK U_tilde = Q.mult(U);
-
-            std::vector<SK> ans = std::vector<SK>(3); 
-            ans[0] = U_tilde;
-            ans[1] = Sigma;
-            ans[2] = V;
+            std::vector<SK> ans; 
+            ans.push_back(U_tilde); 
+            ans.push_back(Sigma); 
+            ans.push_back(V); 
             return ans;
         }
     }

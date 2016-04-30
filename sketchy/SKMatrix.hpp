@@ -196,7 +196,7 @@ class SKMatrix {
         * Transforms matrix_data into an identity matrix
         * @see matrix_data
         */
-        virtual void eye(const int n) = 0;
+        //virtual void _eye(const int n) = 0;
 
        /**
         * Performs QR decomposition of matrix_data

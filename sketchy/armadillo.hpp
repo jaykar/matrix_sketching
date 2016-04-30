@@ -23,7 +23,12 @@ namespace sketchy {
                 matrix_data.save(fn, raw_ascii); 
             }
             
-            friend armadillo eye(int row, int col); 
+            /*            
+            void _eye(const int n){
+                matrix_data = eye(n); 
+
+            }
+            */
 
             std::vector<int> dimensions() const{
                 std::vector<int> a;
@@ -35,7 +40,7 @@ namespace sketchy {
             ~armadillo() = default;
 
             armadillo(int r, int c){
-                if(row < 0 || col < 0) {
+                if(r < 0 || c < 0) {
                     throw std::invalid_argument("Column and row lengths must be non-negative integers");
                 } else {
                     matrix_data = mat(r,c);
@@ -185,32 +190,31 @@ namespace sketchy {
             }
 
             void qr_decompose(armadillo& Q, armadillo& R) const{
-                mat q;
-                mat r;
-                qr(q, r, matrix_data);
-                Q.matrix_data = q;
-                R.matrix_data = r;
+                mat q1;
+                mat r1;
+                qr_econ(q1, r1, matrix_data);
+                Q.matrix_data = q1;
+                R.matrix_data = r1;
             }
 
             friend std::ostream& operator<<(std::ostream&os, const armadillo& out);
 
-            void svd(armadillo& U, armadillo& S, armadillo& V, const int k) const{
+            void svd(armadillo& U, armadillo& S, armadillo& V, int k) const{
                 mat u;
                 vec s;
                 mat v;
-                arma::svds(u, s, v, sp_mat(matrix_data), k);
+
+                //arma::svds(u, s, v, sp_mat(matrix_data), k);
+                svd_econ(u, s, v, matrix_data);
+                    
                 U.matrix_data = u;
-                S.matrix_data = mat(s);
+                S.matrix_data = s; //diagmat(s.rows(0, k-1)); 
                 V.matrix_data = v;
+                //S.matrix_data = mat(s);
             }
     };
-
     std::ostream& operator<<(std::ostream& os, const armadillo&out){
         return os << out.matrix_data ;
-    }
-
-    armadillo eye(int row, int col){
-        return armadillo(eye(row, col)); 
     }
 
 }
