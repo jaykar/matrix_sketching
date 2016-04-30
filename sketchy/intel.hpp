@@ -218,6 +218,15 @@ namespace sketchy {
             }
 
             void qr_decompose(intel& Q, intel& R) const {
+                int lda = this->num_rows();
+                intel q(lda, lda);
+                intel r(lda, lda);
+                int info;
+
+                dgeqrf(lda, this->num_cols(), this->data(), lda, q, r, lda, info);
+
+                Q.data() = q;
+                R.data() = r;
             }
 
             void svd(intel& U, intel& S, intel& V, const int k) const {
