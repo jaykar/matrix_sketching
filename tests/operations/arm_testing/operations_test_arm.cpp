@@ -3,53 +3,31 @@
 //#include "boost.hpp"
 #include "armadillo.hpp"
 #include <string>
+#include <chrono>
+
 using namespace std;
 
 //namespace bnu = boost::numeric::ublas;
 
-template<typename T>
-T rand_n(int total_size){
-    auto input = T();
-    input.rand_n(total_size, total_size);
-    return input;
-}
-
-template<typename T>
-T transpose_mult(T input){
-    auto b = input;
-    b.transpose();
-    return input.mult(b);
-}
-
 int main(){
 
-    string x_label = "data_image"; 
+    string x_label = "comple1x_g"; 
+    //string x_label = "data_image"; 
     cout << "loading x train" << endl; 
     sketchy::armadillo x_train = sketchy::armadillo(x_label); 
-    auto vec_ans = sketchy::ops::k_svd(x_train, 5, 20); 
+    int sketch_size = 400; 
 
+    cout << "doing k-svd" << endl; 
+    auto t1 = chrono::high_resolution_clock::now();
+    auto vec_ans = sketchy::ops::k_svd(x_train, sketch_size); 
+    auto t2 = chrono::high_resolution_clock::now();
+    auto time_span = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+    std::cout << "seconds: " << time_span.count() << " seconds.";
+    std::cout << std::endl;
+
+    cout << "saving" << endl; 
     vec_ans[0].save("u"); 
     vec_ans[1].save("s"); 
     vec_ans[2].save("v"); 
-
-    /*
-    cout << "loading y train" << endl; 
-    string y_label = "../../../../mnist/regularized_label_small"; 
-    sketchy::armadillo y_train = sketchy::armadillo(y_label); 
-    
-    cout << "solving for b" << endl;  
-    sketchy::armadillo b = x_train.solve_x(y_train);  
-    
-    cout << "solving for xtilde" << endl;  
-    sketchy::armadillo x_tilde = sketchy::ops::lin_regress<sketchy::armadillo>(x_train, y_train, 600); 
-            
-    //sketchy::armadillo y_pred = x_train.mult(x_tilde); 
-    //sketchy::armadillo y_pred2 = x_train.mult(b); 
-
-    b.save("b"); 
-    x_tilde.save("x_tilde"); 
-    */
-    //cout << (y_pred.subtract(y_pred2)).accumulate()  << endl; 
-
     return 0;
 }
