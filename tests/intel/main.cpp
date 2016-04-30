@@ -23,14 +23,20 @@ int main() {
     std::cout << "a * X:" << std::endl;
     sketchy::intel X = a.solve_x(b);
     std::cout << a * b << std::endl;
-//b.rand_n(4, 4);
+    //b.rand_n(4, 4);
     std::cout << "a: ";
     std::cout << a << std::endl;
     std::cout << "X: ";
-    std::cout << X << std::endl;
+    std::cout << a << std::endl;
+    std::cout << a.accumulate() << std::endl;
     std::cout << "Xt: ";
     a.transpose();
     std::cout << a << std::endl;
+    std::cout << a.accumulate() << std::endl;
+    std::cout << "[a b]: ";
+    sketchy::intel f = a.concat(b);
+    std::cout << f << std:: endl;
+    std::cout << f.get_cols(1,2) << std::endl;
 
     /*
     a -= b;
@@ -41,7 +47,7 @@ int main() {
 
     sketchy::intel product;
     product = a * b;
-    
+
     std::cout << (product == b) << std::endl;
 
     //std::cout << c.data[2] << " " << a.data[2] + b.data[2] << std::endl;

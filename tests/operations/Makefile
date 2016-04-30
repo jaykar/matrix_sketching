@@ -58,13 +58,14 @@ INTERFACE = -I ../../sketchy/
 # LDLIBS = -larmadillo -lArpack -framework Accelerate
 
 #-O3 -D -DNDEBUG -DBOOST_UBLAS_NDEBUG
-
 operations_test: operations_test.o
 	$(CXX) $(CXXFLAGS) -o operations_test operations_test.o
 
 operations_test.o: operations_test.cpp
 	# $(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(BOOST_INTERFACE) -c operations_test.cpp
 	$(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(INTERFACE) -c operations_test.cpp
+
+
 
 .PHONY: clean
 clean:

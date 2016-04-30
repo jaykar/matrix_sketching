@@ -30,18 +30,20 @@ namespace sketchy {
          * @return approximated matrix from linear regression
          */
         template <typename SKMatrix>
-        SKMatrix& lin_regress(const SKMatrix& A, const SKMatrix& B, const int n){
+        SKMatrix lin_regress(const SKMatrix& A, const SKMatrix& B, const int n){
+
             int n_col = A.num_cols();
 
-            auto concat_mat = A.concat(B);
+            SKMatrix concat_mat = A.concat(B);
             concat_mat.transpose();
 
-            auto sketch = gaussian_projection<SKMatrix>(concat_mat, n);
+            SKMatrix sketch = gaussian_projection<SKMatrix>(concat_mat, n);
             sketch.transpose();
 
-            auto A_sketch = sketch.get_cols(0, n_col -1);
-            auto B_sketch = sketch.get_col(n_col);
-            auto X_tilde  = A_sketch.solve_x(B_sketch);
+            int n_sketch_col = sketch.num_cols();
+            SKMatrix A_sketch = sketch.get_cols(0, n_col -1);
+            SKMatrix B_sketch = sketch.get_cols(n_col, n_sketch_col -1 );
+            SKMatrix X_tilde  = A_sketch.solve_x(B_sketch);
 
             return X_tilde;
         }
@@ -74,10 +76,8 @@ namespace sketchy {
         }
 
         template <typename SK>
-        std::vector<SK> k_svd(const SK&A, int k, int s){
-            auto ans = std::vector<SK>(3);
-            //auto sketch = count_sketch(A, s);
-            auto sketch = gaussian_projection(A, s);
+        void k_svd(const SK& A, SK& U, SK& S, SK& V, const int k, const int s){
+            SK sketch = gaussian_projection(A, s);
             std::cout << sketch.size() << std::endl;
             SK Q;
             SK R;
@@ -85,15 +85,19 @@ namespace sketchy {
 
             std::cout << Q.size() << std::endl;
             std::cout << R.size() << std::endl;
-            auto Q_temp = Q;
+            SK Q_temp = Q;
             Q_temp.transpose();
             Q_temp = Q_temp.mult(A);
-            auto svd_vec = Q_temp.svds(k);
-            auto U_tilde = Q.mult(svd_vec[0]);
-            ans[0] = U_tilde;
-            ans[1] = svd_vec[1];
-            ans[2] = svd_vec[2];
-            return ans;
+
+            SK u;
+            SK v;
+            SK Sigma;
+
+            Q_temp.svd(u, Sigma, v, k);
+
+            U = Q.mult(u);
+            S = Sigma;
+            V = V;
         }
     }
 }
