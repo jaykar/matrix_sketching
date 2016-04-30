@@ -5,8 +5,8 @@
 
 #include "operations.hpp"
 #include "boost.hpp"
-#include "armadillo.hpp"
-#include "intel.hpp"
+// #include "armadillo.hpp"
+// #include "intel.hpp"
 
 using namespace std;
 
@@ -69,13 +69,13 @@ int main(int argc, char *argv[]){
     test_perf<sketchy::boost>(myfile);
     myfile << '\n';
 
-    myfile << "Armadillo" << '\n';
-    test_perf<sketchy::armadillo>(myfile);
-    myfile << '\n';
+    // myfile << "Armadillo" << '\n';
+    // test_perf<sketchy::armadillo>(myfile);
+    // myfile << '\n';
 
-    myfile << "Intel" << '\n';
-    test_perf<sketchy::intel>(myfile);
-    myfile << '\n';
+    // myfile << "Intel" << '\n';
+    // test_perf<sketchy::intel>(myfile);
+    // myfile << '\n';
 
     myfile.close();
 

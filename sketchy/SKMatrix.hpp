@@ -122,7 +122,7 @@ class SKMatrix {
         * @param num_buckets number of partitions
         * @return vector representing hashing of columns
         */
-        std::vector<std::vector<int> > bucket(const int num_buckets) const {
+        std::vector< std::vector<int> > bucket(const int num_buckets) const {
             if(num_buckets > this->num_cols()){
                 std::cout << "Number of buckets must be less than or equal to the number of columns";
                 std::cout << '\n';
@@ -134,8 +134,8 @@ class SKMatrix {
                 std::uniform_int_distribution<> dis(0, num_buckets-1);
 
                 for(int i = 0; i < this->num_cols(); i++){
-                    int bucket = dis(gen);
-                    buckets[bucket].push_back(i);
+                    int bkt = dis(gen);
+                    buckets[bkt].push_back(i);
                 }
 
                 return buckets;

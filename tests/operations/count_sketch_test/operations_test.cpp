@@ -12,8 +12,9 @@ int main(){
     string x_label = "paris"; 
     cout << "loading x train" << endl; 
     sketchy::armadillo x_train = sketchy::armadillo(x_label); 
-
+    //sketchy::armadillo ans = sketchy::ops::count_sketch(x_train, 10); 
     //parameters for sketching; 
+    
     int sketch_size = 400; 
     sketchy::armadillo U;
     sketchy::armadillo S;
@@ -30,5 +31,6 @@ int main(){
     U.save("u");
     S.save("s");
     V.save("v");
+           
     return 0;
 }

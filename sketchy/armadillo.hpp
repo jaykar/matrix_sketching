@@ -7,7 +7,7 @@
 using namespace arma;
 
 namespace sketchy {
-    class armadillo: SKMatrix<armadillo, arma::mat>{
+    class armadillo: public SKMatrix<armadillo, arma::mat>{
         public:
             armadillo(){
                 matrix_data = mat();

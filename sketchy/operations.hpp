@@ -33,14 +33,14 @@ namespace sketchy {
         SKMatrix lin_regress(const SKMatrix& A, const SKMatrix& B, const int n){
 
             int n_col = A.num_cols();
-            
+
             SKMatrix concat_mat = A.concat(B);
             concat_mat.transpose();
 
             SKMatrix sketch = gaussian_projection<SKMatrix>(concat_mat, n);
             sketch.transpose();
 
-            int n_sketch_col = sketch.num_cols(); 
+            int n_sketch_col = sketch.num_cols();
             SKMatrix A_sketch = sketch.get_cols(0, n_col -1);
             SKMatrix B_sketch = sketch.get_cols(n_col, n_sketch_col -1 );
             SKMatrix X_tilde  = A_sketch.solve_x(B_sketch);
@@ -56,10 +56,10 @@ namespace sketchy {
          */
         template <typename SKMatrix>
         SKMatrix count_sketch(const SKMatrix& A, const int n) {
-            std::vector<std::vector<int> > buckets = A.bucket(n);
+            auto buckets = A.bucket(n);
             std::vector<bool> flipped = A.flip_signs();
 
-            SKMatrix sum(A.num_rows(), 0);
+            SKMatrix sum(A.num_rows(), 1);
 
             for(auto hash_set : buckets){
                 SKMatrix set(A.num_rows(), 1);
@@ -76,36 +76,30 @@ namespace sketchy {
         }
 
         template <typename SK>
-        std::vector<SK> k_svd(const SK& A, int s){
-            //SK sketch = count_sketch(A, s);
-            SK sketch = gaussian_projection(A, s);
+        void k_svd(const SK& A, SK& U, SK& S, SK& V, const int s){
+            //SK sketch = gaussian_projection(A, s);
+            SK sketch = count_sketch(A, s);
             
-            std::cout << sketch.size() << std::endl;
-            std::cout << sketch.num_cols() << std::endl;
-            std::cout << sketch.num_rows() << std::endl;
+            std::cout << "num cols in sketch: " <<  sketch.num_cols() << std::endl;
+            std::cout << "num rows in sketch: " << sketch.num_rows() << std::endl;
             
             SK Q;
             SK R;
 
             sketch.qr_decompose(Q,R);
-            std::cout << Q.size() << std::endl;
-            std::cout << R.size() << std::endl;
-
+            //SK Q_temp = SK(Q);
             SK Q_temp = SK(Q);
             Q_temp.transpose();
             Q_temp = Q_temp.mult(A);
 
-            //SK svd_vec = 
-            SK U; 
-            SK V; 
-            SK Sigma; 
-            Q_temp.svd(U, Sigma, V, 0); 
-            SK U_tilde = Q.mult(U);
-            std::vector<SK> ans; 
-            ans.push_back(U_tilde); 
-            ans.push_back(Sigma); 
-            ans.push_back(V); 
-            return ans;
+            SK u_tilde;
+            SK v_tilde;
+            SK Sigma;
+
+            Q_temp.svd(u_tilde, Sigma, v_tilde, 0);
+            U = Q.mult(u_tilde); 
+            S = Sigma;
+            V = v_tilde;
         }
     }
 }

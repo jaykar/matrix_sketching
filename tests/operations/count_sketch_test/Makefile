@@ -53,13 +53,13 @@ CXXFLAGS = -std=c++14 -Wall -g
 BOOST_LIB_PATH = -I /usr/local/include/
 
 # INTERFACE = -I ../interface
-INTERFACE = -I ../../sketchy/
+INTERFACE = -I ../../../sketchy/
 # BOOST_INTERFACE = -I ../boost
-# LDLIBS = -larmadillo -lArpack -framework Accelerate
+LDLIBS = -larmadillo -lArpack -framework Accelerate
 
 #-O3 -D -DNDEBUG -DBOOST_UBLAS_NDEBUG
 operations_test: operations_test.o
-	$(CXX) $(CXXFLAGS) -o operations_test operations_test.o
+	$(CXX) $(CXXFLAGS) -o operations_test operations_test.o $(LDLIBS)
 
 operations_test.o: operations_test.cpp
 	# $(CXX) $(CXXFLAGS) $(BOOST_LIB_PATH) $(BOOST_INTERFACE) -c operations_test.cpp
